@@ -1,8 +1,0 @@
-﻿  main.cpp
-c:\users\snoobi\desktop\darkratnative\test\main.cpp(87): warning C4244: "Argument": Konvertierung von "time_t" in "unsigned int", möglicher Datenverlust
-  Code wird generiert.
-  1 of 791 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  Codegenerierung ist abgeschlossen.
-  test.vcxproj -> C:\Users\snoobi\Desktop\DarkRatNative\test\Release\test.exe
