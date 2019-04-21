@@ -48,22 +48,30 @@ public:
 
 	std::string GetClipboardText()
 	{
-
-		std::string text;
-
-		if (OpenClipboard(NULL))
-		{
-			HANDLE clip;
-			clip = GetClipboardData(CF_TEXT);
-			// lock and copy
-			text = (LPSTR)GlobalLock(clip);
-			// unlock 
-			GlobalUnlock(clip);
-			CloseClipboard();
+		// Try opening the clipboard
+		if (!OpenClipboard(nullptr)){
+			return "";
 		}
 
+		// Get handle of clipboard object for ANSI text
+		HANDLE hData = GetClipboardData(CF_TEXT);
+		if (hData == nullptr) {
+			return "";
+		}
+
+		// Lock the handle to get the actual text pointer
+		char* pszText = static_cast<char*>(GlobalLock(hData));
+		if (pszText == nullptr) {
+			return "";
+		}
+		// Save text in a string class instance
+		std::string text(pszText);
+		// Release the lock
+		GlobalUnlock(hData);
+		// Release the clipboard
+		CloseClipboard();
+
 		return text;
-		//std::cout << text << std::endl;
 	}
 
 	void toClipboard(std::string s) {

