@@ -12,8 +12,7 @@ class OsHelpers {
 
 public:
 
-	static std::string getCpuName()
-	{
+	static std::string getCpuName()	{
 		// Get extended ids.
 		int CPUInfo[4] = { -1 };
 		__cpuid(CPUInfo, 0x80000000);
@@ -21,8 +20,7 @@ public:
 
 		// Get the information associated with each extended ID.
 		char CPUBrandString[0x40] = { 0 };
-		for (unsigned int i = 0x80000000; i <= nExIds; ++i)
-		{
+		for (unsigned int i = 0x80000000; i <= nExIds; ++i) {
 			__cpuid(CPUInfo, i);
 
 			// Interpret CPU brand string and cache information.
@@ -47,8 +45,7 @@ public:
 		return CPUBrandString;
 	}
 
-	static std::string getGpuName()
-	{
+	static std::string getGpuName() {
 		char* str = (char*)malloc(200);
 		ZeroMemory(str, 199);
 		HRESULT hres;
@@ -109,5 +106,47 @@ public:
 		GetPhysicallyInstalledSystemMemory(&rams);
 		_itoa(rams, str, 10);
 		return str;
+	}
+
+	static std::string checkPEIsAdmin() {
+		char* str = (char*)malloc(200);
+		bool fRet = false;
+		HANDLE hToken = NULL;
+		if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
+			TOKEN_ELEVATION Elevation;
+			DWORD cbSize = sizeof(TOKEN_ELEVATION);
+			if (GetTokenInformation(hToken, TokenElevation, &Elevation, sizeof(Elevation), &cbSize)) {
+				fRet = Elevation.TokenIsElevated;
+			}
+		}
+		if (hToken) {
+			CloseHandle(hToken);
+		}
+
+		if (fRet)
+			strcpy(str, "true");
+		else
+			strcpy(str, "false");
+
+		return str;
+	}
+
+	//https://www.codeproject.com/Tips/107866/32-Bit-or-64-bit-OS
+	static std::string PrcessorArchitecture() {
+		BOOL bIs64Bit = FALSE;
+		#if defined(_WIN64)
+			bIs64Bit = TRUE;  
+		#elif defined(_WIN32)
+			typedef BOOL(WINAPI * LPFNISWOW64PROCESS) (HANDLE, PBOOL);
+			LPFNISWOW64PROCESS pfnIsWow64Process = (LPFNISWOW64PROCESS)GetProcAddress(GetModuleHandle(_T("kernel32")), "IsWow64Process");
+			if (pfnIsWow64Process)
+				pfnIsWow64Process(GetCurrentProcess(), &bIs64Bit);
+		#endif
+		if (bIs64Bit) {
+			return "x64";
+		}
+		else {
+			return "x86";
+		}
 	}
 };

