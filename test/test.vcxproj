@@ -22,6 +22,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\Helpers.hpp" />
     <ClInclude Include="..\include\HTTPRequest.hpp">
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
