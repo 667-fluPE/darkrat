@@ -8,11 +8,10 @@ class XOR {
 public:
 
 	static std::string encryptDecrypt(std::string toEncrypt) {
-		char key[3] = { 'K', 'C', 'Q' }; //Any chars will work, in an array of any size
+		Config config;
 		std::string output = toEncrypt;
-
 		for (int i = 0; i < toEncrypt.size(); i++)
-			output[i] = toEncrypt[i] ^ key[i % (sizeof(key) / sizeof(char))];
+			output[i] = toEncrypt[i] ^ config.key[i % (sizeof(config.key) / sizeof(char))];
 
 		return output;
 	}
