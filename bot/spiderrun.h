@@ -31,7 +31,6 @@ int NTRX_RUNPE32(void* Image)
 					NtHeader->OptionalHeader.SizeOfImage, 0x3000, PAGE_EXECUTE_READWRITE);
 				if (pImageBase == 00000000) {
 					ResumeThread(PI.hThread);
-					ExitProcess(NULL);
 					return 0;
 				}
 				if (pImageBase > 0) {

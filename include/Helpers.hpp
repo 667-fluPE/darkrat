@@ -379,11 +379,9 @@ class Helpers
 
 			if (!CreateProcess(target, 0, 0, FALSE, 0, 0, 0, 0, &si, &pi))
 			{
-				std::cerr << "CreateProcess failed (" << GetLastError() << ").\n";
 				return "failed";
 			}
 			else {
-				std::cout << "Process Executed Success" << std::endl;
 				return "success";
 			}
 
