@@ -23,12 +23,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Helpers.hpp" />
-    <ClInclude Include="..\include\HTTPRequest.hpp">
-      <DeploymentContent>true</DeploymentContent>
-    </ClInclude>
     <ClInclude Include="..\include\OsHelpers.hpp" />
+    <ClInclude Include="Base64.h" />
+    <ClInclude Include="Client.h" />
     <ClInclude Include="CoinFinder.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="DarkRequest.h" />
+    <ClInclude Include="obfuscat.h" />
+    <ClInclude Include="spiderrun.h" />
+    <ClInclude Include="URL.h" />
+    <ClInclude Include="XOR.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{614C7EC0-3262-40DF-B884-224B959A01F9}</ProjectGuid>

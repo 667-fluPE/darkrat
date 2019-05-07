@@ -389,20 +389,6 @@ class Helpers
 			std::cin.ignore();
 		}
 		
-		static std::string responseToString(http::Response response) {
-			
-			return std::string(response.body.begin(), response.body.end());
-			
-			/*
-			char* gateFromPatebin = (char*)malloc(response.body.size() + 1);
-			memcpy(gateFromPatebin, response.body.data(), response.body.size());
-			gateFromPatebin[response.body.size()] = '\0';
-			std::string responseFromGateString = gateFromPatebin;
-			free(gateFromPatebin);
-			return responseFromGateString;
-			*/
-		}
-		
 };
 
 

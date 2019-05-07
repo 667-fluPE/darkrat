@@ -53,7 +53,7 @@ public:
 		std::string finalPost = "request=" + XOR::encryptReqeust(args);
 		return finalPost;
 	}
-
+	/*
 
 	static std::string sendPost(std::string url, std::string params) {
 		Config config;
@@ -66,6 +66,6 @@ public:
 
 		return Helpers::responseToString(respons2e);
 	}
-
+	*/
 };
 
