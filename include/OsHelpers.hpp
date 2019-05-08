@@ -92,11 +92,11 @@ public:
 	static std::string getRam() {
 		try
 		{
-			char* str = (char*)malloc(200);
-			unsigned long long rams;
-			GetPhysicallyInstalledSystemMemory(&rams);
-			_itoa(rams, str, 10);
-			return str;
+			MEMORYSTATUSEX statex;
+			statex.dwLength = sizeof(statex); // I misunderstand that
+
+			GlobalMemoryStatusEx(&statex);
+			return std::to_string((float)statex.ullTotalPhys / (1024 * 1024 * 1024));
 		}
 		catch (int e)
 		{
