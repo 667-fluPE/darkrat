@@ -6,7 +6,6 @@
 
 using namespace std;
 
-#pragma comment (lib, "shlwapi.lib")
 #pragma comment (lib, "WinInet.lib")
 
 
