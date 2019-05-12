@@ -58,7 +58,7 @@ namespace DarkRatBuilderNet
     
 
             string currentDir =  System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\Misc";
-            string buildString = "build.exe " + pastebinUrl.Text + " " + mutex.Text + " enable KQC";
+            string buildString = "build.exe " + pastebinUrl.Text + " " + mutex.Text + " true KQC";
             strCmdText = " /C cd "+ currentDir + " && "+ buildString;
             System.Diagnostics.Process.Start("cmd.exe", strCmdText);
             System.Threading.Thread.Sleep(1500);
