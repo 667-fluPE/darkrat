@@ -1,0 +1,8 @@
+bot/.vs/
+bot/Debug
+bot/Release
+Builder/.vs/
+Builder/Release/
+Builder/Debug/
+Builder/Builder/Release/
+Builder/Builder/Debug/

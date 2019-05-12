@@ -8,12 +8,16 @@ class XOR {
 public:
 
 	static std::string encryptDecrypt(std::string toEncrypt) {
-		Config config;
+		darkRat::config::config config = darkRat::config::load();
+		std::string enckey = config.encryptionKey;
+		char* key = (char*)enckey.c_str();
+		size_t keylen = enckey.length();
 		std::string output = toEncrypt;
 		for (int i = 0; i < toEncrypt.size(); i++)
-			output[i] = toEncrypt[i] ^ config.key[i % (sizeof(config.key) / sizeof(char))];
+			output[i] = toEncrypt[i] ^ key[i % keylen];
 
 		return output;
+
 	}
 
 	static std::string encryptReqeust(std::string params) {

