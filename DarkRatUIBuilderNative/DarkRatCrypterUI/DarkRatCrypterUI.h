@@ -6,6 +6,9 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QDataStream>
+#include <qjsonobject.h>
+#include <qjsonarray.h>
+#include <qjsondocument.h>
 #include <QDebug>
 #include <iostream>
 #include <fstream>
@@ -16,7 +19,6 @@
 #include <string>
 #include <Windows.h>
 #include <stdio.h>
-
 #include "VirtualAES.h"
 
 class DarkRatCrypterUI : public QMainWindow
