@@ -1,0 +1,6 @@
+﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (DarkRatCrypterUI.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
+  DarkRatBuilder.cpp
+C:\Users\darkspider\source\repos\DarkRatUIBuilderNative\DarkRatCrypterUI\VirtualAES.h(17): warning C4005: "min": Makro-Neudefinition
+  D:\Windows Kits\10\Include\10.0.17763.0\shared\minwindef.h(197): note: Siehe vorherige Definition von "min"
+C:\Users\darkspider\source\repos\DarkRatUIBuilderNative\DarkRatCrypterUI\RunPe.h(82): warning C4715: "RunPortableExecutable": Nicht alle Codepfade geben einen Wert zurück.
+  DarkRatCrypterUI.vcxproj -> C:\Users\darkspider\source\repos\DarkRatUIBuilderNative\Win32\Debug\DarkRatBuilder.exe

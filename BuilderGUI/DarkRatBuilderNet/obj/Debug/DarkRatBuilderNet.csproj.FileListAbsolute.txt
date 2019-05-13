@@ -1,8 +1,0 @@
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\bin\Debug\DarkRatBuilderNet.exe
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\bin\Debug\DarkRatBuilderNet.pdb
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\obj\Debug\DarkRatBuilderNet.Form1.resources
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\obj\Debug\DarkRatBuilderNet.Properties.Resources.resources
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\obj\Debug\DarkRatBuilderNet.csproj.GenerateResource.cache
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\obj\Debug\DarkRatBuilderNet.csproj.CoreCompileInputs.cache
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\obj\Debug\DarkRatBuilderNet.exe
-C:\Users\darkspider\source\repos\DarkRatBuilderNet\DarkRatBuilderNet\obj\Debug\DarkRatBuilderNet.pdb
