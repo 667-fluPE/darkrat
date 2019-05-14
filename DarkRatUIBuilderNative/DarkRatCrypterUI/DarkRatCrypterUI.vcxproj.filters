@@ -59,13 +59,16 @@
     <ClInclude Include="VirtualAES.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RunPe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RawBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BuildSystem\json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rc4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
