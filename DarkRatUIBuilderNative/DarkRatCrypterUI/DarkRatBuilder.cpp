@@ -46,6 +46,7 @@ DarkRatCrypterUI::DarkRatCrypterUI(QWidget *parent)
 	ui.mutex->setText(QString::fromStdString(random_string(5)));
 	ui.encryptionkey->setText(QString::fromStdString(random_string(32)));
 //	ui.output->setText("Output.exe");
+	ui.statusBar->hide();
 }
 char output[MAX_PATH];
 

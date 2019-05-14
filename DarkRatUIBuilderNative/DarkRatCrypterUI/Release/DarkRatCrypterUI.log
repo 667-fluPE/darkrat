@@ -1,14 +1,8 @@
-﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppClean.targets(76,5): warning : Der Prozess kann nicht auf die Datei "c:\users\darkspider\desktop\darkrat coding\darkrat\darkrat-master\darkratuibuildernative\darkratcrypterui\release\darkratbuilder.tlog\rcc.write.1u.tlog" zugreifen, da sie von einem anderen Prozess verwendet wird.
-D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Release\) enthält freigegebene Dateien aus einem anderen Projekt (DarkRatCrypterUI.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
+﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Release\) enthält freigegebene Dateien aus einem anderen Projekt (DarkRatCrypterUI.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
   Uic'ing DarkRatCrypterUI.ui...
-  Rcc'ing DarkRatCrypterUI.qrc...
-  Moc'ing DarkRatCrypterUI.h...
-   RCC: Warning: No resources in 'C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRatCrypterUI.qrc'.
   DarkRatBuilder.cpp
-  main.cpp
-  VirtualAES.cpp
-  qrc_DarkRatCrypterUI.cpp
   moc_DarkRatCrypterUI.cpp
+  main.cpp
 C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\VirtualAES.h(17): warning C4005: "min": Makro-Neudefinition (Quelldatei wird kompiliert DarkRatBuilder.cpp)
   D:\Windows Kits\10\Include\10.0.17763.0\shared\minwindef.h(197): note: Siehe vorherige Definition von "min" (Quelldatei wird kompiliert DarkRatBuilder.cpp)
 C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\VirtualAES.h(17): warning C4005: "min": Makro-Neudefinition (Quelldatei wird kompiliert main.cpp)
