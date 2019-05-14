@@ -518,7 +518,7 @@ disblay:none;
    <widget class="QCheckBox" name="startup">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>360</x>
       <y>160</y>
       <width>111</width>
       <height>17</height>
@@ -547,10 +547,10 @@ disblay:none;
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>370</x>
       <y>140</y>
-      <width>631</width>
-      <height>16</height>
+      <width>271</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="orientation">
@@ -602,11 +602,50 @@ disblay:none;
       <x>340</x>
       <y>0</y>
       <width>20</width>
-      <height>131</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_change_output">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Output Path</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="outputname">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>241</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>spider.exe</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>130</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Output Path</string>
     </property>
    </widget>
   </widget>

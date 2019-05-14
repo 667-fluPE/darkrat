@@ -30,9 +30,11 @@ public:
 
 private slots:
 	void on_btn_icon_clicked();
+	void on_btn_change_output_clicked();
 	void on_gen_enckey_clicked();
 	void on_gen_mutex_clicked();
 	void on_build_clicked();
+
 
 
 
