@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_DarkRatCrypterUI_t {
     QByteArrayData data[6];
-    char stringdata0[103];
+    char stringdata0[98];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,14 +32,14 @@ struct qt_meta_stringdata_DarkRatCrypterUI_t {
 static const qt_meta_stringdata_DarkRatCrypterUI_t qt_meta_stringdata_DarkRatCrypterUI = {
     {
 QT_MOC_LITERAL(0, 0, 16), // "DarkRatCrypterUI"
-QT_MOC_LITERAL(1, 17, 24), // "on_selectPayload_clicked"
-QT_MOC_LITERAL(2, 42, 0), // ""
-QT_MOC_LITERAL(3, 43, 21), // "on_gen_enckey_clicked"
-QT_MOC_LITERAL(4, 65, 20), // "on_gen_mutex_clicked"
-QT_MOC_LITERAL(5, 86, 16) // "on_build_clicked"
+QT_MOC_LITERAL(1, 17, 19), // "on_btn_icon_clicked"
+QT_MOC_LITERAL(2, 37, 0), // ""
+QT_MOC_LITERAL(3, 38, 21), // "on_gen_enckey_clicked"
+QT_MOC_LITERAL(4, 60, 20), // "on_gen_mutex_clicked"
+QT_MOC_LITERAL(5, 81, 16) // "on_build_clicked"
 
     },
-    "DarkRatCrypterUI\0on_selectPayload_clicked\0"
+    "DarkRatCrypterUI\0on_btn_icon_clicked\0"
     "\0on_gen_enckey_clicked\0on_gen_mutex_clicked\0"
     "on_build_clicked"
 };
@@ -79,7 +79,7 @@ void DarkRatCrypterUI::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         auto *_t = static_cast<DarkRatCrypterUI *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->on_selectPayload_clicked(); break;
+        case 0: _t->on_btn_icon_clicked(); break;
         case 1: _t->on_gen_enckey_clicked(); break;
         case 2: _t->on_gen_mutex_clicked(); break;
         case 3: _t->on_build_clicked(); break;

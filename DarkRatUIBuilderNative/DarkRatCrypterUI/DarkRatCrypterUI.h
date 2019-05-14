@@ -29,7 +29,7 @@ public:
 	DarkRatCrypterUI(QWidget *parent = Q_NULLPTR);
 
 private slots:
-	void on_selectPayload_clicked();
+	void on_btn_icon_clicked();
 	void on_gen_enckey_clicked();
 	void on_gen_mutex_clicked();
 	void on_build_clicked();

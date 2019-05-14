@@ -47,14 +47,33 @@ DarkRatCrypterUI::DarkRatCrypterUI(QWidget *parent)
 	ui.encryptionkey->setText(QString::fromStdString(random_string(32)));
 //	ui.output->setText("Output.exe");
 	ui.statusBar->hide();
+	QPixmap pix("icons/default.png");
+	int w = ui.icon->width();
+	int h = ui.icon->height();
+	ui.icon->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
+
+
 }
 char output[MAX_PATH];
 
 
-void DarkRatCrypterUI::on_selectPayload_clicked()
+void DarkRatCrypterUI::on_btn_icon_clicked()
 {
-	QString filename = QFileDialog::getOpenFileName(this, "Open a File", QDir::currentPath(), "Executable Files (*.exe)");
-//	ui.inputFileLable->setText("File: " + filename);
+	QFileDialog dialog(this);
+	dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
+	dialog.setViewMode(QFileDialog::Detail);
+	QString fileName = QFileDialog::getOpenFileName(this,
+		tr("Open Images"), "icons/", tr("Image Files (*.png *.ico *.icon)"));
+	if (!fileName.isEmpty())
+	{
+		QImage image(fileName);
+		int w = ui.icon->width();
+		int h = ui.icon->height();
+		ui.icon->setPixmap(QPixmap::fromImage(image).scaled(w, h, Qt::KeepAspectRatio));
+
+	}
+
+	ui.icon_path->setText("File: " + fileName);
 }
 
 
@@ -83,6 +102,8 @@ QString base64_encode(QString string) {
 	ba.append(string);
 	return ba.toBase64();
 }
+
+
 void DarkRatCrypterUI::on_build_clicked()
 {
 	RC4 rc4;
