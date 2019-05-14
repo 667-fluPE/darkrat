@@ -45,6 +45,10 @@ public:
     QPushButton *btn_change_output;
     QLineEdit *outputname;
     QLabel *label_4;
+    QCheckBox *checkBox;
+    QPushButton *gen_mutex_2;
+    QFrame *line_3;
+    QLabel *label_5;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -53,7 +57,7 @@ public:
         if (DarkRatCrypterUIClass->objectName().isEmpty())
             DarkRatCrypterUIClass->setObjectName(QString::fromUtf8("DarkRatCrypterUIClass"));
         DarkRatCrypterUIClass->setWindowModality(Qt::NonModal);
-        DarkRatCrypterUIClass->resize(656, 252);
+        DarkRatCrypterUIClass->resize(675, 429);
         DarkRatCrypterUIClass->setStyleSheet(QString::fromUtf8("/*\n"
 "Material Dark Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
@@ -463,7 +467,7 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         build = new QPushButton(centralWidget);
         build->setObjectName(QString::fromUtf8("build"));
-        build->setGeometry(QRect(500, 160, 131, 51));
+        build->setGeometry(QRect(10, 330, 651, 51));
         build->setAutoFillBackground(false);
         pastebinurl = new QLineEdit(centralWidget);
         pastebinurl->setObjectName(QString::fromUtf8("pastebinurl"));
@@ -488,43 +492,57 @@ public:
         label_2->setGeometry(QRect(10, 50, 47, 13));
         startup = new QCheckBox(centralWidget);
         startup->setObjectName(QString::fromUtf8("startup"));
-        startup->setGeometry(QRect(360, 160, 111, 17));
+        startup->setGeometry(QRect(20, 190, 111, 17));
         startup->setStyleSheet(QString::fromUtf8(""));
         label_3 = new QLabel(centralWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(10, 90, 91, 16));
         line = new QFrame(centralWidget);
         line->setObjectName(QString::fromUtf8("line"));
-        line->setGeometry(QRect(370, 140, 271, 20));
+        line->setGeometry(QRect(370, 260, 271, 20));
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
         icon = new QLabel(centralWidget);
         icon->setObjectName(QString::fromUtf8("icon"));
-        icon->setGeometry(QRect(370, 20, 101, 71));
+        icon->setGeometry(QRect(370, 140, 101, 71));
         icon_path = new QLabel(centralWidget);
         icon_path->setObjectName(QString::fromUtf8("icon_path"));
-        icon_path->setGeometry(QRect(360, 120, 281, 16));
+        icon_path->setGeometry(QRect(360, 240, 281, 16));
         btn_icon = new QPushButton(centralWidget);
         btn_icon->setObjectName(QString::fromUtf8("btn_icon"));
-        btn_icon->setGeometry(QRect(500, 60, 131, 41));
+        btn_icon->setGeometry(QRect(500, 180, 131, 41));
         line_2 = new QFrame(centralWidget);
         line_2->setObjectName(QString::fromUtf8("line_2"));
-        line_2->setGeometry(QRect(340, 0, 20, 211));
+        line_2->setGeometry(QRect(340, 0, 20, 311));
         line_2->setFrameShape(QFrame::VLine);
         line_2->setFrameShadow(QFrame::Sunken);
         btn_change_output = new QPushButton(centralWidget);
         btn_change_output->setObjectName(QString::fromUtf8("btn_change_output"));
-        btn_change_output->setGeometry(QRect(260, 150, 75, 23));
+        btn_change_output->setGeometry(QRect(580, 300, 75, 23));
         outputname = new QLineEdit(centralWidget);
         outputname->setObjectName(QString::fromUtf8("outputname"));
-        outputname->setGeometry(QRect(10, 150, 241, 20));
+        outputname->setGeometry(QRect(370, 300, 201, 20));
         label_4 = new QLabel(centralWidget);
         label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setGeometry(QRect(10, 130, 81, 16));
+        label_4->setGeometry(QRect(380, 280, 81, 16));
+        checkBox = new QCheckBox(centralWidget);
+        checkBox->setObjectName(QString::fromUtf8("checkBox"));
+        checkBox->setGeometry(QRect(20, 210, 70, 17));
+        gen_mutex_2 = new QPushButton(centralWidget);
+        gen_mutex_2->setObjectName(QString::fromUtf8("gen_mutex_2"));
+        gen_mutex_2->setGeometry(QRect(260, 30, 75, 23));
+        line_3 = new QFrame(centralWidget);
+        line_3->setObjectName(QString::fromUtf8("line_3"));
+        line_3->setGeometry(QRect(370, 120, 271, 20));
+        line_3->setFrameShape(QFrame::HLine);
+        line_3->setFrameShadow(QFrame::Sunken);
+        label_5 = new QLabel(centralWidget);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setGeometry(QRect(360, 10, 281, 101));
         DarkRatCrypterUIClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(DarkRatCrypterUIClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 656, 18));
+        menuBar->setGeometry(QRect(0, 0, 675, 18));
         DarkRatCrypterUIClass->setMenuBar(menuBar);
         statusBar = new QStatusBar(DarkRatCrypterUIClass);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
@@ -551,6 +569,9 @@ public:
         btn_change_output->setText(QApplication::translate("DarkRatCrypterUIClass", "Output Path", nullptr));
         outputname->setText(QApplication::translate("DarkRatCrypterUIClass", "spider.exe", nullptr));
         label_4->setText(QApplication::translate("DarkRatCrypterUIClass", "Output Path", nullptr));
+        checkBox->setText(QApplication::translate("DarkRatCrypterUIClass", "CheckBox", nullptr));
+        gen_mutex_2->setText(QApplication::translate("DarkRatCrypterUIClass", "Check URL", nullptr));
+        label_5->setText(QApplication::translate("DarkRatCrypterUIClass", "<html><head/><body><p align=\"center\"><span style=\" font-size:18pt; font-weight:600;\">DarkRat Builder 2.1 </span></p><p align=\"center\"><span style=\" font-size:11pt; font-weight:600;\">Native Version</span></p></body></html>", nullptr));
     } // retranslateUi
 
 };
