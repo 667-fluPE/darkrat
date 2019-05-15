@@ -19,7 +19,7 @@
 #include <string>
 #include <Windows.h>
 #include <stdio.h>
-#include "VirtualAES.h"
+//#include "VirtualAES.h"
 
 class DarkRatCrypterUI : public QMainWindow
 {

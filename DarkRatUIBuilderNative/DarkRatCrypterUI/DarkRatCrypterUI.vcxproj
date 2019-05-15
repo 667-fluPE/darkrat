@@ -120,6 +120,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DarkRatBuilder.cpp" />
+    <ClCompile Include="login.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="VirtualAES.cpp" />
   </ItemGroup>
@@ -128,12 +129,18 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DarkRatCrypterUI.ui" />
+    <QtUic Include="login.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="DarkRatCrypterUI.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildSystem\json.h" />
+    <QtMoc Include="loginUI.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+    </QtMoc>
+    <ClInclude Include="DarkRequest.h" />
     <ClInclude Include="RawBuilder.h" />
     <ClInclude Include="rc4.h" />
     <ClInclude Include="base64.h" />

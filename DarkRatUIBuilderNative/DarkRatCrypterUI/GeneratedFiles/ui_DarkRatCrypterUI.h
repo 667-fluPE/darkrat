@@ -45,7 +45,6 @@ public:
     QPushButton *btn_change_output;
     QLineEdit *outputname;
     QLabel *label_4;
-    QCheckBox *checkBox;
     QPushButton *gen_mutex_2;
     QFrame *line_3;
     QLabel *label_5;
@@ -525,9 +524,6 @@ public:
         label_4 = new QLabel(centralWidget);
         label_4->setObjectName(QString::fromUtf8("label_4"));
         label_4->setGeometry(QRect(380, 280, 81, 16));
-        checkBox = new QCheckBox(centralWidget);
-        checkBox->setObjectName(QString::fromUtf8("checkBox"));
-        checkBox->setGeometry(QRect(20, 210, 70, 17));
         gen_mutex_2 = new QPushButton(centralWidget);
         gen_mutex_2->setObjectName(QString::fromUtf8("gen_mutex_2"));
         gen_mutex_2->setGeometry(QRect(260, 30, 75, 23));
@@ -555,7 +551,7 @@ public:
 
     void retranslateUi(QMainWindow *DarkRatCrypterUIClass)
     {
-        DarkRatCrypterUIClass->setWindowTitle(QApplication::translate("DarkRatCrypterUIClass", "DarkRatCrypterUI", nullptr));
+        DarkRatCrypterUIClass->setWindowTitle(QApplication::translate("DarkRatCrypterUIClass", "DarkRat Builder", nullptr));
         build->setText(QApplication::translate("DarkRatCrypterUIClass", "Build", nullptr));
         gen_mutex->setText(QApplication::translate("DarkRatCrypterUIClass", "Random", nullptr));
         gen_enckey->setText(QApplication::translate("DarkRatCrypterUIClass", "Random", nullptr));
@@ -569,7 +565,6 @@ public:
         btn_change_output->setText(QApplication::translate("DarkRatCrypterUIClass", "Output Path", nullptr));
         outputname->setText(QApplication::translate("DarkRatCrypterUIClass", "spider.exe", nullptr));
         label_4->setText(QApplication::translate("DarkRatCrypterUIClass", "Output Path", nullptr));
-        checkBox->setText(QApplication::translate("DarkRatCrypterUIClass", "CheckBox", nullptr));
         gen_mutex_2->setText(QApplication::translate("DarkRatCrypterUIClass", "Check URL", nullptr));
         label_5->setText(QApplication::translate("DarkRatCrypterUIClass", "<html><head/><body><p align=\"center\"><span style=\" font-size:18pt; font-weight:600;\">DarkRat Builder 2.1 </span></p><p align=\"center\"><span style=\" font-size:11pt; font-weight:600;\">Native Version</span></p></body></html>", nullptr));
     } // retranslateUi

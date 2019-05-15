@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DarkRatCrypterUI</string>
+   <string>DarkRat Builder</string>
   </property>
   <property name="styleSheet">
    <string notr="true">/*
@@ -646,19 +646,6 @@ disblay:none;
     </property>
     <property name="text">
      <string>Output Path</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>210</y>
-      <width>70</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>CheckBox</string>
     </property>
    </widget>
    <widget class="QPushButton" name="gen_mutex_2">
