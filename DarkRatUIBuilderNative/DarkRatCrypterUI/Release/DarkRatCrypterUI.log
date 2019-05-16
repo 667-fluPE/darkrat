@@ -1,17 +1,7 @@
 ﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Release\) enthält freigegebene Dateien aus einem anderen Projekt (DarkRatCrypterUI.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
-  Uic'ing DarkRatCrypterUI.ui...
   Uic'ing login.ui...
-  Rcc'ing DarkRatCrypterUI.qrc...
-  Moc'ing DarkRatCrypterUI.h...
-   RCC: Warning: No resources in 'C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRatCrypterUI.qrc'.
-  Moc'ing loginUI.h...
-  DarkRatBuilder.cpp
+  moc_loginUI.cpp
   login.cpp
   main.cpp
-  VirtualAES.cpp
-  qrc_DarkRatCrypterUI.cpp
-  moc_DarkRatCrypterUI.cpp
-C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRequest.h(20): warning C4002: Zu viele Argumente für den Aufruf des funktionsähnlichen Makros "TEXT". (Quelldatei wird kompiliert login.cpp)
-  moc_loginUI.cpp
 LIBCMT.lib(initializers.obj) : warning LNK4098: Standardbibliothek "msvcrt.lib" steht in Konflikt mit anderen Bibliotheken; /NODEFAULTLIB:Bibliothek verwenden.
   DarkRatCrypterUI.vcxproj -> C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\Win32\Release\DarkRatBuilder.exe

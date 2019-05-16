@@ -83,5 +83,8 @@
     <ClInclude Include="DarkRequest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HTTPURL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

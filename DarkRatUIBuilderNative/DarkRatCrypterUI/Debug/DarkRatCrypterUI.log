@@ -1,10 +1,15 @@
 ﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (DarkRatCrypterUI.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
+  Uic'ing DarkRatCrypterUI.ui...
+  Uic'ing login.ui...
+  Rcc'ing DarkRatCrypterUI.qrc...
   Moc'ing DarkRatCrypterUI.h...
+   RCC: Warning: No resources in 'C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRatCrypterUI.qrc'.
   Moc'ing loginUI.h...
   DarkRatBuilder.cpp
   login.cpp
   main.cpp
+  VirtualAES.cpp
   qrc_DarkRatCrypterUI.cpp
   moc_DarkRatCrypterUI.cpp
-C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRatBuilder.cpp(7): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "json.h": No such file or directory
   moc_loginUI.cpp
+  DarkRatCrypterUI.vcxproj -> C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\Win32\Debug\DarkRatBuilder.exe
