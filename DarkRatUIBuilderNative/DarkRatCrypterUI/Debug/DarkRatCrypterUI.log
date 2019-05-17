@@ -12,4 +12,5 @@
   qrc_DarkRatCrypterUI.cpp
   moc_DarkRatCrypterUI.cpp
   moc_loginUI.cpp
+C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRequest.h(123): warning C4715: "postRequest": Nicht alle Codepfade geben einen Wert zurück.
   DarkRatCrypterUI.vcxproj -> C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\Win32\Debug\DarkRatBuilder.exe

@@ -1,7 +1,5 @@
 ﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Release\) enthält freigegebene Dateien aus einem anderen Projekt (DarkRatCrypterUI.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
-  Uic'ing login.ui...
-  moc_loginUI.cpp
   login.cpp
-  main.cpp
+C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRequest.h(123): warning C4715: "postRequest": Nicht alle Codepfade geben einen Wert zurück.
 LIBCMT.lib(initializers.obj) : warning LNK4098: Standardbibliothek "msvcrt.lib" steht in Konflikt mit anderen Bibliotheken; /NODEFAULTLIB:Bibliothek verwenden.
   DarkRatCrypterUI.vcxproj -> C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\Win32\Release\DarkRatBuilder.exe

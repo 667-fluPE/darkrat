@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>675</width>
-    <height>429</height>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -518,8 +518,8 @@ disblay:none;
    <widget class="QCheckBox" name="startup">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>190</y>
+      <x>10</x>
+      <y>150</y>
       <width>111</width>
       <height>17</height>
      </rect>
@@ -658,7 +658,7 @@ disblay:none;
      </rect>
     </property>
     <property name="text">
-     <string>Check URL</string>
+     <string>Pastebin</string>
     </property>
    </widget>
    <widget class="Line" name="line_3">
@@ -679,8 +679,8 @@ disblay:none;
      <rect>
       <x>360</x>
       <y>10</y>
-      <width>281</width>
-      <height>101</height>
+      <width>291</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="text">

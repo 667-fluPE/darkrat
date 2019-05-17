@@ -56,7 +56,7 @@ public:
         if (DarkRatCrypterUIClass->objectName().isEmpty())
             DarkRatCrypterUIClass->setObjectName(QString::fromUtf8("DarkRatCrypterUIClass"));
         DarkRatCrypterUIClass->setWindowModality(Qt::NonModal);
-        DarkRatCrypterUIClass->resize(675, 429);
+        DarkRatCrypterUIClass->resize(675, 406);
         DarkRatCrypterUIClass->setStyleSheet(QString::fromUtf8("/*\n"
 "Material Dark Style Sheet for QT Applications\n"
 "Author: Jaime A. Quiroga P.\n"
@@ -491,7 +491,7 @@ public:
         label_2->setGeometry(QRect(10, 50, 47, 13));
         startup = new QCheckBox(centralWidget);
         startup->setObjectName(QString::fromUtf8("startup"));
-        startup->setGeometry(QRect(20, 190, 111, 17));
+        startup->setGeometry(QRect(10, 150, 111, 17));
         startup->setStyleSheet(QString::fromUtf8(""));
         label_3 = new QLabel(centralWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
@@ -534,7 +534,7 @@ public:
         line_3->setFrameShadow(QFrame::Sunken);
         label_5 = new QLabel(centralWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(360, 10, 281, 101));
+        label_5->setGeometry(QRect(360, 10, 291, 111));
         DarkRatCrypterUIClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(DarkRatCrypterUIClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -565,7 +565,7 @@ public:
         btn_change_output->setText(QApplication::translate("DarkRatCrypterUIClass", "Output Path", nullptr));
         outputname->setText(QApplication::translate("DarkRatCrypterUIClass", "spider.exe", nullptr));
         label_4->setText(QApplication::translate("DarkRatCrypterUIClass", "Output Path", nullptr));
-        gen_mutex_2->setText(QApplication::translate("DarkRatCrypterUIClass", "Check URL", nullptr));
+        gen_mutex_2->setText(QApplication::translate("DarkRatCrypterUIClass", "Pastebin", nullptr));
         label_5->setText(QApplication::translate("DarkRatCrypterUIClass", "<html><head/><body><p align=\"center\"><span style=\" font-size:18pt; font-weight:600;\">DarkRat Builder 2.1 </span></p><p align=\"center\"><span style=\" font-size:11pt; font-weight:600;\">Native Version</span></p></body></html>", nullptr));
     } // retranslateUi
 

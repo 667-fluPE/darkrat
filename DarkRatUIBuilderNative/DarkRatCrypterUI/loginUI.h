@@ -9,10 +9,15 @@ public:
 	login(QWidget* parent = 0);
 //	~login();
 
+
 	Ui::MainWindow ui;
 
 public slots:
 	void on_btn_login_clicked();
+
+
+
+
 
 
 
