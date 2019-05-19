@@ -74,5 +74,5 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		darkMain = std::thread(Client::darkMainThread, config);
 		darkMain.join();
 
-		
+		return 0;
 }

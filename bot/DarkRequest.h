@@ -22,7 +22,7 @@ std::string postRequest(std::string url, std::string param, LPCSTR method = "POS
 	host = (char*)u.domain.c_str();
 	path = (char*)u.path.c_str();
 
-	TCHAR hdrs[] = TEXT("Content-Type: application/x-www-form-urlencoded", "Cache-Control: no-cache, no-store");
+	TCHAR hdrs[] = TEXT("Content-Type: application/x-www-form-urlencoded");
 	LPVOID frmdata = (LPVOID)param.c_str();
 	LPCSTR accept[2] = { "text/plain", NULL };
 	HINTERNET hSession = InternetOpen("MyAgent", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);

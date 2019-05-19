@@ -1,10 +1,4 @@
 ﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (DarkRatCrypterUI.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
-  Uic'ing DarkRatCrypterUI.ui...
-  Uic'ing login.ui...
-  Rcc'ing DarkRatCrypterUI.qrc...
-  Moc'ing DarkRatCrypterUI.h...
-   RCC: Warning: No resources in 'C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRatCrypterUI.qrc'.
-  Moc'ing loginUI.h...
   DarkRatBuilder.cpp
   login.cpp
   main.cpp
@@ -12,5 +6,5 @@
   qrc_DarkRatCrypterUI.cpp
   moc_DarkRatCrypterUI.cpp
   moc_loginUI.cpp
-C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRequest.h(123): warning C4715: "postRequest": Nicht alle Codepfade geben einen Wert zurück.
-  DarkRatCrypterUI.vcxproj -> C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\darkrat-master\DarkRatUIBuilderNative\Win32\Debug\DarkRatBuilder.exe
+C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\DarkRatUIBuilderNative\DarkRatCrypterUI\DarkRequest.h(123): warning C4715: "postRequest": Nicht alle Codepfade geben einen Wert zurück.
+  DarkRatCrypterUI.vcxproj -> C:\Users\darkspider\Desktop\DarkRat Coding\darkrat\DarkRatUIBuilderNative\Win32\Debug\DarkRatBuilder.exe

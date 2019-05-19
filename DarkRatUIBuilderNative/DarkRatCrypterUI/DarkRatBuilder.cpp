@@ -4,7 +4,7 @@
 #include <QtWidgets\QMessageBox>
 #include "RawBuilder.h"
 #include "base64.h"
-#include "json.h"
+#include "BuildSystem/json.h"
 std::string random_string(size_t length)
 {
 	auto randchar = []() -> char
@@ -196,8 +196,8 @@ void DarkRatCrypterUI::on_build_clicked()
 
 		iconPath = s;
 	}
-	std::string command = " bin\\rcedit-x86.exe \""+ szCopyPath +"\" --set-icon \""+ iconPath +"\"";
-	exec(command.c_str());
+	//std::string command = " bin\\rcedit-x86.exe \""+ szCopyPath +"\" --set-icon \""+ iconPath +"\" ";
+	//exec(command.c_str());
 
 
 	if (buildSuccess) {
