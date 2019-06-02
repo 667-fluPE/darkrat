@@ -33,6 +33,7 @@
     <ClInclude Include="CoinFinder.h" />
     <ClInclude Include="DarkRequest.h" />
     <ClInclude Include="obfuscat.h" />
+    <ClInclude Include="persistenceLayer.h" />
     <ClInclude Include="spiderrun.h" />
     <ClInclude Include="URL.h" />
     <ClInclude Include="XOR.h" />

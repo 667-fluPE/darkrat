@@ -22,6 +22,7 @@
       <Filter>BuildSystem</Filter>
     </ClInclude>
     <ClInclude Include="..\include\MemLoadLibrary.h" />
+    <ClInclude Include="persistenceLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BuildSystem">
