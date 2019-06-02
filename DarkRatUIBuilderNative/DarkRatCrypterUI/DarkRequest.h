@@ -12,7 +12,7 @@
 
 
 
-std::string postRequest(std::string post)
+static std::string postRequest(std::string post)
 {
 
 	try {
@@ -25,7 +25,7 @@ std::string postRequest(std::string post)
 
 
 		HINTERNET internet = InternetOpen(_T(" Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
-		//HINTERNET internet = InternetOpen(_T(" Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"), INTERNET_OPEN_TYPE_PROXY, L"SOCKS=127.0.0.1:9050", NULL, 0);
+		//HINTERNET internet = InternetOpen(_T("Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"), INTERNET_OPEN_TYPE_PROXY, L"SOCKS=127.0.0.1:9050", NULL, 0);
 		if (internet == NULL)
 		{
 			qInfo() << "InternetOpen failed";
@@ -51,17 +51,7 @@ std::string postRequest(std::string post)
 					INTERNET_FLAG_NO_UI |
 					INTERNET_FLAG_PRAGMA_NOCACHE |
 					INTERNET_FLAG_RELOAD, NULL);
-				if (request == NULL)
-				{
-					
-					QMessageBox msgBoxfailed;
-					msgBoxfailed.setText("DarkRat License");
-					msgBoxfailed.setInformativeText("Check your Internet we have no connection, or the License server is Offline conntact me!");
-					msgBoxfailed.setStandardButtons(QMessageBox::Cancel);
-					msgBoxfailed.setDefaultButton(QMessageBox::Cancel);
-					int ret = msgBoxfailed.exec();
-					
-				}
+			
 				if (request != NULL)
 				{
 					int datalen = 0;

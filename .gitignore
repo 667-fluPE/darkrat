@@ -8,3 +8,10 @@ Builder/Builder/Release/
 Builder/Builder/Debug/
 DarkRatUIBuilderNative/.vs/
 DarkRatUIBuilderNative/Win32/
+DarkRatUIBuilderNative/Release/
+DarkRatUIBuilderNative/Debug/
+DarkRatUIBuilderNative/DarkRatCrypterUI/Debug/
+DarkRatUIBuilderNative/DarkRatCrypterUI/Release/
+plugintester/.vs
+plugintester/Debug
+plugintester/Release

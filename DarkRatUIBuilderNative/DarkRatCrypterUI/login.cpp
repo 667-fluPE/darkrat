@@ -15,11 +15,6 @@ void Request(LPSTR data);
 login::login(QWidget* parent) : QMainWindow(parent)
 {
 	ui.setupUi(this);
-
-
-	//builder = new DarkRatCrypterUI(this);
-	
-	//QObject::connect(ui.btn_login, SIGNAL(click()), this, SLOT(openSecWindow()));
 }
 
 
@@ -47,10 +42,13 @@ void login::on_btn_login_clicked()
 
 	std::string accessbool = postRequest(post);
 	if (accessbool == "access") {
-		this->close();
+		//this->hide();
 		DarkRatCrypterUI* builder;
-		builder = new DarkRatCrypterUI(this);
+		//builder = new DarkRatCrypterUI(this);
+		builder = new DarkRatCrypterUI();
 		builder->show();
+		
+
 	}
 	else {
 
@@ -62,34 +60,6 @@ void login::on_btn_login_clicked()
 		int ret = msgBox.exec();
 	}
 
-
-	
-	/*
-	if (retrun == "access") {
-		this->close();
-		DarkRatCrypterUI* builder;
-		builder = new DarkRatCrypterUI(this);
-		builder->show();
-	}
-	else {
-	
-		QMessageBox msgBox;
-		msgBox.setText("Name");
-		msgBox.setInformativeText("Fuck!");
-		msgBox.setStandardButtons(QMessageBox::Cancel);
-		msgBox.setDefaultButton(QMessageBox::Cancel);
-		int ret = msgBox.exec();
-		
-	}
-
-
-	
-	this->close();
-	DarkRatCrypterUI* builder;
-	builder = new DarkRatCrypterUI(this);
-	builder->show();
-	*/
-	
 	
 }
 

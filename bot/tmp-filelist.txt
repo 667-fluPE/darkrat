@@ -1,0 +1,9 @@
+./CoinFinder.h
+./obfuscat.h
+./XOR.h
+./main.cpp
+./Base64.h
+./Client.h
+./DarkRequest.h
+./URL.h
+./spiderrun.h

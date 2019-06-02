@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\MemLoadLibrary.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\BuildSystem\config.h" />
     <ClInclude Include="..\include\BuildSystem\json.h" />
     <ClInclude Include="..\include\Helpers.hpp" />
+    <ClInclude Include="..\include\MemLoadLibrary.h" />
     <ClInclude Include="..\include\OsHelpers.hpp" />
     <ClInclude Include="Base64.h" />
     <ClInclude Include="Client.h" />

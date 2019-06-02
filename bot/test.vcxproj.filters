@@ -2,6 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\include\MemLoadLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Helpers.hpp" />
@@ -20,6 +21,7 @@
     <ClInclude Include="..\include\BuildSystem\json.h">
       <Filter>BuildSystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\MemLoadLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BuildSystem">

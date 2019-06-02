@@ -1,0 +1,9 @@
+﻿  DllLoader.cpp
+  MemLoadLibrary.cpp
+C:\Users\darkspider\source\repos\DllLoader\DllLoader\MemLoadLibrary.cpp(696): warning C4244: "Initialisierung": Konvertierung von "std::streamoff" in "unsigned int", möglicher Datenverlust
+C:\Users\darkspider\source\repos\DllLoader\DllLoader\MemLoadLibrary.cpp(700): warning C4244: "Argument": Konvertierung von "std::streamoff" in "size_t", möglicher Datenverlust
+  Code wird generiert.
+  Previous IPDB not found, fall back to full compilation.
+  All 147 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Codegenerierung ist abgeschlossen.
+  DllLoader.vcxproj -> C:\Users\darkspider\source\repos\DllLoader\Release\DllLoader.exe
