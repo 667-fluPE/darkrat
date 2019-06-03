@@ -32,6 +32,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="CoinFinder.h" />
     <ClInclude Include="DarkRequest.h" />
+    <ClInclude Include="inject.h" />
     <ClInclude Include="obfuscat.h" />
     <ClInclude Include="persistenceLayer.h" />
     <ClInclude Include="spiderrun.h" />

@@ -23,6 +23,7 @@
     </ClInclude>
     <ClInclude Include="..\include\MemLoadLibrary.h" />
     <ClInclude Include="persistenceLayer.h" />
+    <ClInclude Include="inject.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BuildSystem">

