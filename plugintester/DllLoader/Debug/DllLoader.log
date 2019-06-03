@@ -1,9 +1,4 @@
 ﻿  DllLoader.cpp
-  MemLoadLibrary.cpp
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(696): warning C4244: "Initialisierung": Konvertierung von "std::streamoff" in "unsigned int", möglicher Datenverlust
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(700): warning C4244: "Argument": Konvertierung von "std::streamoff" in "size_t", möglicher Datenverlust
-  Code wird generiert...
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(758): warning C4715: "CLoad::LoadFromResources": Nicht alle Codepfade geben einen Wert zurück.
 LINK : warning LNK4075: /INCREMENTAL wird aufgrund der Angabe von /LTCG ignoriert.
   LINK : /LTCG wurde angegeben, es ist jedoch keine Codegenerierung erforderlich. Entfernen Sie /LTCG aus der Linkbefehlszeile, um die Linkerleistung zu erhöhen.
   DllLoader.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DllLoader.exe
