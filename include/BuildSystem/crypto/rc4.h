@@ -12,7 +12,30 @@
 #define rc4_rc4_h
 
 #define BUFFER 256
+namespace absent
+{
+	namespace crypto
+	{
+		namespace b64
+		{
+			char* encode(const char* input)
+			{
+				int flen;
+				return base64(input, strlen(input), &flen);
+			}
 
+			char* decode(const char* input)
+			{
+				int flen;
+				unsigned char* decoded = unbase64(input, strlen(input), &flen);
+				unsigned char* final = (unsigned char*)malloc(flen + 1);
+				int i; for (i = 0; i < (flen); i++) final[i] = decoded[i];
+				final[i] = '\0';
+				return (char*)final;
+			}
+		}
+	}
+}
 namespace absent
 {
 	namespace crypto
@@ -30,6 +53,7 @@ namespace absent
 				// Encrypt or Decrypt input (plaintext)
 				return prga(in, str_size);
 			}
+
 
 		private:
 			int S[BUFFER];
@@ -66,6 +90,9 @@ namespace absent
 				k[x] = '\0';
 				return k;
 			}
+
+
+
 		};
 	}
 }

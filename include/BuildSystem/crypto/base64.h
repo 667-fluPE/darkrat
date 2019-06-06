@@ -172,29 +172,6 @@ unsigned char* unbase64(const char* ascii, int len, int *flen)
 	return bin;
 }
 
-namespace absent
-{
-	namespace crypto
-	{
-		namespace b64
-		{
-			char* encode(const char* input)
-			{
-				int flen;
-				return base64(input, strlen(input), &flen);
-			}
 
-			char* decode(const char* input)
-			{
-				int flen;
-				unsigned char* decoded = unbase64(input, strlen(input), &flen);
-				unsigned char* final = (unsigned char*)malloc(flen + 1);
-				int i; for (i = 0; i < (flen); i++) final[i] = decoded[i];
-				final[i] = '\0';
-				return (char*)final;
-			}
-		}
-	}
-}
 
 #endif
