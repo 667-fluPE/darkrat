@@ -11,8 +11,9 @@ using namespace std;
 
 
 
-std::string postRequest(std::string url, std::string param, LPCSTR method = "POST")
+std::string postRequest(std::string url, std::string param, LPCSTR method = "POST", std::string useragent = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3")
 {
+
 
 	char* host;
 	char* path;
@@ -21,11 +22,14 @@ std::string postRequest(std::string url, std::string param, LPCSTR method = "POS
 
 	host = (char*)u.domain.c_str();
 	path = (char*)u.path.c_str();
-
+	HINTERNET hSession;
 	TCHAR hdrs[] = TEXT("Content-Type: application/x-www-form-urlencoded");
 	LPVOID frmdata = (LPVOID)param.c_str();
 	LPCSTR accept[2] = { "text/plain", NULL };
-	HINTERNET hSession = InternetOpen("MyAgent", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+
+	hSession = InternetOpen((LPCSTR)useragent.c_str(), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+
+	
 	HINTERNET hConnect = InternetConnect(hSession, host, INTERNET_DEFAULT_HTTP_PORT, NULL, NULL, INTERNET_SERVICE_HTTP, 0, 1);
 	HINTERNET hRequest = HttpOpenRequest(hConnect, method, path, NULL, NULL, accept, INTERNET_FLAG_RESYNCHRONIZE | INTERNET_FLAG_PRAGMA_NOCACHE | INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_RELOAD, 1);
 

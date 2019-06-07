@@ -1,4 +1,5 @@
-﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (dlltest.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
+﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppClean.targets(76,5): warning : Der Prozess kann nicht auf die Datei "c:\users\darkspider\desktop\darkratcoding\darkrat\plugintester\plugins\example_task_extension\dlltest\debug\memlib.obj" zugreifen, da sie von einem anderen Prozess verwendet wird.
+D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (dlltest.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
   pch.cpp
   MemLib.cpp
      Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\ExampleTask.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\ExampleTask.exp" werden erstellt.

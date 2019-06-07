@@ -41,9 +41,7 @@ public:
 	}
 
 	static std::string encryptReqeust(std::string params) {
-		//std::string encryptedPostParams = EnCrypt(params);
 		std::string encryptedPostParams = base64_encode((const unsigned char*)params.c_str(), params.length());
-		//encryptedPostParams = EnCrypt(encryptedPostParams);
 		std::string finalPost = base64_encode((const unsigned char*)encryptedPostParams.c_str(), encryptedPostParams.length());
 		return finalPost;
 	}

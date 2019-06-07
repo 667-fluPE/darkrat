@@ -10,10 +10,10 @@
 #include <ShellAPI.h>
 #include <wbemidl.h>
 #include <list>
+#include "obfuscat.h"
 #include "BuildSystem\json.h"
 #include "BuildSystem\config.h"
 #include <conio.h>
-#include "obfuscat.h"
 #include "URL.h"
 #include <atlbase.h>
 #include <wtypes.h>

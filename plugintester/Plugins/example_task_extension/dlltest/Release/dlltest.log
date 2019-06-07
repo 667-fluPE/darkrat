@@ -1,0 +1,8 @@
+﻿  pch.cpp
+  MemLib.cpp
+     Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\ExampleTask.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\ExampleTask.exp" werden erstellt.
+  Code wird generiert.
+  Previous IPDB not found, fall back to full compilation.
+  All 18 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Codegenerierung ist abgeschlossen.
+  dlltest.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\ExampleTask.dll

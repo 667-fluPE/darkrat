@@ -37,7 +37,7 @@ std::string postRequest(std::string url, std::string param, LPCSTR method = "POS
 		frmdata, //lpOptional <--Your POST data...not really optional for you.
 		strlen(param.c_str()))) {
 		DWORD errorCode = GetLastError();
-		std::cout << errorCode;
+		//std::cout << errorCode;
 	}
 	//HttpSendRequest(hRequest, hdrs, strlen(hdrs), frmdata, strlen(param.c_str()));
 	DWORD rSize;
