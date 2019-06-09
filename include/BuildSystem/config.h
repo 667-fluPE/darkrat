@@ -34,7 +34,7 @@ namespace darkRat
 			std::string persistence;
 			std::string spreadtag;
 			std::string useragent;
-			std::string versionID = "2.1.1";
+			std::string versionID = "2.1.2";
 			std::string encryptionKey;
 			config(std::string ek, std::string pu, std::string mux, std::string sup, std::string ri, std::string per, std::string st, std::string ua, std::list<std::string> pn)
 			{

