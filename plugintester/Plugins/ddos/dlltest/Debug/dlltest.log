@@ -1,7 +1,10 @@
-﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (dlltest.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
+﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (dlltest.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   pch.cpp
   MemLib.cpp
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(52): warning C4190: "GetMachineGUID" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
-  D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\xstring(4167): note: Siehe Deklaration von "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(55,2): warning C4190:  "GetMachineGUID" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
+D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xstring(4231): message :  Siehe Deklaration von "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(238,16): warning C4101:  "connfd": Unreferenzierte lokale Variable
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(240,8): warning C4101:  "tmpres": Unreferenzierte lokale Variable
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(239,33): warning C4101:  "cli": Unreferenzierte lokale Variable
      Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DDos.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DDos.exp" werden erstellt.
   dlltest.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DDos.dll

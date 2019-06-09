@@ -1,7 +1,0 @@
-﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (dlltest.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
-  pch.cpp
-  MemLib.cpp
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(50): warning C4190: "GetMachineGUID" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
-  D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\xstring(4167): note: Siehe Deklaration von "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
-     Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DDos.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DDos.exp" werden erstellt.
-  dlltest.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DDos.dll

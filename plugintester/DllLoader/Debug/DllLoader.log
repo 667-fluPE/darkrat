@@ -1,10 +1,9 @@
-﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppClean.targets(76,5): warning : Der Prozess kann nicht auf die Datei "c:\users\darkspider\desktop\darkratcoding\darkrat\plugintester\dllloader\debug\dllloader.tlog\cl.command.1.tlog" zugreifen, da sie von einem anderen Prozess verwendet wird.
-  DllLoader.cpp
+﻿  DllLoader.cpp
   MemLoadLibrary.cpp
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(696): warning C4244: "Initialisierung": Konvertierung von "std::streamoff" in "unsigned int", möglicher Datenverlust
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(700): warning C4244: "Argument": Konvertierung von "std::streamoff" in "size_t", möglicher Datenverlust
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(696,23): warning C4244:  "Initialisierung": Konvertierung von "std::streamoff" in "unsigned int", möglicher Datenverlust
   Code wird generiert...
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(758): warning C4715: "CLoad::LoadFromResources": Nicht alle Codepfade geben einen Wert zurück.
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(700,37): warning C4244:  "Argument": Konvertierung von "std::streamoff" in "size_t", möglicher Datenverlust
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(700,37): warning C4244: C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(758) : warning C4715: "CLoad::LoadFromResources": Nicht alle Codepfade geben einen Wert zurück.
 LINK : warning LNK4075: /INCREMENTAL wird aufgrund der Angabe von /LTCG ignoriert.
   LINK : /LTCG wurde angegeben, es ist jedoch keine Codegenerierung erforderlich. Entfernen Sie /LTCG aus der Linkbefehlszeile, um die Linkerleistung zu erhöhen.
   DllLoader.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\DllLoader.exe

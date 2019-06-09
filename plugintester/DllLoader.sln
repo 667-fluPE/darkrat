@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DDos", "Plugins\ddos\dlltes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleTask", "Plugins\example_task_extension\dlltest\dlltest.vcxproj", "{E79CC688-6562-44F4-98B8-DA980D2E49F1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "USB", "Plugins\usb_spread\dlltest\dlltest.vcxproj", "{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -43,6 +45,14 @@ Global
 		{E79CC688-6562-44F4-98B8-DA980D2E49F1}.Release|x64.Build.0 = Release|x64
 		{E79CC688-6562-44F4-98B8-DA980D2E49F1}.Release|x86.ActiveCfg = Release|Win32
 		{E79CC688-6562-44F4-98B8-DA980D2E49F1}.Release|x86.Build.0 = Release|Win32
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Debug|x64.ActiveCfg = Debug|x64
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Debug|x64.Build.0 = Debug|x64
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Debug|x86.ActiveCfg = Debug|Win32
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Debug|x86.Build.0 = Debug|Win32
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Release|x64.ActiveCfg = Release|x64
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Release|x64.Build.0 = Release|x64
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Release|x86.ActiveCfg = Release|Win32
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{303785C6-1340-4C93-889F-D6399535C1D2} = {71CE386F-B390-463F-BCA0-C6831FBBF664}
 		{E79CC688-6562-44F4-98B8-DA980D2E49F1} = {71CE386F-B390-463F-BCA0-C6831FBBF664}
+		{A190F7B7-C74F-4B35-A4F3-0F6C87F46BFB} = {71CE386F-B390-463F-BCA0-C6831FBBF664}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {09F82C8E-4F2C-4B19-8FBD-29A398CD8E29}

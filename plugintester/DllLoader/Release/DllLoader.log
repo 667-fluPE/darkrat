@@ -4,6 +4,6 @@ C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoad
 C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\DllLoader\MemLoadLibrary.cpp(700,37): warning C4244:  "Argument": Konvertierung von "std::streamoff" in "size_t", möglicher Datenverlust
   Code wird generiert.
   Previous IPDB not found, fall back to full compilation.
-  All 378 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 395 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Codegenerierung ist abgeschlossen.
   DllLoader.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\DllLoader.exe
