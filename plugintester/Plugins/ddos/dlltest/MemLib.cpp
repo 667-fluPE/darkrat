@@ -47,10 +47,6 @@ extern "C"
 		//return arr;
 	}
 
-
-
-
-
 	static std::string GetMachineGUID()
 	{
 		std::string ret;
@@ -272,78 +268,6 @@ extern "C"
 		}
 		return;
 	}
-
 }
 
 
-typedef BOOL(WINAPI* PFreeLibrary)(_In_ HMODULE hModule);
-typedef VOID(WINAPI* PExitThread)(_In_ DWORD dwExitCode);
-typedef unsigned int (WINAPI* PTHREADPROC)(LPVOID lParam);
-
-typedef struct _DLLUNLOADINFO
-{
-	PFreeLibrary	m_fpFreeLibrary;
-	PExitThread		m_fpExitThread;
-	HMODULE		    m_hFreeModule;
-}DLLUNLOADINFO, * PDLLUNLOADINFO;
-
-unsigned int WINAPI DllUnloadThreadProc(LPVOID lParam)
-{
-	PDLLUNLOADINFO pDllUnloadInfo = (PDLLUNLOADINFO)lParam;
-
-	//  
-	// FreeLibrary dll  
-	//  
-	(pDllUnloadInfo->m_fpFreeLibrary)(pDllUnloadInfo->m_hFreeModule);
-
-	//
-	// Exit Thread
-	// This thread return value is freed memory.
-	// So you don't have to return this thread.
-	//
-	pDllUnloadInfo->m_fpExitThread(0);
-	return 0;
-}
-
-
-VOID DllSelfUnloading(_In_ const HMODULE hModule)
-{
-	PVOID pMemory = NULL;
-	ULONG ulFuncSize;
-	unsigned int uintThreadId = 0;
-
-	pMemory = VirtualAlloc(NULL, 0x1000, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-	if (pMemory != NULL)
-	{
-		ulFuncSize = (ULONG_PTR)DllUnloadThreadProc - (ULONG_PTR)DllSelfUnloading;
-		if ((ulFuncSize >> 31) & 0x01)
-		{
-			ulFuncSize = (ULONG_PTR)DllSelfUnloading - (ULONG_PTR)DllUnloadThreadProc;
-		}
-
-		memcpy(pMemory, DllUnloadThreadProc, ulFuncSize);
-
-		((PDLLUNLOADINFO)(((ULONG_PTR)pMemory) + 0x500))->m_fpFreeLibrary =
-			(PFreeLibrary)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "FreeLibrary");
-
-		((PDLLUNLOADINFO)(((ULONG_PTR)pMemory) + 0x500))->m_fpExitThread =
-			(PExitThread)GetProcAddress(GetModuleHandle(TEXT("kernel32.dll")), "ExitThread");
-
-		((PDLLUNLOADINFO)(((ULONG_PTR)pMemory) + 0x500))->m_hFreeModule = hModule;
-
-		_beginthreadex(NULL, 0, (PTHREADPROC)pMemory, (PVOID)(((ULONG_PTR)pMemory) + 0x500), 0, &uintThreadId);
-	}
-}
-
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
-{
-	switch (ul_reason_for_call)
-	{
-	case DLL_PROCESS_ATTACH:
-		// Create your thread here to unload your dlls
-		DllSelfUnloading((HMODULE)hModule);
-	default:
-		break;
-	}
-	return TRUE;
-}

@@ -1,8 +1,7 @@
-﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppClean.targets(76,5): warning : Der Prozess kann nicht auf die Datei "c:\users\darkspider\desktop\darkratcoding\darkrat\plugintester\plugins\ddos\dlltest\release\ddos.tlog\cl.command.1.tlog" zugreifen, da sie von einem anderen Prozess verwendet wird.
-  pch.cpp
+﻿  pch.cpp
   MemLib.cpp
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(55,2): warning C4190:  "GetMachineGUID" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(51,2): warning C4190:  "GetMachineGUID" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
 D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xstring(4231): message :  Siehe Deklaration von "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(236,34): warning C4244:  "Argument": Konvertierung von "unsigned long" in "u_short", möglicher Datenverlust
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(232,34): warning C4244:  "Argument": Konvertierung von "unsigned long" in "u_short", möglicher Datenverlust
      Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\DDos.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\DDos.exp" werden erstellt.
   dlltest.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\DDos.dll
