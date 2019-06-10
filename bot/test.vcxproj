@@ -23,6 +23,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\antidbg.h" />
     <ClInclude Include="..\include\BuildSystem\config.h" />
     <ClInclude Include="..\include\BuildSystem\json.h" />
     <ClInclude Include="..\include\Helpers.hpp" />

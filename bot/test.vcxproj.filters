@@ -24,6 +24,7 @@
     <ClInclude Include="..\include\MemLoadLibrary.h" />
     <ClInclude Include="persistenceLayer.h" />
     <ClInclude Include="inject.h" />
+    <ClInclude Include="..\include\antidbg.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BuildSystem">

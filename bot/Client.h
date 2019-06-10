@@ -130,7 +130,6 @@ public:
 						func fn = (func)lib.GetProcAddressFromMemory(hLibrary, (LPCSTR)v[3].c_str());
 						fn(v[4]);
 						lib.FreeLibraryFromMemory(hLibrary);
-					
 						started = OBFUSCATE("success");
 					}
 					catch (...)
