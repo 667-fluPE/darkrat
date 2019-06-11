@@ -1,9 +1,7 @@
 ﻿  pch.cpp
   MemLib.cpp
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(50,2): warning C4190:  "GetMachineGUID" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(51,2): warning C4190:  "GetMachineGUID" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
 D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xstring(4231): message :  Siehe Deklaration von "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(233,34): warning C4244:  "Argument": Konvertierung von "unsigned long" in "u_short", möglicher Datenverlust
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(233,34): warning C4244: C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(170) : error C4716: "TS3Thread": Muss einen Wert zurückgeben
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(233,34): warning C4244: C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(175) : error C4716: "ARMEThread": Muss einen Wert zurückgeben
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(233,34): warning C4244: C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(180) : error C4716: "HULKThread": Muss einen Wert zurückgeben
-D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(429,5): error MSB6006: "CL.exe" wurde mit dem Code 2 beendet.
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\ddos\dlltest\MemLib.cpp(243,34): warning C4244:  "Argument": Konvertierung von "unsigned long" in "u_short", möglicher Datenverlust
+     Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\DDos.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\DDos.exp" werden erstellt.
+  dlltest.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\DDos.dll

