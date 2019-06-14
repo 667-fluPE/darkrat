@@ -13,5 +13,6 @@
     <ClInclude Include="DarkRequest.h" />
     <ClInclude Include="URL.h" />
     <ClInclude Include="..\..\include\antidbg.h" />
+    <ClInclude Include="rawclient.h" />
   </ItemGroup>
 </Project>
