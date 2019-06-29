@@ -1,12 +1,10 @@
 ﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (ExampleTask.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   pch.cpp
   MemLib.cpp
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\monero_cpu\dlltest\MemLib.cpp(74,2): warning C4190:  "getGpuName" hat C-Bindung angegeben, aber gibt UDT "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" zurück, was mit C inkompatibel ist
-D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\include\xstring(4231): message :  Siehe Deklaration von "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
      Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\Monero_cpu.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\Monero_cpu.exp" werden erstellt.
   Code wird generiert.
   Previous IPDB not found, fall back to full compilation.
-C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\monero_cpu\dlltest\MemLib.cpp(71): warning C4715: "NTRX_RUNPE32": Nicht alle Codepfade geben einen Wert zurück.
-  All 308 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Plugins\monero_cpu\dlltest\MemLib.cpp(65): warning C4715: "NTRX_RUNPE32": Nicht alle Codepfade geben einen Wert zurück.
+  All 23 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Codegenerierung ist abgeschlossen.
   dlltest.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Release\Monero_cpu.dll

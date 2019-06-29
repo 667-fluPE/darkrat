@@ -1,5 +1,0 @@
-﻿D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (dlltest.vcxproj, ExampleTask.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  pch.cpp
-  MemLib.cpp
-     Bibliothek "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\USB.lib" und Objekt "C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\USB.exp" werden erstellt.
-  dlltest.vcxproj -> C:\Users\darkspider\Desktop\DarkRatCoding\darkrat\plugintester\Debug\USB.dll

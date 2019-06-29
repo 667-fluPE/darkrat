@@ -27,9 +27,6 @@
     <ClInclude Include="framework.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="rawamdgpu.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

@@ -21,10 +21,10 @@
     <ClInclude Include="pch.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="sqlite3.h">
+    <ClInclude Include="DarkRequest.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="DarkRequest.h">
+    <ClInclude Include="Stealer.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -33,9 +33,6 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="MemLib.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="sqlite3.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
