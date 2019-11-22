@@ -11,7 +11,7 @@ using namespace std;
 
 
 
-std::string postRequest(std::string url, std::string param, LPCSTR method = "POST", std::string useragent = "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3")
+std::string postRequest(std::string url, std::string param, LPCSTR method = OBFUSCATE("POST"), std::string useragent = OBFUSCATE("Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3"))
 {
 
 

